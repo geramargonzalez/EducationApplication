@@ -28,6 +28,7 @@ class TallerAlumno extends Entity
         'id_taller' => true,
         'id_alumno' => true,
         'created' => true,
-        'modified' => true
+        'modified' => true,
+        'id_user' => true
     ];
 }

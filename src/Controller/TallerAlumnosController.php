@@ -12,7 +12,6 @@ use App\Controller\AppController;
  */
 class TallerAlumnosController extends AppController
 {
-
     /**
      * Index method
      *
@@ -23,7 +22,6 @@ class TallerAlumnosController extends AppController
         $tallerAlumnos = $this->paginate($this->TallerAlumnos);
         $this->set(compact('tallerAlumnos'));
     }
-
     /**
      * View method
      *
@@ -36,10 +34,8 @@ class TallerAlumnosController extends AppController
         $tallerAlumno = $this->TallerAlumnos->get($id, [
             'contain' => []
         ]);
-
         $this->set('tallerAlumno', $tallerAlumno);
     }
-
     /**
      * Add method
      *
@@ -51,15 +47,13 @@ class TallerAlumnosController extends AppController
         if ($this->request->is('post')) {
             $tallerAlumno = $this->TallerAlumnos->patchEntity($tallerAlumno, $this->request->getData());
             if ($this->TallerAlumnos->save($tallerAlumno)) {
-                $this->Flash->success(__('The taller alumno has been saved.'));
-
+                $this->Flash->success(__('El alumno ha sido registrado en la materia ...'));
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The taller alumno could not be saved. Please, try again.'));
+            $this->Flash->error(__('El alumno no ha podido guardarse.'));
         }
         $this->set(compact('tallerAlumno'));
     }
-
     /**
      * Edit method
      *
@@ -69,21 +63,17 @@ class TallerAlumnosController extends AppController
      */
     public function edit($id = null)
     {
-        $tallerAlumno = $this->TallerAlumnos->get($id, [
-            'contain' => []
-        ]);
+        $tallerAlumno = $this->TallerAlumnos->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $tallerAlumno = $this->TallerAlumnos->patchEntity($tallerAlumno, $this->request->getData());
             if ($this->TallerAlumnos->save($tallerAlumno)) {
-                $this->Flash->success(__('The taller alumno has been saved.'));
-
+                $this->Flash->success(__('La materia ha sido guardada.'));
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The taller alumno could not be saved. Please, try again.'));
+            $this->Flash->error(__('Se produjo un error. Verifique sus datos.'));
         }
         $this->set(compact('tallerAlumno'));
     }
-
     /**
      * Delete method
      *
@@ -96,9 +86,9 @@ class TallerAlumnosController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $tallerAlumno = $this->TallerAlumnos->get($id);
         if ($this->TallerAlumnos->delete($tallerAlumno)) {
-            $this->Flash->success(__('The taller alumno has been deleted.'));
+            $this->Flash->success(__('La materia ha sido eliminada.'));
         } else {
-            $this->Flash->error(__('The taller alumno could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La materia no se pudo eliminar.'));
         }
 
         return $this->redirect(['action' => 'index']);

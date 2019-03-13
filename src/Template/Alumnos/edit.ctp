@@ -13,8 +13,8 @@
             echo $this->Form->control('surname');
             echo $this->Form->control('age');
             echo $this->Form->control('procedencia');
+            echo $this->Form->control('ci');
             echo $this->Form->control('observation');
-            echo $this->Form->control('taller._ids', ['options' => $taller]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

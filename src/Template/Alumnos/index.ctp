@@ -9,26 +9,22 @@
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('surname') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('age') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('procedencia') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('created') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Cedula Identidad') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Nombre') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Apellido') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Edad') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Procedencia') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($alumnos as $alumno): ?>
             <tr>
-                <td><?= $this->Number->format($alumno->id) ?></td>
+                <td><?= $this->Number->format($alumno->ci) ?></td>
                 <td><?= h($alumno->name) ?></td>
                 <td><?= h($alumno->surname) ?></td>
                 <td><?= $this->Number->format($alumno->age) ?></td>
                 <td><?= h($alumno->procedencia) ?></td>
-                <td><?= h($alumno->created) ?></td>
-                <td><?= h($alumno->modified) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('Ver'), ['action' => 'view', $alumno->id]) ?>
                     <?= $this->Html->link(__('Editar'), ['action' => 'edit', $alumno->id]) ?>

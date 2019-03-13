@@ -36,6 +36,7 @@ class Alumno extends Entity
         'procedencia' => true,
         'observation' => true,
         'created' => true,
-        'modified' => true
+        'modified' => true,
+        'ci' => true
     ];
 }

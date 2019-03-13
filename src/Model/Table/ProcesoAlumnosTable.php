@@ -38,6 +38,10 @@ class ProcesoAlumnosTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+
+        $this->hasMany('Users', [
+            'foreignKey' => 'id_user'
+        ]);
     }
 
     /**
@@ -76,6 +80,11 @@ class ProcesoAlumnosTable extends Table
             ->integer('promedio')
             ->requirePresence('promedio', 'create')
             ->allowEmptyString('promedio', false);
+
+        $validator
+            ->integer('id_user')
+            ->requirePresence('id_user', 'create')
+            ->allowEmptyString('id_user', false);
 
         return $validator;
     }

@@ -12,7 +12,6 @@ use App\Controller\AppController;
  */
 class AlumnosController extends AppController
 {
-
     /**
      * Index method
      *
@@ -23,7 +22,6 @@ class AlumnosController extends AppController
         $alumnos = $this->paginate($this->Alumnos);
         $this->set(compact('alumnos'));
     }
-
     /**
      * View method
      *
@@ -46,8 +44,6 @@ class AlumnosController extends AppController
         $alumno = $this->Alumnos->newEntity();
         if ($this->request->is('post')) {
             $alumno = $this->Alumnos->patchEntity($alumno, $this->request->getData());
-
-            
             if ($this->Alumnos->save($alumno)) {
                 $this->Flash->success(__('The alumno has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -76,8 +72,7 @@ class AlumnosController extends AppController
             $this->Flash->error(__('The alumno could not be saved. Please, try again.'));
         }
         $this->set(compact('alumno'));
-    }
-
+    } 
     /**
      * Delete method
      *

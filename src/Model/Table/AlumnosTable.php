@@ -84,6 +84,11 @@ class AlumnosTable extends Table
             ->requirePresence('observation', 'create')
             ->allowEmptyString('observation', false);
 
+        $validator
+            ->scalar('ci')
+            ->requirePresence('ci', 'create')
+            ->allowEmptyString('ci', false);
+
         return $validator;
     }
 }

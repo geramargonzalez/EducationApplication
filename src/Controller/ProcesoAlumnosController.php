@@ -22,8 +22,6 @@ class ProcesoAlumnosController extends AppController
         parent::initialize();
         $this->loadModel('Alumnos');
     }
-
-
     /**
      * Index method
      *
@@ -35,17 +33,18 @@ class ProcesoAlumnosController extends AppController
             ->find('all')
             ->where([
                 'ProcesoAlumnos.id_alumno' => $id,
+                'ProcesoAlumnos.id_user' => $this->Auth->user('id'),  
             ]);
+      
         $avg_rendimiento = $this->procesoAvgRendimiento($id);
         $avg_expresionOral = $this->procesoAvgExpresionOral($id);
         $avg_conducta = $this->procesoAvgConducta($id);
         $avg_general = $this->procesoAvgGeneral($id);
-        
         $procesoAlumnos = $this->paginate($qry, ['limit' => 10]);
         $alumno = $this->Alumnos->get($id);
-        $this->set(compact('procesoAlumnos','avg_conducta','avg_expresionOral','avg_rendimiento','avg_general','alumno'));
+        $this->set(compact('procesoAlumnos','avg_conducta','avg_expresionOral','avg_rendimiento',
+            'avg_general','alumno'));
     }
-
     /**
      * View method
      *
@@ -71,18 +70,15 @@ class ProcesoAlumnosController extends AppController
         if ($this->request->is('post')) {
 
             $procesoAlumno = $this->ProcesoAlumnos->patchEntity($procesoAlumno, $this->request->getData());
-            $procesoAlumno->promedio = ($procesoAlumno->conducta + $procesoAlumno->rendimiento + $procesoAlumno->expresion_oral);
-             $procesoAlumno->id_alumno = $id;
-
+            $procesoAlumno->promedio = ($procesoAlumno->conducta + $procesoAlumno->rendimiento + $procesoAlumno->expresion_oral)/3;
+            $procesoAlumno->id_alumno = $id;
+            $procesoAlumno->id_user = $this->Auth->user('id');
             if ($this->ProcesoAlumnos->save($procesoAlumno)) {
                 $this->Flash->success(__('The proceso alumno has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller' => 'Alumnos','action' => 'view',$procesoAlumno->id_alumno]);
             }
             $this->Flash->error(__('The proceso alumno could not be saved. Please, try again.'));
         }
-
-        //
         $alumno = $this->Alumnos->get($id);
         $this->set(compact('procesoAlumno','alumno'));
     }
@@ -103,8 +99,7 @@ class ProcesoAlumnosController extends AppController
             $procesoAlumno = $this->ProcesoAlumnos->patchEntity($procesoAlumno, $this->request->getData());
             if ($this->ProcesoAlumnos->save($procesoAlumno)) {
                 $this->Flash->success(__('The proceso alumno has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller'=>'Alumnos','action' => 'index']);
             }
             $this->Flash->error(__('The proceso alumno could not be saved. Please, try again.'));
         }
@@ -127,14 +122,12 @@ class ProcesoAlumnosController extends AppController
         } else {
             $this->Flash->error(__('The proceso alumno could not be deleted. Please, try again.'));
         }
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect(['controller'=>'Alumnos','action' => 'index']);
     }
-   
     public function procesoAvgRendimiento($id = null){
-
         $query = $this->ProcesoAlumnos->findById_alumno($id);
         $rendi = $query->select(['avg' => $query->func()->avg('rendimiento')])->first();
-       return $rendi->avg;
+        return $rendi->avg;
 
     }
     public function procesoAvgExpresionOral($id = null){
