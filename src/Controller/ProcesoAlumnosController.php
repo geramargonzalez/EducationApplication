@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\I18n\Time;
 
 /**
  * ProcesoAlumnos Controller
@@ -29,17 +30,19 @@ class ProcesoAlumnosController extends AppController
      */
     public function index($id = null)
     {
+         
+         $id_user = $this->Auth->user('id');
          $qry = $this->ProcesoAlumnos
             ->find('all')
             ->where([
                 'ProcesoAlumnos.id_alumno' => $id,
-                'ProcesoAlumnos.id_user' => $this->Auth->user('id'),  
+                'ProcesoAlumnos.id_user' => $id_user,  
             ]);
-      
-        $avg_rendimiento = $this->procesoAvgRendimiento($id);
-        $avg_expresionOral = $this->procesoAvgExpresionOral($id);
-        $avg_conducta = $this->procesoAvgConducta($id);
-        $avg_general = $this->procesoAvgGeneral($id);
+       
+        $avg_rendimiento = $this->procesoAvgRendimiento($id,$id_user);
+        $avg_expresionOral = $this->procesoAvgExpresionOral($id,$id_user);
+        $avg_conducta = $this->procesoAvgConducta($id,$id_user);
+        $avg_general = $this->procesoAvgGeneral($id,$id_user);
         $procesoAlumnos = $this->paginate($qry, ['limit' => 10]);
         $alumno = $this->Alumnos->get($id);
         $this->set(compact('procesoAlumnos','avg_conducta','avg_expresionOral','avg_rendimiento',
@@ -66,9 +69,7 @@ class ProcesoAlumnosController extends AppController
     public function add($id = null)
     {
         $procesoAlumno = $this->ProcesoAlumnos->newEntity();
-       
         if ($this->request->is('post')) {
-
             $procesoAlumno = $this->ProcesoAlumnos->patchEntity($procesoAlumno, $this->request->getData());
             $procesoAlumno->promedio = ($procesoAlumno->conducta + $procesoAlumno->rendimiento + $procesoAlumno->expresion_oral)/3;
             $procesoAlumno->id_alumno = $id;
@@ -92,9 +93,7 @@ class ProcesoAlumnosController extends AppController
      */
     public function edit($id = null)
     {
-        $procesoAlumno = $this->ProcesoAlumnos->get($id, [
-            'contain' => []
-        ]);
+        $procesoAlumno = $this->ProcesoAlumnos->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $procesoAlumno = $this->ProcesoAlumnos->patchEntity($procesoAlumno, $this->request->getData());
             if ($this->ProcesoAlumnos->save($procesoAlumno)) {
@@ -124,28 +123,25 @@ class ProcesoAlumnosController extends AppController
         }
         return $this->redirect(['controller'=>'Alumnos','action' => 'index']);
     }
-    public function procesoAvgRendimiento($id = null){
-        $query = $this->ProcesoAlumnos->findById_alumno($id);
+
+    public function procesoAvgRendimiento($id = null, $user_id = null){
+        $query = $this->ProcesoAlumnos->findById_alumnoAndId_user($id,$user_id);
         $rendi = $query->select(['avg' => $query->func()->avg('rendimiento')])->first();
         return $rendi->avg;
-
     }
-    public function procesoAvgExpresionOral($id = null){
-        $query = $this->ProcesoAlumnos->findById_alumno($id);
+    public function procesoAvgExpresionOral($id = null, $user_id = null){
+        $query = $this->ProcesoAlumnos->findById_alumnoAndId_user($id,$user_id);
         $exp_oral = $query->select(['avg' => $query->func()->avg('expresion_oral')])->first();
         return $exp_oral->avg;
     }
-    public function procesoAvgConducta($id = null){
-
-        $query = $this->ProcesoAlumnos->findById_alumno($id);
+    public function procesoAvgConducta($id = null, $user_id = null){
+        $query = $this->ProcesoAlumnos->findById_alumnoAndId_user($id,$user_id);
         $condu = $query->select(['avg' => $query->func()->avg('conducta')])->first();
         return $condu->avg;
     }
-     public function procesoAvgGeneral($id = null){
-
-        $query = $this->ProcesoAlumnos->findById_alumno($id);
+     public function procesoAvgGeneral($id = null, $user_id = null){
+        $query = $this->ProcesoAlumnos->findById_alumnoAndId_user($id,$user_id);
         $condu = $query->select(['avg' => $query->func()->avg('promedio')])->first();
-
         return $condu->avg;
     }
 }

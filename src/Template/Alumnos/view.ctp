@@ -44,8 +44,9 @@
             <tr>
                 <td class="actions">
                    <?= $this->Html->link(__('Nuevo Proceso |'), ['controller' => 'ProcesoAlumnos', 'action' => 'add', $alumno->id]) ?>
-                    <?= $this->Html->link(__(' Ver Proceso'), ['controller' => 'ProcesoAlumnos', 'action' => 'index', $alumno->id]) ?>
-    
+                    <?= $this->Html->link(__(' Ver Proceso |'), ['controller' => 'ProcesoAlumnos', 'action' => 'index', $alumno->id]) ?>
+                    <?= $this->Html->link(__('Nueva Observacion |'), ['controller' => 'ObservacionesAlumnos', 'action' => 'add', $alumno->id]) ?>
+                     <?= $this->Html->link(__('Observaciones'), ['controller' => 'ObservacionesAlumnos', 'action' => 'index', $alumno->id]) ?>
                 </td>
             </tr>
             

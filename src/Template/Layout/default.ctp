@@ -12,8 +12,7 @@
  * @since         0.10.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-
-$cakeDescription = 'CakePHP: the rapid development php framework';
+$cakeDescription = 'App: CEC-Alumnos-Data';
 ?>
 <!DOCTYPE html>
 <html>
@@ -40,7 +39,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 <h1><a href=""><?= $this->fetch('title') ?></a></h1>
             </li>
         </ul>
-        <?php echo $this->element('profile'); ?>
+    <?php echo $this->element('profile'); ?>
     </nav>
      <?php echo $this->element('menu_left'); ?>
     <?= $this->Flash->render() ?>

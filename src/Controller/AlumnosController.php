@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\I18n\Time;
 
 /**
  * Alumnos Controller
@@ -52,7 +53,6 @@ class AlumnosController extends AppController
         }
         $this->set(compact('alumno'));
     }
-
     /**
      * Edit method
      *
@@ -89,7 +89,6 @@ class AlumnosController extends AppController
         } else {
             $this->Flash->error(__('The alumno could not be deleted. Please, try again.'));
         }
-
         return $this->redirect(['action' => 'index']);
     }
 }
