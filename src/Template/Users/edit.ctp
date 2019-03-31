@@ -11,7 +11,6 @@
         <?php
             echo $this->Form->control('name');
             echo $this->Form->control('surname');
-            echo $this->Form->control('materia');
             echo $this->Form->control('email');
             echo $this->Form->control('password');
             echo $this->Form->control('image');

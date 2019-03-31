@@ -34,14 +34,15 @@ class AlumnosTable extends Table
     public function initialize(array $config)
     {
         parent::initialize($config);
-
         $this->setTable('alumnos');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
-
         $this->addBehavior('Timestamp');
-
         
+        $this->belongsTo('Taller', [
+            'foreignKey' => 'id_taller',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
@@ -88,6 +89,10 @@ class AlumnosTable extends Table
             ->scalar('ci')
             ->requirePresence('ci', 'create')
             ->allowEmptyString('ci', false);
+
+        $validator
+            ->integer('id_taller')
+            ->requirePresence('id_taller', 'create');
 
         return $validator;
     }

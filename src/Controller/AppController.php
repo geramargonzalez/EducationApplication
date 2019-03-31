@@ -72,11 +72,12 @@ class AppController extends Controller
       public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        $params = $this->request->params;
+        //request->getParam()
+       // $params = $this->request->getParam('controller');
         $userSession = $this->Auth->user();
-        if (!$userSession && ($params['controller'] == 'Users' && $params['action'] == 'add')) {
-            $this->Auth->allow(['login', 'add']);
-        }
+        /*if (!$userSession && ($params['controller'] == 'Users' && $params['action'] == 'add')) {
+            $this->Auth->allow(['login']);
+       }*/
 
         $this->set(compact('userSession'));
     }

@@ -13,6 +13,13 @@ use Cake\I18n\Time;
  */
 class AlumnosController extends AppController
 {
+      public function initialize()
+    {
+        parent::initialize();
+        $this->loadModel('Taller');
+       // $this->loadModel();
+    }
+
     /**
      * Index method
      *
@@ -20,7 +27,20 @@ class AlumnosController extends AppController
      */
     public function index()
     {
-        $alumnos = $this->paginate($this->Alumnos);
+
+        $id_user = $this->Auth->user('id');
+        $query = $this->Taller->findById_user($id_user);
+        $taller = $query->first();
+
+        // VER VER VER VER VER VER VER VER VER VER VER VER VER 
+        //YA ESTA IMPLEMENTADO QUE SE BUSQUE ALUMNO POR TALLER
+
+       /* if($taller->role_id == 5){
+          $alumnos = $this->paginate($this->Alumnos->find("all")->where(['id_taller =' => $taller->id]));
+        } else {
+          $alumnos = $this->paginate($this->Alumnos);      
+        }*/
+        $alumnos = $this->paginate($this->Alumnos);      
         $this->set(compact('alumnos'));
     }
     /**
@@ -33,7 +53,13 @@ class AlumnosController extends AppController
     public function view($id = null)
     {
         $alumno = $this->Alumnos->get($id);
-        $this->set('alumno', $alumno);
+        if($alumno->id_taller != 0){
+            $taller  = $this->Taller->get($alumnos->id_taller);
+            $nombre = $taller->name;
+        } else {
+            $nombre = "No tiene";
+        }
+        $this->set(compact('alumno','nombre'));
     }
     /**
      * Add method
@@ -45,6 +71,7 @@ class AlumnosController extends AppController
         $alumno = $this->Alumnos->newEntity();
         if ($this->request->is('post')) {
             $alumno = $this->Alumnos->patchEntity($alumno, $this->request->getData());
+            $alumno->id_centro = 1;
             if ($this->Alumnos->save($alumno)) {
                 $this->Flash->success(__('The alumno has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -53,6 +80,58 @@ class AlumnosController extends AppController
         }
         $this->set(compact('alumno'));
     }
+
+     public function addAlumnosToTaller($id = null)
+    {
+        
+        $taller = $this->Alumnos->Taller->get($id);
+        $alum_reg = 0;
+        if ($this->request->is('post')) {
+            $data = $this->request->getData();
+            foreach ($data as $key => $value) {
+                if ($value == 1) {
+                    $alumno = $this->Alumnos->get($key);
+                    $alumno->id_taller = $taller->id;
+                   if ($this->Alumnos->save($alumno)) {
+                       $alum_reg++; 
+                      }    
+                }
+            }
+            if($alum_reg > 0){
+                 $this->Flash->success(__('Los alumnos han sido registrados.'));
+                 return $this->redirect(['controller' =>'Taller', 'action' => 'view',$taller->id]);
+            
+            } else{
+                 $this->Flash->error(__('Se produjo un error.'));
+            }
+        }
+        $alumnos = $this->Alumnos->find("all")->where(['id_taller =' => 0]);
+        $this->set(compact('alumnos','taller'));
+    }
+
+     public function addAlumnoToTaller(){
+
+
+        if ($this->request->is(['patch', 'post', 'put'])) {
+
+            $data = $this->request->getData();
+            $taller = $this->Alumnos->Taller->get($data['talleres']);
+            $alumno = $this->Alumnos->get($data['alumnos']);
+            $alumno->id_taller = $taller->id;
+           
+            if ($this->Alumnos->save($alumno)) {
+                $this->Flash->success(__('El alumno se a ingresado en la materia.'));
+                return $this->redirect(['action' => 'index']);
+            }
+           
+            $this->Flash->error(__('Se produjo un error. Verifique sus datos.'));
+        }
+        $talleres = $this->Alumnos->Taller->find('list')->where(['role_id' => 5]);
+        $alumnos = $this->Alumnos->find('list')->where(['id_taller <' => 1]);
+        $this->set(compact('alumnos','talleres'));
+
+    }
+
     /**
      * Edit method
      *
@@ -65,6 +144,7 @@ class AlumnosController extends AppController
         $alumno = $this->Alumnos->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $alumno = $this->Alumnos->patchEntity($alumno, $this->request->getData());
+            $alumno->id_centro = 1;
             if ($this->Alumnos->save($alumno)) {
                 $this->Flash->success(__('The alumno has been saved.'));
                 return $this->redirect(['action' => 'index']);

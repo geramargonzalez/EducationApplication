@@ -185,6 +185,9 @@ Type::build('timestamp')
 
 Configure::load('custom', 'default');
 
+//Plugin::load('GoogleCharts');
+
+
 /*
  * Custom Inflector rules, can be set to correctly pluralize or singularize
  * table, model, controller names or whatever other string is passed to the

@@ -5,24 +5,21 @@
  */
 ?>
 <div class="taller index large-9 medium-8 columns content">
-    <h3><?= __('Taller') ?></h3>
+    <h3><?= __('Materia') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-               
-                <th scope="col"><?= $this->Paginator->sort('name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('id_profesor') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('created') ?></th>
-                
+                <th scope="col"><?= $this->Paginator->sort('Materia') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Fecha') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($taller as $taller): ?>
+            <?php foreach ($talleres as $taller): ?>
             <tr>
                 <td><?= h($taller->name) ?></td>
-                <td><?= $this->Number->format($taller->id_user) ?></td>
-                <td><?= h($taller->created) ?></td>
+                <td><?= h($taller->created->day . " / " .$taller->created->month) ?></td>
+                <th scope="col">0</th>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $taller->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $taller->id]) ?>

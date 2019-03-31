@@ -15,11 +15,18 @@ use Cake\I18n\Time;
 class UsersController extends AppController
 {
 
+     public function initialize()
+    {
+        parent::initialize();
+        $this->loadModel('Taller');
+        //$this->loadModel('TallerUsers');
+    }
+
     public function isAuthorized($user = null)
     {
-        if (in_array($this->request->params['action'], ['view', 'index', 'edit', 'delete'])) {
-            if ($user['role_id'] != RolesEnum::PROFESOR) {
-                $this->Flash->error(__('Access denied!'));
+        if (in_array($this->request->params['action'], ['add'])) {
+            if ($user['role_id'] != 3) {
+                $this->Flash->error(__('Acceso denegado!'));
                 return false;
             }
         }
@@ -32,14 +39,11 @@ class UsersController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Roles']
-        ];
+     
+        $user_session = $this->Auth->user();
         $users = $this->paginate($this->Users);
-
-        $this->set(compact('users'));
+        $this->set(compact('users','user_session'));
     }
-
     /**
      * View method
      *
@@ -62,17 +66,28 @@ class UsersController extends AppController
     public function add()
     {
         $user = $this->Users->newEntity();
+    
         if ($this->request->is('post')) {
+            
+            $data = $this->request->getData();
             $user = $this->Users->patchEntity($user, $this->request->getData());
+ 
             if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+
+                $taller = $this->Taller->get($data['talleres']);
+                $taller->id_user = $user->id;
+                 if ($this->Taller->save($taller)) {
+                    
+                    $this->Flash->success(__('The user has been saved.'));
+                 }
 
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
-        $roles = $this->Users->Roles->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'roles'));
+        $talleres = $this->Taller->find('list', ['limit' => 200]);
+        $roles = $this->Users->Roles->find('list')->where(['id <' => 4]);
+        $this->set(compact('user','roles','talleres'));
     }
     /**
      * Edit method
@@ -90,7 +105,6 @@ class UsersController extends AppController
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
-
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
@@ -114,7 +128,6 @@ class UsersController extends AppController
         } else {
             $this->Flash->error(__('The user could not be deleted. Please, try again.'));
         }
-
         return $this->redirect(['action' => 'index']);
     }
      public function login()

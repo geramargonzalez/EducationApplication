@@ -5,7 +5,7 @@
  */
 ?>
 
-<div class="users form large-9 medium-8 columns content">
+<div class="users form large-12 medium-2 columns content">
     <?= $this->Form->create() ?>
     <fieldset>
         <legend><?= __('Login') ?></legend>

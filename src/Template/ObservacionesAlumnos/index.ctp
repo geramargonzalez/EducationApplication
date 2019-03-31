@@ -10,7 +10,6 @@
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('Profesor') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('observaciones') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Fecha') ?></th>
                 <th scope="col" class="actions"><?= __('Acciones') ?></th>
@@ -18,8 +17,9 @@
         </thead>
         <tbody>
             <?php foreach ($observacionesAlumnos as $observacionesAlumno): ?>
+               <?php //foreach ($users as $user): ?>
             <tr>
-                <td><?= h($user->name . " " . $user->surname )?></td>
+               
                 <td><?= h($observacionesAlumno->observaciones)?></td>
                 <td><?= h($observacionesAlumno->created->day . " / " . $observacionesAlumno->created->month) ?></td>
                
@@ -29,6 +29,7 @@
                     <?= $this->Form->postLink(__('Eliminar'), ['action' => 'delete', $observacionesAlumno->id], ['confirm' => __('Are you sure you want to delete # {0}?', $observacionesAlumno->id)]) ?>
                 </td>
             </tr>
+               <?php// endforeach; ?>
             <?php endforeach; ?>
         </tbody>
     </table>

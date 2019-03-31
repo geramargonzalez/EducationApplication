@@ -45,6 +45,7 @@ class UsersTable extends Table
             'foreignKey' => 'role_id',
             'joinType' => 'INNER'
         ]);
+
     }
 
     /**
@@ -70,12 +71,6 @@ class UsersTable extends Table
             ->maxLength('surname', 255)
             ->requirePresence('surname', 'create')
             ->allowEmptyString('surname', false);
-
-        $validator
-            ->scalar('materia')
-            ->maxLength('materia', 255)
-            ->requirePresence('materia', 'create')
-            ->allowEmptyString('materia', false);
 
         $validator
             ->email('email')

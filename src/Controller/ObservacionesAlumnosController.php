@@ -13,27 +13,24 @@ use Cake\I18n\Time;
  */
 class ObservacionesAlumnosController extends AppController
 {
-
     /**
-     * Index method
+     * index method
      *
      * @return \Cake\Http\Response|void
      */
     public function index($id = null)
     {
     
-        $id_user = $this->Auth->user('id');    
         $qry = $this->ObservacionesAlumnos
             ->find('all')
             ->where([
                 'ObservacionesAlumnos.id_alumno' => $id
             ]);
-        $user = $this->ObservacionesAlumnos->Users->get($id_user);
+        
         $alumno = $this->ObservacionesAlumnos->Alumnos->get($id);
         $observacionesAlumnos = $this->paginate($qry, ['limit' => 10]);
-        $this->set(compact('observacionesAlumnos','alumno','user'));
+        $this->set(compact('observacionesAlumnos','alumno'));
     }
-
     /**
      * View method
      *
@@ -42,17 +39,12 @@ class ObservacionesAlumnosController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null, $id_alumno = null)
-    {
-        $id_user = $this->Auth->user('id');    
+    {  
         $observacionesAlumno = $this->ObservacionesAlumnos->get($id);
         $alumno = $this->ObservacionesAlumnos->Alumnos->get($id_alumno);
-        $user = $this->ObservacionesAlumnos->Users->get($id_user);
-        //debug($alumno);
-        //exit;
-        //$this->set('observacionesAlumno', $observacionesAlumno, 'alumno', $alumno);
+        $user = $this->ObservacionesAlumnos->Users->get($observacionesAlumno->id_user);
         $this->set(compact('observacionesAlumno','alumno','user'));
     }
-
     /**
      * Add method
      *
@@ -74,7 +66,6 @@ class ObservacionesAlumnosController extends AppController
             }
             $this->Flash->error(__('The observaciones alumno could not be saved. Please, try again.'));
         }
-
         $alumno = $this->ObservacionesAlumnos->Alumnos->get($id);
         $this->set(compact('observacionesAlumno','alumno'));
     }
@@ -88,21 +79,17 @@ class ObservacionesAlumnosController extends AppController
      */
     public function edit($id = null)
     {
-        $observacionesAlumno = $this->ObservacionesAlumnos->get($id, [
-            'contain' => []
-        ]);
+        $observacionesAlumno = $this->ObservacionesAlumnos->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $observacionesAlumno = $this->ObservacionesAlumnos->patchEntity($observacionesAlumno, $this->request->getData());
             if ($this->ObservacionesAlumnos->save($observacionesAlumno)) {
                 $this->Flash->success(__('The observaciones alumno has been saved.'));
-
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The observaciones alumno could not be saved. Please, try again.'));
         }
         $this->set(compact('observacionesAlumno'));
     }
-
     /**
      * Delete method
      *
@@ -119,7 +106,6 @@ class ObservacionesAlumnosController extends AppController
         } else {
             $this->Flash->error(__('The observaciones alumno could not be deleted. Please, try again.'));
         }
-
         return $this->redirect(['action' => 'index']);
     }
 }

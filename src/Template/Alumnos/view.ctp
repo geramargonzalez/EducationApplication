@@ -27,10 +27,13 @@
             <th scope="row"><?= __('Telefono') ?></th>
             <td><?= h($alumno->tel) ?></td>
         </tr>
-       
+        <tr>
+            <th scope="row"><?= __('Taller') ?></th>
+            <td><?= h($nombre) ?></td>
+        </tr>
     </table>
     <div class="row">
-        <h4><?= __('Observation') ?></h4>
+        <h4><?= __('Antescedentes') ?></h4>
         <?= $this->Text->autoParagraph(h($alumno->observation)); ?>
     </div>
     <div class="related">

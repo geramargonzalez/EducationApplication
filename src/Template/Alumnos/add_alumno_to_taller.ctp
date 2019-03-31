@@ -5,14 +5,14 @@
  */
 ?>
 <div class="taller form large-9 medium-8 columns content">
-    <?= $this->Form->create($taller) ?>
+    <?= $this->Form->create() ?>
     <fieldset>
-        <legend><?= __('Edit Taller') ?></legend>
+        <legend><?= __('Agregar alumno a taller') ?></legend>
         <?php
-            echo $this->Form->control('name');
-            echo $this->Form->control('roles');
+            echo $this->Form->control('talleres');
+            echo $this->Form->control('alumnos');
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('Enviar')) ?>
     <?= $this->Form->end() ?>
 </div>

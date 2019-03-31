@@ -34,18 +34,19 @@ class TallerTable extends Table
     public function initialize(array $config)
     {
         parent::initialize($config);
-
         $this->setTable('taller');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
-
+        $this->addBehavior('Timestamp');
+        $this->belongsTo('Roles', [
+            'foreignKey' => 'role_id',
+            'joinType' => 'INNER'
+        ]);
         $this->belongsTo('Users', [
             'foreignKey' => 'id_user',
             'joinType' => 'INNER'
         ]);
-        $this->addBehavior('Timestamp');
     }
-
     /**
      * Default validation rules.
      *
@@ -57,17 +58,16 @@ class TallerTable extends Table
         $validator
             ->integer('id')
             ->allowEmptyString('id', 'create');
-
         $validator
             ->scalar('name')
             ->maxLength('name', 255)
             ->requirePresence('name', 'create')
             ->allowEmptyString('name', false);
-
         $validator
-            ->integer('id_user')
-            ->requirePresence('id_user', 'create')
-            ->allowEmptyString('id_user', false);
+            ->scalar('role_id')
+            ->maxLength('role_id', 11)
+            ->requirePresence('role_id', 'create')
+            ->allowEmptyString('name', false);
 
         return $validator;
     }

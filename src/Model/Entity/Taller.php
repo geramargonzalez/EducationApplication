@@ -11,12 +11,10 @@ use Cake\ORM\Entity;
  * @property int $id_profesor
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
- *
  * @property \App\Model\Entity\Alumno[] $alumnos
  */
 class Taller extends Entity
 {
-
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -28,9 +26,9 @@ class Taller extends Entity
      */
     protected $_accessible = [
         'name' => true,
+        'role_id' => true,
         'id_user' => true,
         'created' => true,
-        'modified' => true,
-        'alumnos' => true
+        'modified' => true
     ];
 }

@@ -7,12 +7,12 @@
 <div class="taller form large-9 medium-8 columns content">
     <?= $this->Form->create($taller) ?>
     <fieldset>
-        <legend><?= __('Agregar Taller') ?></legend>
+        <legend><?= __('Agregar materia') ?></legend>
         <?php
             echo $this->Form->control('name');
-            echo $this->Form->control('id_user', ['options' => $users]);
+            echo $this->Form->control('role_id');
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('Enviar')) ?>
     <?= $this->Form->end() ?>
 </div>

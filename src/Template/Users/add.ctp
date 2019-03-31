@@ -7,15 +7,15 @@
 <div class="users form large-9 medium-8 columns content">
     <?= $this->Form->create($user) ?>
     <fieldset>
-        <legend><?= __('Add User') ?></legend>
+        <legend><?= __('Agregar Docente') ?></legend>
         <?php
             echo $this->Form->control('name');
             echo $this->Form->control('surname');
-            echo $this->Form->control('materia');
             echo $this->Form->control('email');
             echo $this->Form->control('password');
             echo $this->Form->control('image');
             echo $this->Form->control('role_id');
+            echo $this->Form->control('talleres');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

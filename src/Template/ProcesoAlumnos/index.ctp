@@ -69,7 +69,7 @@
                  <td scope="col"></td>
                  <td scope="col"><?= $this->Number->format(round($avg_general)) ?></td>
                  <td class="actions">
-                      <?= $this->Html->link(__('Nuevo Proceso'), ['controller' => 'ProcesoAlumnos', 'action' => 'add', $alumno->id]) ?>
+                       <?= $this->Html->link(__('Estadisticas'), ['controller' => 'ProcesoAlumnos', 'action' => 'statsAlumnos', $alumno->id]) ?>
                 </td>
 
                

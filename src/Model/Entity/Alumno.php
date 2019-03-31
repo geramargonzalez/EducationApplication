@@ -37,6 +37,7 @@ class Alumno extends Entity
         'observation' => true,
         'created' => true,
         'modified' => true,
-        'ci' => true
+        'ci' => true,
+        'id_taller'=> true
     ];
 }

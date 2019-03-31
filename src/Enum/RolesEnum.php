@@ -9,7 +9,7 @@ class RolesEnum {
     public static function GetList() {
         return [
             Self::PROFESOR => __('Profesor'),
-            Self::USER => __('User'),
+            Self::PROFESOR_ADMIN => __('Profesor_admin'),
         ];
     }
 

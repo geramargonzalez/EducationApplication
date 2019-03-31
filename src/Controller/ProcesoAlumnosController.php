@@ -4,6 +4,8 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\I18n\Time;
 
+require_once(ROOT.DS.'plugins'.DS.'GoogleCharts'.DS.'vendor'.DS.'GoogleCharts.php');
+
 /**
  * ProcesoAlumnos Controller
  *
@@ -17,6 +19,13 @@ class ProcesoAlumnosController extends AppController
    // private $avg_conducta;
     //private $avg_expresionOral;
     //private $avg_rendimiento;
+
+      public function beforeRender(Event $event)
+    {
+        parent::beforeRender($event);
+        
+        $this->getView()->loadHelper('GoogleCharts.GoogleCharts');
+    }
     
     public function initialize()
     {
@@ -38,7 +47,6 @@ class ProcesoAlumnosController extends AppController
                 'ProcesoAlumnos.id_alumno' => $id,
                 'ProcesoAlumnos.id_user' => $id_user,  
             ]);
-       
         $avg_rendimiento = $this->procesoAvgRendimiento($id,$id_user);
         $avg_expresionOral = $this->procesoAvgExpresionOral($id,$id_user);
         $avg_conducta = $this->procesoAvgConducta($id,$id_user);
@@ -83,7 +91,6 @@ class ProcesoAlumnosController extends AppController
         $alumno = $this->Alumnos->get($id);
         $this->set(compact('procesoAlumno','alumno'));
     }
-
     /**
      * Edit method
      *
@@ -104,7 +111,23 @@ class ProcesoAlumnosController extends AppController
         }
         $this->set(compact('procesoAlumno'));
     }
+      public function statsAlumnos($id_alumno = null)
+    {
 
+        // Calcular el promedio del alumno por mes
+        $alumno = $this->Alumnos->get($id_alumno);
+        $query = $this->Proceso->findById_alumno($id_alumno);
+        $proceso = $query->first();
+
+        $rounds = $this->Rounds->find('all')
+                    ->select(['Round.score', 'Round.event_date'])
+                    ->where(['Round.user_id' => $this->Auth->user('id')])
+                    ->order(['Round.event_date' => 'ASC'])
+                    ->limit(8)
+                    ->toArray();
+        
+        $this->set(compact('alumno'));
+    } 
     /**
      * Delete method
      *
@@ -124,6 +147,7 @@ class ProcesoAlumnosController extends AppController
         return $this->redirect(['controller'=>'Alumnos','action' => 'index']);
     }
 
+    // Funciones 
     public function procesoAvgRendimiento($id = null, $user_id = null){
         $query = $this->ProcesoAlumnos->findById_alumnoAndId_user($id,$user_id);
         $rendi = $query->select(['avg' => $query->func()->avg('rendimiento')])->first();
