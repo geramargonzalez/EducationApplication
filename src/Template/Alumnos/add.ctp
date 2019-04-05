@@ -15,6 +15,7 @@
             echo $this->Form->control('ci');
             echo $this->Form->control('procedencia');
             echo $this->Form->control('tel');
+            echo $this->Form->control('turnos');
             echo $this->Form->control('observation');
         ?>
     </fieldset>

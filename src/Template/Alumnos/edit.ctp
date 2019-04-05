@@ -15,8 +15,10 @@
             echo $this->Form->control('procedencia');
             echo $this->Form->control('ci');
             echo $this->Form->control('observation');
+            echo $this->Form->control('turnos');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div>
+ 

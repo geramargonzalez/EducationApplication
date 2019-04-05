@@ -16,6 +16,7 @@
             echo $this->Form->control('image');
             echo $this->Form->control('role_id');
             echo $this->Form->control('talleres');
+            echo $this->Form->control('turnos');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

@@ -22,7 +22,6 @@ class RolesController extends AppController
     public function index()
     {
         $roles = $this->paginate($this->Roles);
-
         $this->set(compact('roles'));
     }
 
@@ -54,7 +53,6 @@ class RolesController extends AppController
             $role = $this->Roles->patchEntity($role, $this->request->getData());
             if ($this->Roles->save($role)) {
                 $this->Flash->success(__('The role has been saved.'));
-
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The role could not be saved. Please, try again.'));
@@ -78,7 +76,6 @@ class RolesController extends AppController
             $role = $this->Roles->patchEntity($role, $this->request->getData());
             if ($this->Roles->save($role)) {
                 $this->Flash->success(__('The role has been saved.'));
-
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The role could not be saved. Please, try again.'));

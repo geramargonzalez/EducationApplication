@@ -17,30 +17,32 @@ class AlumnosController extends AppController
     {
         parent::initialize();
         $this->loadModel('Taller');
-       // $this->loadModel();
+        $this->loadModel('Turno');
     }
-
     /**
+     
      * Index method
      *
      * @return \Cake\Http\Response|void
      */
     public function index()
     {
-
         $id_user = $this->Auth->user('id');
         $query = $this->Taller->findById_user($id_user);
         $taller = $query->first();
 
-        // VER VER VER VER VER VER VER VER VER VER VER VER VER 
-        //YA ESTA IMPLEMENTADO QUE SE BUSQUE ALUMNO POR TALLER
+        // ***** VER VER VER VER VER VER VER VER VER VER VER VER VER *****
+        // ***** YA ESTA IMPLEMENTADO QUE SE BUSQUE ALUMNO POR TALLER ****
 
-       /* if($taller->role_id == 5){
+       /* 
+        if($taller->role_id == 5){
           $alumnos = $this->paginate($this->Alumnos->find("all")->where(['id_taller =' => $taller->id]));
         } else {
           $alumnos = $this->paginate($this->Alumnos);      
-        }*/
-        $alumnos = $this->paginate($this->Alumnos);      
+        }
+        */
+
+        $alumnos = $this->paginate($this->Alumnos,['limit' => 100]);      
         $this->set(compact('alumnos'));
     }
     /**
@@ -57,7 +59,7 @@ class AlumnosController extends AppController
             $taller  = $this->Taller->get($alumnos->id_taller);
             $nombre = $taller->name;
         } else {
-            $nombre = "No tiene";
+            $nombre = "No tiene ";
         }
         $this->set(compact('alumno','nombre'));
     }
@@ -78,12 +80,13 @@ class AlumnosController extends AppController
             }
             $this->Flash->error(__('The alumno could not be saved. Please, try again.'));
         }
-        $this->set(compact('alumno'));
+        $turnos = $this->Turno->find('list', ['keyField' => 'id',
+                                             'valueField' => 'nombre']);
+        $this->set(compact('alumno','turnos'));
     }
 
      public function addAlumnosToTaller($id = null)
     {
-        
         $taller = $this->Alumnos->Taller->get($id);
         $alum_reg = 0;
         if ($this->request->is('post')) {
@@ -100,7 +103,6 @@ class AlumnosController extends AppController
             if($alum_reg > 0){
                  $this->Flash->success(__('Los alumnos han sido registrados.'));
                  return $this->redirect(['controller' =>'Taller', 'action' => 'view',$taller->id]);
-            
             } else{
                  $this->Flash->error(__('Se produjo un error.'));
             }
@@ -111,27 +113,23 @@ class AlumnosController extends AppController
 
      public function addAlumnoToTaller(){
 
+        $user = $this->Auth->user();
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-
             $data = $this->request->getData();
             $taller = $this->Alumnos->Taller->get($data['talleres']);
             $alumno = $this->Alumnos->get($data['alumnos']);
             $alumno->id_taller = $taller->id;
-           
             if ($this->Alumnos->save($alumno)) {
                 $this->Flash->success(__('El alumno se a ingresado en la materia.'));
                 return $this->redirect(['action' => 'index']);
             }
-           
             $this->Flash->error(__('Se produjo un error. Verifique sus datos.'));
         }
-        $talleres = $this->Alumnos->Taller->find('list')->where(['role_id' => 5]);
-        $alumnos = $this->Alumnos->find('list')->where(['id_taller <' => 1]);
+        $talleres = $this->Alumnos->Taller->find('list')->where(['role_id' => 5,'id_turno' => $user['id_turno']]);
+        $alumnos = $this->Alumnos->find('list')->where(['id_taller <' => 1,'id_turno' => $user['id_turno']]);
         $this->set(compact('alumnos','talleres'));
-
     }
-
     /**
      * Edit method
      *
@@ -168,6 +166,19 @@ class AlumnosController extends AppController
             $this->Flash->success(__('The alumno has been deleted.'));
         } else {
             $this->Flash->error(__('The alumno could not be deleted. Please, try again.'));
+        }
+        return $this->redirect(['action' => 'index']);
+    }
+
+       public function deleteByAlumno($id = null)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $alumno = $this->Alumnos->get($id);
+        $alumno->id_taller = 0;
+        if ($this->Alumnos->save($alumno)) {
+            $this->Flash->success(__('El alumno ha sido quitado del taller'));
+        } else {
+            $this->Flash->error(__('Se produjo un error, el alumno no puede ser quitado.'));
         }
         return $this->redirect(['action' => 'index']);
     }

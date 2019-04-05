@@ -43,6 +43,16 @@ class AlumnosTable extends Table
             'foreignKey' => 'id_taller',
             'joinType' => 'INNER'
         ]);
+
+          $this->belongsTo('Centro', [
+            'foreignKey' => 'id_centro',
+            'joinType' => 'INNER'
+        ]);
+
+          $this->belongsTo('Turno', [
+            'foreignKey' => 'id_turno',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
@@ -93,6 +103,13 @@ class AlumnosTable extends Table
         $validator
             ->integer('id_taller')
             ->requirePresence('id_taller', 'create');
+
+          $validator
+            ->integer('id_centro')
+            ->allowEmptyString('id_centro', 'create');
+        $validator
+            ->integer('id_turno')
+            ->allowEmptyString('id_turno', 'create');
 
         return $validator;
     }

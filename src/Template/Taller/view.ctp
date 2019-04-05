@@ -46,9 +46,8 @@
                 <td><?= h($alumno->surname) ?></td>
                 <td><?= h($alumno->age) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Alumnos', 'action' => 'view', $alumno->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Alumnos', 'action' => 'edit', $alumno->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'TallerAlumnos', 'action' => 'deleteByAlumno', $alumno->id,$taller->id], ['confirm' => __('Are you sure you want to delete # {0}?', $alumno->id)]) ?>
+                    <?= $this->Html->link(__('Ver'), ['controller' => 'Alumnos', 'action' => 'view', $alumno->id]) ?>
+                    <?= $this->Form->postLink(__('Quitar'), ['controller' => 'Alumnos', 'action' => 'deleteByAlumno', $alumno->id,$taller->id], ['confirm' => __('Are you sure you want to delete # {0}?', $alumno->id)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

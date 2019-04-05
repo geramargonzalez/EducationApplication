@@ -10,6 +10,7 @@
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('Materia') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Turno') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Fecha') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
@@ -18,12 +19,11 @@
             <?php foreach ($talleres as $taller): ?>
             <tr>
                 <td><?= h($taller->name) ?></td>
+                 <td><?= $taller->id_turno == 1 ? "Matutino" : "Vespertino"; ?></td>
                 <td><?= h($taller->created->day . " / " .$taller->created->month) ?></td>
-                <th scope="col">0</th>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $taller->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $taller->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $taller->id], ['confirm' => __('Are you sure you want to delete # {0}?', $taller->id)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

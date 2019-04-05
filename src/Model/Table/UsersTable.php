@@ -46,6 +46,16 @@ class UsersTable extends Table
             'joinType' => 'INNER'
         ]);
 
+        $this->belongsTo('Centro', [
+            'foreignKey' => 'id_centro',
+            'joinType' => 'INNER'
+        ]);
+
+          $this->belongsTo('Turno', [
+            'foreignKey' => 'id_turno',
+            'joinType' => 'INNER'
+        ]);
+
     }
 
     /**
@@ -88,6 +98,13 @@ class UsersTable extends Table
             ->maxLength('image', 255)
             ->requirePresence('image', 'create')
             ->allowEmptyFile('image', false);
+
+         $validator
+            ->integer('id_centro')
+            ->allowEmptyString('id_centro', 'create');
+        $validator
+            ->integer('id_turno')
+            ->allowEmptyString('id_turno', 'create');
 
         return $validator;
     }

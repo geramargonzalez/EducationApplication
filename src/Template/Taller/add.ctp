@@ -11,8 +11,10 @@
         <?php
             echo $this->Form->control('name');
             echo $this->Form->control('role_id');
+            echo $this->Form->control('turnos');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Enviar')) ?>
     <?= $this->Form->end() ?>
 </div>
+  

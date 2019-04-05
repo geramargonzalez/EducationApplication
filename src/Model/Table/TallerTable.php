@@ -46,6 +46,16 @@ class TallerTable extends Table
             'foreignKey' => 'id_user',
             'joinType' => 'INNER'
         ]);
+
+           $this->belongsTo('Centro', [
+            'foreignKey' => 'id_centro',
+            'joinType' => 'INNER'
+        ]);
+
+          $this->belongsTo('Turno', [
+            'foreignKey' => 'id_turno',
+            'joinType' => 'INNER'
+        ]);
     }
     /**
      * Default validation rules.
@@ -68,6 +78,12 @@ class TallerTable extends Table
             ->maxLength('role_id', 11)
             ->requirePresence('role_id', 'create')
             ->allowEmptyString('name', false);
+         $validator
+            ->integer('id_centro')
+            ->allowEmptyString('id_centro', 'create');
+        $validator
+            ->integer('id_turno')
+            ->allowEmptyString('id_turno', 'create');
 
         return $validator;
     }

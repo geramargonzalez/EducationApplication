@@ -20,20 +20,17 @@ class ObservacionesAlumnosController extends AppController
      */
     public function index($id = null)
     {
-    
         $qry = $this->ObservacionesAlumnos
             ->find('all')
             ->where([
                 'ObservacionesAlumnos.id_alumno' => $id
             ]);
-        
         $alumno = $this->ObservacionesAlumnos->Alumnos->get($id);
         $observacionesAlumnos = $this->paginate($qry, ['limit' => 10]);
         $this->set(compact('observacionesAlumnos','alumno'));
     }
     /**
-     * View method
-     *
+     * View methodo
      * @param string|null $id Observaciones Alumno id.
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
@@ -52,14 +49,12 @@ class ObservacionesAlumnosController extends AppController
      */
     public function add($id = null)
     {
-         $id_user = $this->Auth->user('id');
+        $id_user = $this->Auth->user('id');
         $observacionesAlumno = $this->ObservacionesAlumnos->newEntity();
         if ($this->request->is('post')) {
             $observacionesAlumno = $this->ObservacionesAlumnos->patchEntity($observacionesAlumno, $this->request->getData());
-            
             $observacionesAlumno->id_user = $id_user;
             $observacionesAlumno->id_alumno = $id;
-           
             if ($this->ObservacionesAlumnos->save($observacionesAlumno)) {
                 $this->Flash->success(__('The observaciones alumno has been saved.'));
                 return $this->redirect(['controller'=>'Alumnos','action' => 'view',$id]);

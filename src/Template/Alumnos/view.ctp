@@ -33,7 +33,7 @@
         </tr>
     </table>
     <div class="row">
-        <h4><?= __('Antescedentes') ?></h4>
+        <h4><?= __('Antecedentes') ?></h4>
         <?= $this->Text->autoParagraph(h($alumno->observation)); ?>
     </div>
     <div class="related">

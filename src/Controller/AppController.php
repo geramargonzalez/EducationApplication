@@ -30,6 +30,7 @@ use Cake\I18n\Time;
 class AppController extends Controller
 {
 
+    //public $helpers = ['GoogleCharts.GoogleCharts'];
     /**
      * Initialization hook method.
      *
@@ -68,6 +69,8 @@ class AppController extends Controller
                 ]
             ]
         ]);
+
+       // $this->loadHelper('GoogleCharts.GoogleCharts');
     }
       public function beforeFilter(Event $event)
     {

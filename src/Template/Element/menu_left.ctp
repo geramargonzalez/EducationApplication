@@ -13,6 +13,10 @@
 	        <li><?= $this->Html->link(__('Nuevo Profesor'), ['controller' => 'Users', 'action' => 'add']) ?></li>
 	        <li><?= $this->Html->link(__('Profesores'), ['controller' => 'Users', 'action' => 'index']) ?></li>
 	        <hr/>
+	        <li><?= $this->Html->link(__('Agregar evaluacion'), ['controller' => 'TipoEvaluacion','action' => 'add']) ?></li>
+	         <li><?= $this->Html->link(__('Tipo de evaluaciones'), ['controller' => 'TipoEvaluacion','action' => 'index']) ?></li>
+	        <hr/>
+
 	        <li><?= $this->Html->link(__('Agregar Centro'), ['controller' => 'Centro', 'action' => 'add']) ?></li>
 	        <li><?= $this->Html->link(__('Centros'), ['controller' => 'Centro', 'action' => 'index']) ?></li>
 	    </ul>

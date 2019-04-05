@@ -41,7 +41,8 @@ class UsersController extends AppController
     {
      
         $user_session = $this->Auth->user();
-        $users = $this->paginate($this->Users);
+        
+        $users = $this->paginate($this->Users,['limit' => 15]);
         $this->set(compact('users','user_session'));
     }
     /**
@@ -71,23 +72,21 @@ class UsersController extends AppController
             
             $data = $this->request->getData();
             $user = $this->Users->patchEntity($user, $this->request->getData());
- 
             if ($this->Users->save($user)) {
-
                 $taller = $this->Taller->get($data['talleres']);
                 $taller->id_user = $user->id;
-                 if ($this->Taller->save($taller)) {
-                    
+                if ($this->Taller->save($taller)) {
                     $this->Flash->success(__('The user has been saved.'));
                  }
-
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $talleres = $this->Taller->find('list', ['limit' => 200]);
-        $roles = $this->Users->Roles->find('list')->where(['id <' => 4]);
-        $this->set(compact('user','roles','talleres'));
+        $roles = $this->Users->Roles->find('list');
+        $turnos = $this->Users->Turno->find('list', ['keyField' => 'id',
+                    'valueField' => 'nombre']);
+        $this->set(compact('user','roles','talleres','turnos'));
     }
     /**
      * Edit method
@@ -109,8 +108,11 @@ class UsersController extends AppController
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
+        $talleres = $this->Taller->find('list', ['limit' => 200]);
         $roles = $this->Users->Roles->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'roles'));
+        $turnos = $this->Users->Turno->find('list', ['keyField' => 'id',
+                    'valueField' => 'nombre']);
+        $this->set(compact('user', 'roles','turnos','talleres'));
     }
     /**
      * Delete method
@@ -130,6 +132,8 @@ class UsersController extends AppController
         }
         return $this->redirect(['action' => 'index']);
     }
+    
+    //
      public function login()
     {
         if ($this->Auth->user()) {

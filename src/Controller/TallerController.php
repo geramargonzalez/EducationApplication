@@ -24,13 +24,13 @@ class TallerController extends AppController
         return parent::isAuthorized($user);
     }
 
-
      public function initialize()
     {
         parent::initialize();
         $this->loadModel('Users');
         $this->loadModel('Alumnos');
         $this->loadModel('Roles');
+        $this->loadModel('Turno');
     }
     /**
      * Index method
@@ -38,7 +38,6 @@ class TallerController extends AppController
      */
     public function index()
     {
-        //$id_user = $this->Auth->user('id');
         $qry = $this->Taller->find('all');
         $talleres = $this->paginate($qry, ['limit' => 10]);
         $this->set(compact('talleres'));
@@ -61,7 +60,7 @@ class TallerController extends AppController
 
         $cant = $this->Alumnos->find();
                           $cant->select(['count' => $cant->func()->count('*')])
-                                   ->where(['id_taller' => $taller->id]);                    
+                               ->where(['id_taller' => $taller->id]);                    
         $cantidad= $cant->first()->count;
         $this->set(compact('taller', 'alumnos','user','cantidad'));
     }
@@ -77,15 +76,19 @@ class TallerController extends AppController
             $data = $this->request->getData();
             $taller = $this->Taller->patchEntity($taller, $data);
             $taller->id_user = 0;
+            $taller->id_centro = 1;
+            $taller->id_turno = $data['turnos'];
             if ($this->Taller->save($taller)) {
                 $this->Flash->success(__('The taller has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The taller could not be saved. Please, try again.'));
         }
-         $roles = $this->Roles->find('list')->where(['id >' => 3]);
-        $this->set(compact('taller','roles'));
-    }
+        $roles = $this->Roles->find('list')->where(['id >' => 3]);
+        $turnos = $this->Turno->find('list', ['keyField' => 'id',
+                    'valueField' => 'nombre']);
+        $this->set(compact('taller','roles','turnos'));
+    } 
     /**
      * Edit method
      * @param string|null $id Taller id.

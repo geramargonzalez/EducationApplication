@@ -17,19 +17,16 @@
         </thead>
         <tbody>
             <?php foreach ($observacionesAlumnos as $observacionesAlumno): ?>
-               <?php //foreach ($users as $user): ?>
             <tr>
-               
                 <td><?= h($observacionesAlumno->observaciones)?></td>
-                <td><?= h($observacionesAlumno->created->day . " / " . $observacionesAlumno->created->month) ?></td>
-               
+                <td><?= h($observacionesAlumno->created->day . " / " . $observacionesAlumno->created->month) ?></td>               
                 <td class="actions">
                     <?= $this->Html->link(__('Detalle'), ['action' => 'view', $observacionesAlumno->id, $alumno->id]) ?>
                     <?= $this->Html->link(__('Editar'), ['action' => 'edit', $observacionesAlumno->id]) ?>
                     <?= $this->Form->postLink(__('Eliminar'), ['action' => 'delete', $observacionesAlumno->id], ['confirm' => __('Are you sure you want to delete # {0}?', $observacionesAlumno->id)]) ?>
                 </td>
             </tr>
-               <?php// endforeach; ?>
+              
             <?php endforeach; ?>
         </tbody>
     </table>

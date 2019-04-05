@@ -28,7 +28,10 @@ class Taller extends Entity
         'name' => true,
         'role_id' => true,
         'id_user' => true,
+        'id_centro' => true,
+        'id_turno' => true,
         'created' => true,
         'modified' => true
     ];
 }
+ 

@@ -31,7 +31,8 @@ class User extends Entity
         'created' => true,
         'modified' => true,
         'role_id' => true,
-        'role' => true
+        'id_centro' => true,
+        'id_turno' => true
     ];
 
     protected $_hidden = [

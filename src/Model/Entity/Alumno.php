@@ -38,6 +38,8 @@ class Alumno extends Entity
         'created' => true,
         'modified' => true,
         'ci' => true,
-        'id_taller'=> true
+        'id_taller'=> true,
+        'id_turno'=> true,
+        'id_centro'=> true
     ];
 }
