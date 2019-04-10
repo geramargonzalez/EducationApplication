@@ -13,16 +13,35 @@ use App\Controller\AppController;
 class RendimientoAlumnoController extends AppController
 {
 
+   public function initialize()
+    {
+        parent::initialize();
+        $this->loadModel('Alumnos');
+        
+    }
     /**
      * Index method
      *
      * @return \Cake\Http\Response|void
      */
-    public function index()
+    public function index($id_alumno = null)
     {
-        $rendimientoAlumno = $this->paginate($this->RendimientoAlumno);
+        $id_user = $this->Auth->user('id');
 
-        $this->set(compact('rendimientoAlumno'));
+        $alumno = $this->Alumnos->get($id_alumno);
+        $rendimientoAlumno = $this->paginate($this->RendimientoAlumno->find("all")->where(['id_alumno =' => $id_alumno,'id_user = ' => $id_user]));
+
+        $query = $this->RendimientoAlumno->findById_alumno($id_alumno, $id_user);
+
+        $tipoEva = $query->select(['rendimiento' => $query->func()->avg('rendimiento'), 'tipo_evaluacion' =>'tipoevaluacion'])
+                  ->where(['id_alumno'  => $alumno->id])
+                  ->group('tipoevaluacion')
+                  ->order(['rendimiento' => 'DESC']);
+
+        $tipoEva->enableHydration(false);
+        $tipo_evaluacion = $tipoEva->toList(); 
+
+        $this->set(compact('tipo_evaluacion','alumno'));
     }
 
     /**
@@ -34,10 +53,7 @@ class RendimientoAlumnoController extends AppController
      */
     public function view($id = null)
     {
-        $rendimientoAlumno = $this->RendimientoAlumno->get($id, [
-            'contain' => []
-        ]);
-
+        $rendimientoAlumno = $this->RendimientoAlumno->get($id);
         $this->set('rendimientoAlumno', $rendimientoAlumno);
     }
 
@@ -53,7 +69,6 @@ class RendimientoAlumnoController extends AppController
             $rendimientoAlumno = $this->RendimientoAlumno->patchEntity($rendimientoAlumno, $this->request->getData());
             if ($this->RendimientoAlumno->save($rendimientoAlumno)) {
                 $this->Flash->success(__('The rendimiento alumno has been saved.'));
-
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The rendimiento alumno could not be saved. Please, try again.'));

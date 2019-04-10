@@ -48,7 +48,8 @@ $cakeDescription = 'App: CEC-Alumnos-Data';
     </div>
     <footer>
     </footer>
-     <?= $this->Html->script('./fusionCharts/fusioncharts.js') ?>
+    
+
      <script type = "text/javascript">
          google.charts.load('current', {packages: ['corechart','line']});  
       </script>

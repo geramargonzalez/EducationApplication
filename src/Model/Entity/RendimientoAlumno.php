@@ -8,7 +8,7 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int $id_alumno
- * @property int $tipo_evaluacion
+ * @property string $tipoevaluacion
  * @property int $rendimiento
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
@@ -27,10 +27,10 @@ class RendimientoAlumno extends Entity
      */
     protected $_accessible = [
         'id_alumno' => true,
-        'tipo_evaluacion' => true,
         'rendimiento' => true,
         'id_user' =>true,
         'created' => true,
-        'modified' => true
+        'modified' => true,
+        'tipoevaluacion' => true
     ];
 }

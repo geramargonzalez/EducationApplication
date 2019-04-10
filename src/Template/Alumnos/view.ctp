@@ -12,7 +12,7 @@
             <td><?= h($alumno->name) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Edad') ?></th>
+            <th scope="row"><?= __('Apellido') ?></th>
             <td><?= h($alumno->surname) ?></td>
         </tr>
         <tr>
@@ -49,7 +49,9 @@
                    <?= $this->Html->link(__('Nuevo Proceso |'), ['controller' => 'ProcesoAlumnos', 'action' => 'add', $alumno->id]) ?>
                     <?= $this->Html->link(__(' Ver Proceso |'), ['controller' => 'ProcesoAlumnos', 'action' => 'index', $alumno->id]) ?>
                     <?= $this->Html->link(__('Nueva Observacion |'), ['controller' => 'ObservacionesAlumnos', 'action' => 'add', $alumno->id]) ?>
-                     <?= $this->Html->link(__('Observaciones'), ['controller' => 'ObservacionesAlumnos', 'action' => 'index', $alumno->id]) ?>
+                     <?= $this->Html->link(__('Observaciones |'), ['controller' => 'ObservacionesAlumnos', 'action' => 'index', $alumno->id]) ?>
+                    <?= $this->Html->link(__('Estadisticas Globales |'), ['controller' => 'ProcesoAlumnos', 'action' => 'statsAlumnosGenerales', $alumno->id]) ?>
+                    <?= $this->Html->link(__('Desgloce de rendimientos'), ['controller' => 'RendimientoAlumno', 'action' => 'index', $alumno->id]) ?>
                 </td>
             </tr>
             

@@ -32,7 +32,6 @@ class CentroController extends AppController
     public function index()
     {
         $centro = $this->paginate($this->Centro);
-
         $this->set(compact('centro'));
     }
 
@@ -48,7 +47,6 @@ class CentroController extends AppController
         $centro = $this->Centro->get($id, [
             'contain' => []
         ]);
-
         $this->set('centro', $centro);
     }
 
@@ -64,7 +62,6 @@ class CentroController extends AppController
             $centro = $this->Centro->patchEntity($centro, $this->request->getData());
             if ($this->Centro->save($centro)) {
                 $this->Flash->success(__('The centro has been saved.'));
-
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The centro could not be saved. Please, try again.'));
@@ -88,7 +85,6 @@ class CentroController extends AppController
             $centro = $this->Centro->patchEntity($centro, $this->request->getData());
             if ($this->Centro->save($centro)) {
                 $this->Flash->success(__('The centro has been saved.'));
-
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The centro could not be saved. Please, try again.'));

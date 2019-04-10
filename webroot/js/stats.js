@@ -1,39 +1,60 @@
-function drawChart() {
-   // Define the chart to be drawn.
-   var data = new google.visualization.DataTable();
-   data.addColumn('string', 'Month');
-   data.addColumn('number', 'Rendimiento');
-   data.addColumn('number', 'Conducta');
-   data.addColumn('number', 'Expresion Oral');
-   data.addRows([
-      ['Mar',  9.5,  5.7, 3.5],
-      ['Apr',  14.5, 11.3, 8.4],
-      ['May',  18.2, 17.0, 13.5],
-      ['Jun',  21.5, 22.0, 17.0],
-      
-      ['Jul',  25.2, 24.8, 18.6],
-      ['Aug',  26.5, 24.1, 17.9],
-      ['Sep',  23.3, 20.1, 14.3],
-      ['Oct',  18.3, 14.1, 9.0],
-      ['Nov',  13.9,  8.6, 3.9],
-      ['Dec',  9.6,  2.5,  1.0]
-   ]);
-      
-   // Set chart options
-   var options = {'title' : 'Promedio Rendimiento por mes',
-      hAxis: {
-         title: 'Mes'
-      },
-      vAxis: {
-         title: 'Trabajo'
-      },   
-      'width':550,
-      'height':400	  
-   };
+   /*<?php 
 
-   // Instantiate and draw the chart.
-   var chart = new google.visualization.LineChart(document.getElementById('container'));
-   chart.draw(data, options);
-}
+  */
+  
 
-google.charts.setOnLoadCallback(drawChart);
+  google.charts.load('current', {'packages':['corechart']});
+
+      // Define la función callback para crear la gráfica
+      google.charts.setOnLoadCallback(drawChart);
+
+      // Función para poblar la gráfica
+      // iniciar el gráfico, pasa los datos y los dibuja
+      function drawChart() {
+
+        // Crea la gráfica
+        /*
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Navegador');
+        data.addColumn('number', 'Porcien');
+        data.addRows([
+          ['Chrome', 61],
+          ['Firefox', 16],
+          ['Internet Explorer', 13],
+          ['Safari', 5],
+          ['Otros', 5]
+        ]);
+
+        //arrayToDataTable()
+        var data = google.visualization.arrayToDataTable([
+          ['Navegador','Porcien'],
+          ['Chrome', 61],
+          ['Firefox', 16],
+          ['Internet Explorer', 13],
+          ['Safari', 5],
+          ['Otros', 5]
+        ]);
+        */
+
+
+        var data = new google.visualization.DataTable({
+        cols: [{id: 'navegador', label: 'Navegador', type: 'string'},
+               {id: 'porcien', label: 'Porciento', type: 'number'}],
+        rows: [{c:[{v: 'Chrome'}, {v: 61, f:'Sesenta y un porciento'}]},
+               {c:[{v: 'Firefox'}, {v: 16, f:'Diez y seis porciento'}]},
+               {c:[{v: 'Internet Explorer'}, {v: 13, f:'Trece porciento'}]},
+               {c:[{v: 'Safari'}, {v:5, f:'Cinco porciento'}]},
+               {c:[{v: 'Otros'}, {v:5, f:'Cinco porciento'}]}]
+        });
+        
+        
+        // Opciones de la gráfica
+        var opciones = {'title':'Participación de los Navegadores',
+                      'is3D':true,
+                       'width':500,
+                       'height':400};
+
+        // Inicia la gráfica
+        var chart = new google.visualization.PieChart(document.getElementById('grafica'));
+        chart.draw(data, opciones);
+      }

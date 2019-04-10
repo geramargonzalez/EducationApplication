@@ -34,6 +34,7 @@ class Alumno extends Entity
         'surname' => true,
         'age' => true,
         'procedencia' => true,
+        'tel' => true,
         'observation' => true,
         'created' => true,
         'modified' => true,

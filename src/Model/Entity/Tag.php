@@ -4,16 +4,13 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * ObservacionesAlumno Entity
+ * Tag Entity
  *
  * @property int $id
- * @property int $id_alumno
- * @property int $id_user
- * @property string $observaciones
- * @property \Cake\I18n\FrozenTime $created
- * @property \Cake\I18n\FrozenTime $modified
+ * @property string $name
+ * @property string $description
  */
-class ObservacionesAlumno extends Entity
+class Tag extends Entity
 {
 
     /**
@@ -26,11 +23,7 @@ class ObservacionesAlumno extends Entity
      * @var array
      */
     protected $_accessible = [
-        'id_alumno' => true,
-        'id_user' => true,
-        'etiqueta'=> true,
-        'observaciones' => true,
-        'created' => true,
-        'modified' => true
+        'name' => true,
+        'description' => true
     ];
 }

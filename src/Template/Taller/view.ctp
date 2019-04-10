@@ -27,6 +27,10 @@
             <th scope="row"><?= __('Agregar Alumnos') ?></th>
             <td> <?= $this->Html->link(__('add'), ['controller' => 'Alumnos', 'action' => 'addAlumnosToTaller', $taller->id]) ?></td>
         </tr>
+         <tr>
+            <th scope="row"><?= __('Estadisticas del taller') ?></th>
+            <td> <?= $this->Html->link(__('Ver'), ['controller' => 'ProcesoAlumnos', 'action' => 'statsTaller', $taller->id]) ?></td>
+        </tr>
         <?php } ?>
     </table>
     <?php if($taller->role_id == 5) { ?>

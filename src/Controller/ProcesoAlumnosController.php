@@ -5,8 +5,8 @@ use App\Controller\AppController;
 use Cake\Event\Event;
 use Cake\I18n\Time;
 //use Cake\ORM\TableRegistry;
-use FusionCharts;
-require_once(ROOT .DS. 'vendor' . DS  . 'fusioncharts' . DS . 'fusioncharts.php');
+//use FusionCharts;
+//require_once(ROOT .DS. 'vendor' . DS  . 'fusioncharts' . DS . 'fusioncharts.php');
 //use GoogleCharts;
 //require_once(ROOT.DS.'plugins'.DS.'GoogleCharts'.DS.'vendor'.DS.'GoogleCharts.php');
 
@@ -90,11 +90,14 @@ class ProcesoAlumnosController extends AppController
             $rendimientoAlumno = $this->RendimientoAlumno->newEntity();
             $datos  =  array(
                   "id_alumno" =>  $id,
-                  'tipo_evaluacion' => $data['tipo_evaluacion'],
                   'rendimiento' => $data['rendimiento'],
-                  'id_user' =>  $procesoAlumno->id_user
+                  'id_user' =>  $procesoAlumno->id_user,
+                  'tipoevaluacion' => $data['tipoevaluacion']
                 );
             $rendimientoAlumno = $this->RendimientoAlumno->patchEntity($rendimientoAlumno,$datos);
+
+            //debug($rendimientoAlumno);
+            //exit;
             if($this->RendimientoAlumno->save($rendimientoAlumno)){
                if ($this->ProcesoAlumnos->save($procesoAlumno)) {
                 $this->Flash->success(__('The proceso alumno has been saved.'));
@@ -106,11 +109,10 @@ class ProcesoAlumnosController extends AppController
               $this->Flash->error(__('The proceso alumno could not be saved. Please, try again.'));
             }
            
-            
         }
         
         $alumno = $this->Alumnos->get($id);
-        $tipoEvaluacion = $this->TipoEvaluacion->find('list', ['keyField' => 'id',
+        $tipoEvaluacion = $this->TipoEvaluacion->find('list', ['keyField' => 'nombre',
                     'valueField' => 'nombre']);
         
         $this->set(compact('procesoAlumno','alumno','tipoEvaluacion'));
@@ -136,97 +138,101 @@ class ProcesoAlumnosController extends AppController
         $this->set(compact('procesoAlumno'));
     }
      
-    /*  public function statsAlumnos($id_alumno = null)
-    {
-        $alumno = $this->Alumnos->get($id_alumno);
-        $id_user = $this->Auth->user('id');
-        $query = $this->ProcesoAlumnos->findById_alumnoAndId_user($id_alumno, $id_user);
-        $rounds = $query->select(['avg' => $query->func()->avg('rendimiento')])
-                  ->where(['ProcesoAlumnos.id_alumno'  => $alumno->id]);
-        $chart = new GoogleCharts();
-        $chart->type("LineChart");
-        //Options array holds all options for Chart API
-        $chart->options(['title' => '']);
-        $chart->columns([
-            //Each column key should correspond to a field in your data array
-            'event_date' => [
-                //Tells the chart what type of data this is
-                'type' => 'string',
-                //The chart label for this column
-                'label' => 'Date'
-            ],
-            'score' => [
-                'type' => 'number',
-                'label' => 'Score',
-                //Optional NumberFormat pattern
-                'format' => '#,###'
-            ]
-        ]);
-
-        foreach($rounds as $round) {
-            $chart->addRow($round);
-        }
-        foreach($rounds as $round) {
-            $chart->addRow([
-                'event_date' => $round['event_date'],
-                'score' => $round['avg']
-            ]);
-        }
-        $this->set(compact('alumno','chart'));
-    } */
 
     public function statsAlumnos($id_alumno = null)
     {
        $alumno = $this->Alumnos->get($id_alumno);
-        $id_user = $this->Auth->user('id');
-        $query = $this->ProcesoAlumnos->findById_alumnoAndId_user($id_alumno, $id_user);
-        $rounds = $query->select(['avg' => $query->func()->avg('rendimiento')])
-                  ->where(['ProcesoAlumnos.id_alumno'  => $alumno->id]);
-      /*
-       $data = array();
-        //$chartData = TableRegistry::get('mscombi2ddata');
-        //query to fetch the desired data
-        //$query = $chartData->find();
-        //creating the array contains chart attribute
-        $arrData = array(
-                "chart" => array(
-                     "animation"=>"0",
-                    "caption"=> "Albertsons SuperMart",
-                    "subCaption"=> "No. Of Visitors Last Week",
-                    "xAxisName"=> "Day",
-                    "yAxisName"=> "No. Of Visitors",
-                    "showValues"=> "0",
-                    "paletteColors"=> "#81BB76", 
-                    "showHoverEffect"=> "1",
-                    "use3DLighting"=> "0",
-                    "showaxislines"=> "1",
-                    "baseFontSize"=> "13",
-                    "theme"=> "fint"
-                    )
-               );
-            
-            foreach($rounds as $row) {
-                 $value = $row["value1"];
-                 $data = new array (
-                      "label" => $row["category"],
-                      "value" => $row["value1"]
-                               )
-                          );
-                }
-
-              $arrData["data"]= $data;
-
-           //encoding the dataset object in json format
-           $jsonEncodedData = json_encode($arrData);
-
-        // chart object
-        $columnChart = new FusionCharts("column2d", "chart-1", "100%", "300", "chart-container", "json", $jsonEncodedData);
-         
-         // Render the chart
-         $columnChart->render();*/
+       $id_user = $this->Auth->user('id');
+       $query = $this->ProcesoAlumnos->findById_alumnoAndId_user($id_alumno, $id_user);
        
-        $this->set(compact('alumno'));
+       $queryTortas = $this->RendimientoAlumno->findById_alumnoAndId_user($id_alumno, $id_user);
+      
+        //'expresion_oral' => $query->func()->avg('expresion_oral'),'conducta' => $query->func()->avg('conducta'),
+        $rendi= $query->select(['rendimiento' => $query->func()->avg('rendimiento'), 'Mes' =>'MONTH(created)'])
+                  ->where(['id_alumno'  => $alumno->id])
+                  ->group('MONTH(created)')
+                  ->order(['rendimiento' => 'DESC']);
+
+         $cond = $query->select(['conducta' => $query->func()->avg('conducta'), 'Mes' =>'MONTH(created)'])
+                  ->where(['id_alumno'  => $alumno->id])
+                  ->group('MONTH(created)')
+                  ->order(['rendimiento' => 'DESC']);
+
+        $expre = $query->select(['expresion_oral' => $query->func()->avg('expresion_oral'), 'Mes' =>'MONTH(created)'])
+                  ->where(['id_alumno'  => $alumno->id])
+                  ->group('MONTH(created)')
+                  ->order(['rendimiento' => 'DESC']);
+
+        $tipoEva = $queryTortas->select(['rendimiento' => $query->func()->Sum('rendimiento'), 'tipo_evaluacion' =>'tipoevaluacion'])
+                  ->where(['id_alumno'  => $alumno->id])
+                  ->group('tipoevaluacion')
+                  ->order(['rendimiento' => 'DESC']);
+
+       
+        $rendi->enableHydration(false);
+        $rendimiento = $rendi->toList(); 
+
+        $cond->enableHydration(false);
+        $conducta = $cond->toList();
+
+        $expre->enableHydration(false);
+        $expresion_oral = $expre->toList();
+
+        $tipoEva->enableHydration(false);
+        $tipo_evaluacion = $tipoEva->toList(); 
+
+       // Debug($tipo_evaluacion);
+       // exit; 
+
+       
+        $this->set(compact('alumno','rendimiento','tipo_evaluacion'));
     }
+    
+    public function statsAlumnosGenerales($id_alumno = null){
+      
+      $alumno = $this->Alumnos->get($id_alumno);
+    //  $id_user = $this->Auth->user('id');
+      $query = $this->ProcesoAlumnos->findById_alumno($id_alumno);
+
+      $queryTortas = $this->RendimientoAlumno->findById_alumno($id_alumno);
+
+      $rendi= $query->select(['rendimiento' => $query->func()->avg('rendimiento'), 'Mes' =>'MONTH(created)'])
+                ->where(['id_alumno'  => $alumno->id])
+                ->group('MONTH(created)')
+                ->order(['rendimiento' => 'DESC']);
+
+       $cond = $query->select(['conducta' => $query->func()->avg('conducta'), 'Mes' =>'MONTH(created)'])
+                ->where(['id_alumno'  => $alumno->id])
+                ->group('MONTH(created)')
+                ->order(['rendimiento' => 'DESC']);
+
+      $expre = $query->select(['expresion_oral' => $query->func()->avg('expresion_oral'), 'Mes' =>'MONTH(created)'])
+                ->where(['id_alumno'  => $alumno->id])
+                ->group('MONTH(created)')
+                ->order(['rendimiento' => 'DESC']);
+
+      $tipoEva = $queryTortas->select(['rendimiento' => $query->func()->Sum('rendimiento'), 'tipo_evaluacion' =>'tipoevaluacion'])
+                ->where(['id_alumno'  => $alumno->id])
+                ->group('tipoevaluacion')
+                ->order(['rendimiento' => 'DESC']);
+
+       
+      $rendi->enableHydration(false);
+      $rendimiento = $rendi->toList(); 
+
+      $cond->enableHydration(false);
+      $conducta = $cond->toList();
+
+      $expre->enableHydration(false);
+      $expresion_oral = $expre->toList();
+
+      $tipoEva->enableHydration(false);
+      $tipo_evaluacion = $tipoEva->toList();
+
+      $this->set(compact('alumno','rendimiento','tipo_evaluacion'));
+       
+    }
+
 
     /**
      * Delete method

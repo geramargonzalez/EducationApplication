@@ -13,6 +13,18 @@ use Cake\I18n\Time;
  */
 class ObservacionesAlumnosController extends AppController
 {
+    
+
+       public function initialize()
+    {
+        parent::initialize();
+        $this->loadModel('Tag');
+       // $this->loadModel('Turno');
+    }
+
+
+
+
     /**
      * index method
      *
@@ -26,7 +38,7 @@ class ObservacionesAlumnosController extends AppController
                 'ObservacionesAlumnos.id_alumno' => $id
             ]);
         $alumno = $this->ObservacionesAlumnos->Alumnos->get($id);
-        $observacionesAlumnos = $this->paginate($qry, ['limit' => 10]);
+        $observacionesAlumnos = $this->paginate($qry, ['limit' => 100]);
         $this->set(compact('observacionesAlumnos','alumno'));
     }
     /**
@@ -52,9 +64,11 @@ class ObservacionesAlumnosController extends AppController
         $id_user = $this->Auth->user('id');
         $observacionesAlumno = $this->ObservacionesAlumnos->newEntity();
         if ($this->request->is('post')) {
-            $observacionesAlumno = $this->ObservacionesAlumnos->patchEntity($observacionesAlumno, $this->request->getData());
+            $data = $this->request->getData();
+            $observacionesAlumno = $this->ObservacionesAlumnos->patchEntity($observacionesAlumno,$data);
             $observacionesAlumno->id_user = $id_user;
             $observacionesAlumno->id_alumno = $id;
+            $observacionesAlumno->etiqueta = $data['etiqueta'];
             if ($this->ObservacionesAlumnos->save($observacionesAlumno)) {
                 $this->Flash->success(__('The observaciones alumno has been saved.'));
                 return $this->redirect(['controller'=>'Alumnos','action' => 'view',$id]);
@@ -62,7 +76,11 @@ class ObservacionesAlumnosController extends AppController
             $this->Flash->error(__('The observaciones alumno could not be saved. Please, try again.'));
         }
         $alumno = $this->ObservacionesAlumnos->Alumnos->get($id);
-        $this->set(compact('observacionesAlumno','alumno'));
+        $tags = $this->Tag->find('list',[
+                    'keyField' => 'name',
+                    'valueField' => 'name',
+            ]);
+        $this->set(compact('observacionesAlumno','alumno','tags'));
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 use Migrations\AbstractMigration;
 
-class CreateTurno extends AbstractMigration
+class CreateTag extends AbstractMigration
 {
     /**
      * Change Method.
@@ -12,15 +12,15 @@ class CreateTurno extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('turno');
-        $table->addColumn('nombre', 'string', [
+        $table = $this->table('tag');
+        $table->addColumn('name', 'string', [
             'default' => null,
             'limit' => 255,
             'null' => false,
         ]);
-        $table->addColumn('id_centro', 'integer', [
+        $table->addColumn('description', 'string', [
             'default' => null,
-            'limit' => 11,
+            'limit' => 255,
             'null' => false,
         ]);
         $table->create();

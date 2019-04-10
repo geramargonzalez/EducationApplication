@@ -1,7 +1,7 @@
 <?php
 use Migrations\AbstractMigration;
 
-class CreateRol extends AbstractMigration
+class AddEtiquetaToObservacionesAlumnos extends AbstractMigration
 {
     /**
      * Change Method.
@@ -12,12 +12,12 @@ class CreateRol extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('rol');
-        $table->addColumn('name', 'string', [
+        $table = $this->table('observaciones_alumnos');
+        $table->addColumn('etiqueta', 'string', [
             'default' => null,
             'limit' => 255,
             'null' => false,
         ]);
-        $table->create();
+        $table->update();
     }
 }

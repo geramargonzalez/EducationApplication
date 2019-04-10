@@ -84,6 +84,11 @@ class AlumnosTable extends Table
             ->requirePresence('age', 'create')
             ->allowEmptyString('age', false);
 
+          $validator
+            ->integer('tel')
+            ->requirePresence('tel', 'create')
+            ->allowEmptyString('tel', false);
+
         $validator
             ->scalar('procedencia')
             ->maxLength('procedencia', 255)

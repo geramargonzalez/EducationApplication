@@ -33,9 +33,6 @@ class RendimientoAlumnoTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('rendimiento_alumno');
-        $this->setDisplayField('id');
-        $this->setPrimaryKey('id');
 
          $this->belongsTo('Users', [
             'foreignKey' => 'id_user',
@@ -62,10 +59,11 @@ class RendimientoAlumnoTable extends Table
             ->requirePresence('id_alumno', 'create')
             ->allowEmptyString('id_alumno', false);
 
-        $validator
-            ->integer('tipo_evaluacion')
-            ->requirePresence('tipo_evaluacion', 'create')
-            ->allowEmptyString('tipo_evaluacion', false);
+         $validator
+            ->scalar('tipoevaluacion')
+            ->maxLength('tipoevaluacion', 255)
+            ->requirePresence('tipoevaluacion', 'create')
+            ->allowEmptyString('tipoevaluacion', false);
 
         $validator
             ->integer('rendimiento')

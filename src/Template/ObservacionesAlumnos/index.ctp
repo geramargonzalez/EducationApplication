@@ -4,7 +4,6 @@
  * @var \App\Model\Entity\ObservacionesAlumno[]|\Cake\Collection\CollectionInterface $observacionesAlumnos
  */
 ?>
-
 <div class="observacionesAlumnos index large-9 medium-8 columns content">
     <h3><?= __('Observaciones del estudiante: ' . $alumno->name . " " . $alumno->surname ) ?></h3>
     <table cellpadding="0" cellspacing="0">

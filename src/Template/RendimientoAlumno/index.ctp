@@ -4,40 +4,24 @@
  * @var \App\Model\Entity\RendimientoAlumno[]|\Cake\Collection\CollectionInterface $rendimientoAlumno
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Rendimiento Alumno'), ['action' => 'add']) ?></li>
-    </ul>
-</nav>
+
 <div class="rendimientoAlumno index large-9 medium-8 columns content">
-    <h3><?= __('Rendimiento Alumno') ?></h3>
+    <h3><?= __('Rendimiento Alumno: ' . $alumno->name ." " . $alumno->surname) ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('id_alumno') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('tipo_evaluacion') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('rendimiento') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('created') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Tipo de evaluacion') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Rendimiento promedio ') ?></th>
+              
+               
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($rendimientoAlumno as $rendimientoAlumno): ?>
+            <?php foreach ($tipo_evaluacion as $tipo): ?>
             <tr>
-                <td><?= $this->Number->format($rendimientoAlumno->id) ?></td>
-                <td><?= $this->Number->format($rendimientoAlumno->id_alumno) ?></td>
-                <td><?= $this->Number->format($rendimientoAlumno->tipo_evaluacion) ?></td>
-                <td><?= $this->Number->format($rendimientoAlumno->rendimiento) ?></td>
-                <td><?= h($rendimientoAlumno->created) ?></td>
-                <td><?= h($rendimientoAlumno->modified) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $rendimientoAlumno->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $rendimientoAlumno->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $rendimientoAlumno->id], ['confirm' => __('Are you sure you want to delete # {0}?', $rendimientoAlumno->id)]) ?>
-                </td>
+                <td><?= h($tipo['tipo_evaluacion']) ?></td>
+                <td><?= $this->Number->format($tipo['rendimiento']) ?></td>
+               
             </tr>
             <?php endforeach; ?>
         </tbody>

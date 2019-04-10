@@ -72,14 +72,21 @@ class AlumnosController extends AppController
     {
         $alumno = $this->Alumnos->newEntity();
         if ($this->request->is('post')) {
-            $alumno = $this->Alumnos->patchEntity($alumno, $this->request->getData());
+            $data = $this->request->getData();
+            $alumno = $this->Alumnos->patchEntity($alumno,$data);
             $alumno->id_centro = 1;
+            $alumno->id_taller = 0;
+            $alumno->image = "Null";
+            $alumno->id_turno = $data['turnos'];
+           // debug($data);
+           // exit;
             if ($this->Alumnos->save($alumno)) {
                 $this->Flash->success(__('The alumno has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The alumno could not be saved. Please, try again.'));
         }
+        
         $turnos = $this->Turno->find('list', ['keyField' => 'id',
                                              'valueField' => 'nombre']);
         $this->set(compact('alumno','turnos'));
@@ -91,6 +98,7 @@ class AlumnosController extends AppController
         $alum_reg = 0;
         if ($this->request->is('post')) {
             $data = $this->request->getData();
+            
             foreach ($data as $key => $value) {
                 if ($value == 1) {
                     $alumno = $this->Alumnos->get($key);
@@ -127,7 +135,7 @@ class AlumnosController extends AppController
             $this->Flash->error(__('Se produjo un error. Verifique sus datos.'));
         }
         $talleres = $this->Alumnos->Taller->find('list')->where(['role_id' => 5,'id_turno' => $user['id_turno']]);
-        $alumnos = $this->Alumnos->find('list')->where(['id_taller <' => 1,'id_turno' => $user['id_turno']]);
+        $alumnos = $this->Alumnos->find('list')->where(['id_taller <' => 1,'id_turno =' => $user['id_turno']]);
         $this->set(compact('alumnos','talleres'));
     }
     /**

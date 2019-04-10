@@ -118,7 +118,7 @@
                   if($i+1 < count($tipo_evaluacion))print ",";
                  }
                 ?>
-              
+            
             ]);
                
             // Set chart options
@@ -136,7 +136,7 @@
  </script>
 
 
-  <h3><?= __("Grafica de Rendimiento mensual de: " . $alumno->name . " " . $alumno->surname) ?></h3>
+  <h3><?= __("Rendimiento global: " . $alumno->name . " " . $alumno->surname) ?></h3>
 
 
 <div class="stats large-6 medium-6 columns content">

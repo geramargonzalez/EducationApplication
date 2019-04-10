@@ -76,6 +76,11 @@ class ObservacionesAlumnosTable extends Table
             ->requirePresence('observaciones', 'create')
             ->allowEmptyString('observaciones', false);
 
+         $validator
+            ->scalar('etiqueta')
+            ->requirePresence('etiqueta', 'create')
+            ->allowEmptyString('etiqueta', false);
+
         return $validator;
     }
 }

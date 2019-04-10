@@ -10,6 +10,7 @@
         <legend><?= __('Observación: ' . $alumno->name . " " . $alumno->surname) ?></legend>
         <?php
             echo $this->Form->control('observaciones');
+             echo $this->Form->control('tags');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
