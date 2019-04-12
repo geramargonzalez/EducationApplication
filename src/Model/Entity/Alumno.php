@@ -41,6 +41,7 @@ class Alumno extends Entity
         'ci' => true,
         'id_taller'=> true,
         'id_turno'=> true,
-        'id_centro'=> true
+        'id_centro'=> true,
+        'status' => true
     ];
 }

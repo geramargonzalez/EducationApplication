@@ -17,7 +17,6 @@ class RendimientoAlumnoController extends AppController
     {
         parent::initialize();
         $this->loadModel('Alumnos');
-        
     }
     /**
      * Index method

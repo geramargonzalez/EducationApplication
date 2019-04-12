@@ -81,12 +81,26 @@ class ProcesoAlumnosController extends AppController
         $procesoAlumno = $this->ProcesoAlumnos->newEntity();
         if ($this->request->is('post')) {
             $data = $this->request->getData();
+
+            
             $procesoAlumno = $this->ProcesoAlumnos->patchEntity($procesoAlumno, $this->request->getData());
             
             $procesoAlumno->promedio = ($procesoAlumno->conducta + $procesoAlumno->rendimiento + $procesoAlumno->expresion_oral)/3;
             $procesoAlumno->id_alumno = $id;
             $procesoAlumno->id_user = $this->Auth->user('id');
+
+            if(empty($data['conducta'])){
+              $procesoAlumno->conducta = 6;
+            } 
+            if(empty($data['expresion_oral'])){
+              $procesoAlumno->expresion_oral = 6;
+            } 
+             if(empty($data['rendimiento'])){
+              $procesoAlumno->rendimiento = 6;
+            }
             
+           // debug($procesoAlumno);
+           // exit;
             $rendimientoAlumno = $this->RendimientoAlumno->newEntity();
             $datos  =  array(
                   "id_alumno" =>  $id,
@@ -96,8 +110,7 @@ class ProcesoAlumnosController extends AppController
                 );
             $rendimientoAlumno = $this->RendimientoAlumno->patchEntity($rendimientoAlumno,$datos);
 
-            //debug($rendimientoAlumno);
-            //exit;
+          
             if($this->RendimientoAlumno->save($rendimientoAlumno)){
                if ($this->ProcesoAlumnos->save($procesoAlumno)) {
                 $this->Flash->success(__('The proceso alumno has been saved.'));
@@ -151,32 +164,18 @@ class ProcesoAlumnosController extends AppController
         $rendi= $query->select(['rendimiento' => $query->func()->avg('rendimiento'), 'Mes' =>'MONTH(created)'])
                   ->where(['id_alumno'  => $alumno->id])
                   ->group('MONTH(created)')
-                  ->order(['rendimiento' => 'DESC']);
+                  ->order(['MONTH(created)' => 'ASC']);
 
-         $cond = $query->select(['conducta' => $query->func()->avg('conducta'), 'Mes' =>'MONTH(created)'])
-                  ->where(['id_alumno'  => $alumno->id])
-                  ->group('MONTH(created)')
-                  ->order(['rendimiento' => 'DESC']);
-
-        $expre = $query->select(['expresion_oral' => $query->func()->avg('expresion_oral'), 'Mes' =>'MONTH(created)'])
-                  ->where(['id_alumno'  => $alumno->id])
-                  ->group('MONTH(created)')
-                  ->order(['rendimiento' => 'DESC']);
+                  
 
         $tipoEva = $queryTortas->select(['rendimiento' => $query->func()->Sum('rendimiento'), 'tipo_evaluacion' =>'tipoevaluacion'])
                   ->where(['id_alumno'  => $alumno->id])
                   ->group('tipoevaluacion')
-                  ->order(['rendimiento' => 'DESC']);
+                  ->order(['tipoevaluacion' => 'ASC']);
 
        
         $rendi->enableHydration(false);
         $rendimiento = $rendi->toList(); 
-
-        $cond->enableHydration(false);
-        $conducta = $cond->toList();
-
-        $expre->enableHydration(false);
-        $expresion_oral = $expre->toList();
 
         $tipoEva->enableHydration(false);
         $tipo_evaluacion = $tipoEva->toList(); 
@@ -191,22 +190,10 @@ class ProcesoAlumnosController extends AppController
     public function statsAlumnosGenerales($id_alumno = null){
       
       $alumno = $this->Alumnos->get($id_alumno);
-    //  $id_user = $this->Auth->user('id');
       $query = $this->ProcesoAlumnos->findById_alumno($id_alumno);
-
       $queryTortas = $this->RendimientoAlumno->findById_alumno($id_alumno);
-
+      
       $rendi= $query->select(['rendimiento' => $query->func()->avg('rendimiento'), 'Mes' =>'MONTH(created)'])
-                ->where(['id_alumno'  => $alumno->id])
-                ->group('MONTH(created)')
-                ->order(['rendimiento' => 'DESC']);
-
-       $cond = $query->select(['conducta' => $query->func()->avg('conducta'), 'Mes' =>'MONTH(created)'])
-                ->where(['id_alumno'  => $alumno->id])
-                ->group('MONTH(created)')
-                ->order(['rendimiento' => 'DESC']);
-
-      $expre = $query->select(['expresion_oral' => $query->func()->avg('expresion_oral'), 'Mes' =>'MONTH(created)'])
                 ->where(['id_alumno'  => $alumno->id])
                 ->group('MONTH(created)')
                 ->order(['rendimiento' => 'DESC']);
@@ -220,19 +207,38 @@ class ProcesoAlumnosController extends AppController
       $rendi->enableHydration(false);
       $rendimiento = $rendi->toList(); 
 
-      $cond->enableHydration(false);
-      $conducta = $cond->toList();
-
-      $expre->enableHydration(false);
-      $expresion_oral = $expre->toList();
-
       $tipoEva->enableHydration(false);
       $tipo_evaluacion = $tipoEva->toList();
 
       $this->set(compact('alumno','rendimiento','tipo_evaluacion'));
        
     }
+    public function statsAlumnosMateria($id_user = null){
+      
+      $query = $this->ProcesoAlumnos->findById_user($id_user);
+      $queryTortas = $this->RendimientoAlumno->findById_user($id_user);
+      $rendi= $query->select(['rendimiento' => $query->func()->avg('rendimiento'), 'Mes' =>'MONTH(created)'])
+                ->where(['id_user'  => $id_user])
+                ->group('MONTH(created)')
+                ->order(['rendimiento' => 'DESC']);
 
+      $tipoEva = $queryTortas->select(['rendimiento' => $query->func()->Sum('rendimiento'), 'tipo_evaluacion' =>'tipoevaluacion'])
+                ->where(['id_user'  => $id_user])
+                ->group('tipoevaluacion')
+                ->order(['rendimiento' => 'DESC']);
+      
+      $rendi->enableHydration(false);
+      $rendimiento = $rendi->toList(); 
+      $tipoEva->enableHydration(false);
+      $tipo_evaluacion = $tipoEva->toList();
+
+      $this->set(compact('rendimiento','tipo_evaluacion'));
+       
+    }
+
+    public function statsAlumnosDesabilitadosHabilitados(){
+      // Se van a mostar los alumnos que desabilitaron y los meses donde dejaron.
+    }
 
     /**
      * Delete method

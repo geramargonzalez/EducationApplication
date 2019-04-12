@@ -61,20 +61,21 @@ class ProcesoAlumnosTable extends Table
             ->requirePresence('id_alumno', 'create')
             ->allowEmptyString('id_alumno', false);
 
-        $validator
+        /*$validator
             ->integer('conducta')
             ->requirePresence('conducta', 'create')
-            ->allowEmptyString('conducta', false);
+            ->allowEmptyString('conducta', true);
+
 
         $validator
             ->integer('rendimiento')
             ->requirePresence('rendimiento', 'create')
-            ->allowEmptyString('rendimiento', false);
+            ->allowEmptyString('rendimiento', true);
 
         $validator
             ->integer('expresion_oral')
             ->requirePresence('expresion_oral', 'create')
-            ->allowEmptyString('expresion_oral', false);
+            ->allowEmptyString('expresion_oral', true);*/
 
         $validator
             ->integer('promedio')

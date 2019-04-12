@@ -116,6 +116,10 @@ class AlumnosTable extends Table
             ->integer('id_turno')
             ->allowEmptyString('id_turno', 'create');
 
+        $validator
+            ->integer('status')
+            ->allowEmptyString('status', 'create');
+
         return $validator;
     }
 }

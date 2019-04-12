@@ -42,7 +42,7 @@ class AlumnosController extends AppController
         }
         */
 
-        $alumnos = $this->paginate($this->Alumnos,['limit' => 100]);      
+        $alumnos = $this->paginate($this->Alumnos->find("all")->where(['status =' => true]),['limit' => 100]);      
         $this->set(compact('alumnos'));
     }
     /**
@@ -78,6 +78,7 @@ class AlumnosController extends AppController
             $alumno->id_taller = 0;
             $alumno->image = "Null";
             $alumno->id_turno = $data['turnos'];
+            $alumno->status = true;
            // debug($data);
            // exit;
             if ($this->Alumnos->save($alumno)) {
@@ -159,6 +160,12 @@ class AlumnosController extends AppController
         }
         $this->set(compact('alumno'));
     } 
+
+    public function alumnosDesabilitados(){
+        $alumnos = $this->paginate($this->Alumnos->find("all")->where(['status =' => false]),['limit' => 100]);      
+        $this->set(compact('alumnos'));
+    }
+
     /**
      * Delete method
      *
@@ -170,7 +177,8 @@ class AlumnosController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $alumno = $this->Alumnos->get($id);
-        if ($this->Alumnos->delete($alumno)) {
+        $alumno->status = false;
+        if ($this->Alumnos->save($alumno)) {
             $this->Flash->success(__('The alumno has been deleted.'));
         } else {
             $this->Flash->error(__('The alumno could not be deleted. Please, try again.'));

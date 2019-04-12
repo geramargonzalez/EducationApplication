@@ -95,12 +95,17 @@ class ObservacionesAlumnosController extends AppController
         $observacionesAlumno = $this->ObservacionesAlumnos->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $observacionesAlumno = $this->ObservacionesAlumnos->patchEntity($observacionesAlumno, $this->request->getData());
+             $observacionesAlumno->etiqueta = $data['etiqueta'];
             if ($this->ObservacionesAlumnos->save($observacionesAlumno)) {
                 $this->Flash->success(__('The observaciones alumno has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The observaciones alumno could not be saved. Please, try again.'));
         }
+        $tags = $this->Tag->find('list',[
+                    'keyField' => 'name',
+                    'valueField' => 'name',
+            ]);
         $this->set(compact('observacionesAlumno'));
     }
     /**

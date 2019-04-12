@@ -16,6 +16,7 @@
             echo $this->Form->control('ci');
             echo $this->Form->control('observation');
             echo $this->Form->control('turnos');
+            echo $this->Form->control('status');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

@@ -16,7 +16,7 @@ class CentroController extends AppController
 
     public function isAuthorized($user = null)
     {
-        if (in_array($this->request->params['action'], ['add','delete','edit'])) {
+        if (in_array($this->request->getParams['action'], ['add','delete','edit'])) {
             if ($user['role_id'] != 3) {
                 $this->Flash->error(__('Acceso denegado!'));
                 return false;
