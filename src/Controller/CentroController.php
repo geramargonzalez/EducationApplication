@@ -13,17 +13,6 @@ use App\Controller\AppController;
 class CentroController extends AppController
 {
 
-
-    public function isAuthorized($user = null)
-    {
-        if (in_array($this->request->getParams['action'], ['add','delete','edit'])) {
-            if ($user['role_id'] != 3) {
-                $this->Flash->error(__('Acceso denegado!'));
-                return false;
-            }
-        }
-        return parent::isAuthorized($user);
-    }
     /**
      * Index method
      *
@@ -59,14 +48,17 @@ class CentroController extends AppController
     {
         $centro = $this->Centro->newEntity();
         if ($this->request->is('post')) {
-            $centro = $this->Centro->patchEntity($centro, $this->request->getData());
+            $data = $this->request->getData();
+            $centro = $this->Centro->patchEntity($centro, $data);
+            $centro->id_subsistema = $data['subsistemas'];
             if ($this->Centro->save($centro)) {
                 $this->Flash->success(__('The centro has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The centro could not be saved. Please, try again.'));
         }
-        $this->set(compact('centro'));
+         $subsistemas = $this->Centro->Subsistema->find('list');
+        $this->set(compact('centro','subsistemas'));
     }
 
     /**

@@ -37,6 +37,6 @@ class AppView extends View
      */
     public function initialize()
     {
-      //$this->loadHelper('GoogleCharts.GoogleCharts');
+      $this->loadHelper('Generate');
     }
 }

@@ -33,6 +33,8 @@ class ProcesoAlumnosController extends AppController
         $this->loadModel('Alumnos');
         $this->loadModel('TipoEvaluacion');
         $this->loadModel('RendimientoAlumno');
+         $this->loadModel('Taller');
+          $this->loadModel('Users');
     }
     /**
      * Index method
@@ -82,7 +84,6 @@ class ProcesoAlumnosController extends AppController
         if ($this->request->is('post')) {
             $data = $this->request->getData();
 
-            
             $procesoAlumno = $this->ProcesoAlumnos->patchEntity($procesoAlumno, $this->request->getData());
             
             $procesoAlumno->promedio = ($procesoAlumno->conducta + $procesoAlumno->rendimiento + $procesoAlumno->expresion_oral)/3;
@@ -99,8 +100,7 @@ class ProcesoAlumnosController extends AppController
               $procesoAlumno->rendimiento = 6;
             }
             
-           // debug($procesoAlumno);
-           // exit;
+
             $rendimientoAlumno = $this->RendimientoAlumno->newEntity();
             $datos  =  array(
                   "id_alumno" =>  $id,
@@ -159,32 +159,27 @@ class ProcesoAlumnosController extends AppController
        $query = $this->ProcesoAlumnos->findById_alumnoAndId_user($id_alumno, $id_user);
        
        $queryTortas = $this->RendimientoAlumno->findById_alumnoAndId_user($id_alumno, $id_user);
-      
-        //'expresion_oral' => $query->func()->avg('expresion_oral'),'conducta' => $query->func()->avg('conducta'),
+ 
         $rendi= $query->select(['rendimiento' => $query->func()->avg('rendimiento'), 'Mes' =>'MONTH(created)'])
                   ->where(['id_alumno'  => $alumno->id])
                   ->group('MONTH(created)')
                   ->order(['MONTH(created)' => 'ASC']);
-
-                  
-
-        $tipoEva = $queryTortas->select(['rendimiento' => $query->func()->Sum('rendimiento'), 'tipo_evaluacion' =>'tipoevaluacion'])
-                  ->where(['id_alumno'  => $alumno->id])
-                  ->group('tipoevaluacion')
-                  ->order(['tipoevaluacion' => 'ASC']);
-
-       
         $rendi->enableHydration(false);
         $rendimiento = $rendi->toList(); 
 
-        $tipoEva->enableHydration(false);
-        $tipo_evaluacion = $tipoEva->toList(); 
+        $rendi_pordia = $query->select(['rendimiento' => 'rendimiento', 'Fecha' =>'created'])
+                  ->where(['id_alumno'  => $alumno->id])
+                  ->group('MONTH(created)')
+                  ->order(['MONTH(created)' => 'ASC']);
 
-       // Debug($tipo_evaluacion);
-       // exit; 
+    
+        $rendi_pordia->enableHydration(false);
+        $rendiPorDia = $rendi->toList(); 
+        
+
 
        
-        $this->set(compact('alumno','rendimiento','tipo_evaluacion'));
+        $this->set(compact('alumno','rendimiento','rendiPorDia'));
     }
     
     public function statsAlumnosGenerales($id_alumno = null){
@@ -213,17 +208,22 @@ class ProcesoAlumnosController extends AppController
       $this->set(compact('alumno','rendimiento','tipo_evaluacion'));
        
     }
-    public function statsAlumnosMateria($id_user = null){
+    public function statsAlumnosMateria($id_taller = null){
       
-      $query = $this->ProcesoAlumnos->findById_user($id_user);
-      $queryTortas = $this->RendimientoAlumno->findById_user($id_user);
+      $taller = $this->Taller->get($id_taller);
+
+      $user = $this->Users->get($taller->id_user);
+
+      $query = $this->ProcesoAlumnos->findById_user($user->id);
+      $queryTortas = $this->RendimientoAlumno->findById_user($user->id);
+      
       $rendi= $query->select(['rendimiento' => $query->func()->avg('rendimiento'), 'Mes' =>'MONTH(created)'])
-                ->where(['id_user'  => $id_user])
+                ->where(['id_user'  => $user->id])
                 ->group('MONTH(created)')
                 ->order(['rendimiento' => 'DESC']);
 
       $tipoEva = $queryTortas->select(['rendimiento' => $query->func()->Sum('rendimiento'), 'tipo_evaluacion' =>'tipoevaluacion'])
-                ->where(['id_user'  => $id_user])
+                ->where(['id_user'  => $user->id])
                 ->group('tipoevaluacion')
                 ->order(['rendimiento' => 'DESC']);
       
@@ -232,7 +232,7 @@ class ProcesoAlumnosController extends AppController
       $tipoEva->enableHydration(false);
       $tipo_evaluacion = $tipoEva->toList();
 
-      $this->set(compact('rendimiento','tipo_evaluacion'));
+      $this->set(compact('rendimiento','tipo_evaluacion','taller'));
        
     }
 

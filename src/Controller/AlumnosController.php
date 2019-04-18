@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\I18n\Time;
+use App\Enums\RolesEnum;
 
 /**
  * Alumnos Controller
@@ -18,6 +19,11 @@ class AlumnosController extends AppController
         parent::initialize();
         $this->loadModel('Taller');
         $this->loadModel('Turno');
+        $this->loadModel('Centro');
+        $this->loadModel('UsersCentro');
+        $this->loadModel('UsersTurno');
+        $this->loadComponent('FileUpload');
+        
     }
     /**
      
@@ -27,22 +33,42 @@ class AlumnosController extends AppController
      */
     public function index()
     {
-        $id_user = $this->Auth->user('id');
-        $query = $this->Taller->findById_user($id_user);
+        $user = $this->Auth->user();
+        $query = $this->Taller->findById_user($user['id']);
         $taller = $query->first();
+       
+       $qry = $this->Alumnos->find("all")->where(['status =' => true, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']]);
+    
 
-        // ***** VER VER VER VER VER VER VER VER VER VER VER VER VER *****
-        // ***** YA ESTA IMPLEMENTADO QUE SE BUSQUE ALUMNO POR TALLER ****
+        /*$qry = $this->Alumnos->find('all')->join([
+                                        'c' => [
+                                            'table' => 'users_centro',
+                                            'type' => 'LEFT',
+                                            'conditions' => 'c.id_centro = alumnos.id_centro','c.id_user = ' . $user['id'],
+                                        ],
+                                        'u' => [
+                                            'table' => 'users_turno',
+                                            'type' => 'LEFT',
+                                            'conditions' => 'u.id_turno = alumnos.id_turno','u.id_user = ' . $user['id'],
+                                        ]
+                                    ]);
 
-       /* 
-        if($taller->role_id == 5){
-          $alumnos = $this->paginate($this->Alumnos->find("all")->where(['id_taller =' => $taller->id]));
-        } else {
-          $alumnos = $this->paginate($this->Alumnos);      
-        }
-        */
 
-        $alumnos = $this->paginate($this->Alumnos->find("all")->where(['status =' => true]),['limit' => 100]);      
+
+
+                ->join([
+                                        'table' => 'users_centro',
+                                        'alias' => 'c',
+                                        'type' => 'LEFT',
+                                        'conditions' => 'c.id_centro = alumnos.id_centro', 'c.id_user = ' . $user['id']]);*/
+                                  
+       // $qry = $this->Alumnos->find('all')->matching('UsersCentro', function ($q) {
+         //    return $q->where(['Alumnos.id_centro = UsersCentro.id_cento', 'UsersCentro.id_user =' . $user['id']]);
+        // });
+
+        
+
+        $alumnos = $this->paginate($qry,['limit' => 100]);      
         $this->set(compact('alumnos'));
     }
     /**
@@ -54,14 +80,15 @@ class AlumnosController extends AppController
      */
     public function view($id = null)
     {
+        $user = $this->Auth->user();
         $alumno = $this->Alumnos->get($id);
         if($alumno->id_taller != 0){
-            $taller  = $this->Taller->get($alumnos->id_taller);
+            $taller  = $this->Taller->get($alumno->id_taller);
             $nombre = $taller->name;
         } else {
-            $nombre = "No tiene ";
+            $nombre = "No tiene taller asignado.";
         }
-        $this->set(compact('alumno','nombre'));
+        $this->set(compact('alumno','nombre','user'));
     }
     /**
      * Add method
@@ -70,17 +97,24 @@ class AlumnosController extends AppController
      */
     public function add()
     {
+        $user = $this->Auth->user();
         $alumno = $this->Alumnos->newEntity();
         if ($this->request->is('post')) {
             $data = $this->request->getData();
             $alumno = $this->Alumnos->patchEntity($alumno,$data);
-            $alumno->id_centro = 1;
+            $alumno->id_centro = $data['centros'];
             $alumno->id_taller = 0;
-            $alumno->image = "Null";
             $alumno->id_turno = $data['turnos'];
             $alumno->status = true;
            // debug($data);
            // exit;
+           if (!empty($data['image'])) {
+                  $result = $this->FileUpload->fileUpload($data['image'], 'users');
+                  $alumno->image = USER_IMG_PATH . DS . $result['file_name'];
+            } else {
+               $alumno->image = "null";
+            }
+            // Hacer un find buscando ese Alumno, y si no lo encuentro mandar un mensaje de error
             if ($this->Alumnos->save($alumno)) {
                 $this->Flash->success(__('The alumno has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -90,11 +124,14 @@ class AlumnosController extends AppController
         
         $turnos = $this->Turno->find('list', ['keyField' => 'id',
                                              'valueField' => 'nombre']);
-        $this->set(compact('alumno','turnos'));
+        $centros = $this->Centro->find('list', ['keyField' => 'id',
+                    'valueField' => 'name']);
+        $this->set(compact('alumno','turnos','centros'));
     }
 
      public function addAlumnosToTaller($id = null)
     {
+        $user = $this->Auth->user();
         $taller = $this->Alumnos->Taller->get($id);
         $alum_reg = 0;
         if ($this->request->is('post')) {
@@ -116,27 +153,27 @@ class AlumnosController extends AppController
                  $this->Flash->error(__('Se produjo un error.'));
             }
         }
-        $alumnos = $this->Alumnos->find("all")->where(['id_taller =' => 0]);
+        $alumnos = $this->Alumnos->find("all")->where(['status =' => true, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']]);
         $this->set(compact('alumnos','taller'));
     }
 
      public function addAlumnoToTaller(){
 
         $user = $this->Auth->user();
-
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
             $taller = $this->Alumnos->Taller->get($data['talleres']);
             $alumno = $this->Alumnos->get($data['alumnos']);
             $alumno->id_taller = $taller->id;
+           
             if ($this->Alumnos->save($alumno)) {
                 $this->Flash->success(__('El alumno se a ingresado en la materia.'));
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('Se produjo un error. Verifique sus datos.'));
         }
-        $talleres = $this->Alumnos->Taller->find('list')->where(['role_id' => 5,'id_turno' => $user['id_turno']]);
-        $alumnos = $this->Alumnos->find('list')->where(['id_taller <' => 1,'id_turno =' => $user['id_turno']]);
+        $talleres = $this->Alumnos->Taller->find('list')->where(['role_id' => RolesEnum::TALLER,'id_turno' => $user['id_turno'], 'id_centro' => $user['id_centro']]);
+        $alumnos = $this->Alumnos->find('list')->where(['status =' => true, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']]);
         $this->set(compact('alumnos','talleres'));
     }
     /**
@@ -152,20 +189,33 @@ class AlumnosController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $alumno = $this->Alumnos->patchEntity($alumno, $this->request->getData());
             $alumno->id_centro = 1;
+
+              if (!empty($data['image'])) {
+                        $result = $this->FileUpload->fileUpload($data['image'], 'users');
+                        $user->image = USER_IMG_PATH . DS . $result['file_name'];
+                    } else {
+                        $user->image = $img;
+                    }
+            
             if ($this->Alumnos->save($alumno)) {
+
                 $this->Flash->success(__('The alumno has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The alumno could not be saved. Please, try again.'));
         }
-        $this->set(compact('alumno'));
+        
+       $turnos = $this->Turno->find('list', ['keyField' => 'id',
+                                             'valueField' => 'nombre']);
+        $centros = $this->Centro->find('list', ['keyField' => 'id',
+                    'valueField' => 'name']);
+        $this->set(compact('alumno','turnos','centros'));
     } 
 
     public function alumnosDesabilitados(){
-        $alumnos = $this->paginate($this->Alumnos->find("all")->where(['status =' => false]),['limit' => 100]);      
+        $alumnos = $this->paginate($this->Alumnos->find("all")->where(['status =' => false, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']]),['limit' => 100]);      
         $this->set(compact('alumnos'));
     }
-
     /**
      * Delete method
      *
@@ -186,7 +236,7 @@ class AlumnosController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-       public function deleteByAlumno($id = null)
+       public function deleteByAlumno($id = null, $id_taller = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $alumno = $this->Alumnos->get($id);
@@ -196,6 +246,6 @@ class AlumnosController extends AppController
         } else {
             $this->Flash->error(__('Se produjo un error, el alumno no puede ser quitado.'));
         }
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect(['controller'=>'Taller', 'action' => 'view', $id_taller]);
     }
 }

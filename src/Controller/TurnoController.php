@@ -21,7 +21,6 @@ class TurnoController extends AppController
     public function index()
     {
         $turno = $this->paginate($this->Turno);
-
         $this->set(compact('turno'));
     }
 

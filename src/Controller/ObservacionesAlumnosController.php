@@ -14,17 +14,11 @@ use Cake\I18n\Time;
 class ObservacionesAlumnosController extends AppController
 {
     
-
        public function initialize()
     {
         parent::initialize();
         $this->loadModel('Tag');
-       // $this->loadModel('Turno');
     }
-
-
-
-
     /**
      * index method
      *
@@ -100,7 +94,7 @@ class ObservacionesAlumnosController extends AppController
                 $this->Flash->success(__('The observaciones alumno has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The observaciones alumno could not be saved. Please, try again.'));
+            $this->Flash->error(__('La observacion no pudo guardarse. Verifique sus datos.'));
         }
         $tags = $this->Tag->find('list',[
                     'keyField' => 'name',

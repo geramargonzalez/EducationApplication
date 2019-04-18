@@ -3,11 +3,12 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Taller $taller
  */
+use App\Enums\RolesEnum;
 ?>
 <div class="taller view large-9 medium-8 columns content">
     <h3><?= h("Materia: " . $taller->name) ?></h3>
     <table class="vertical-table">
-         <?php if($user != null) { ?>
+     <?php if($user != null) { ?>
         <tr>
             <th scope="row"><?= __('Profesor') ?></th>
             <td><?= h($user->name . " " . $user->surname) ?></td>
@@ -18,7 +19,7 @@
                 <td><?= h("No tiene docente definido") ?></td>
             </tr>
           <?php }  ?>
-        <?php if($taller->role_id == 5) { ?>
+        <?php if($taller->role_id == RolesEnum::TALLER) { ?>
         <tr>
             <th scope="row"><?= __('Cantidad de alumnos') ?></th>
             <td><?= h($cantidad) ?></td>
@@ -29,11 +30,11 @@
         </tr>
          <tr>
             <th scope="row"><?= __('Estadisticas del taller') ?></th>
-            <td> <?= $this->Html->link(__('Ver'), ['controller' => 'ProcesoAlumnos', 'action' => 'statsTaller', $taller->id]) ?></td>
+            <td> <?= $this->Html->link(__('Ver'), ['controller' => 'ProcesoAlumnos', 'action' => 'statsAlumnosMateria', $taller->id]) ?></td>
         </tr>
         <?php } ?>
     </table>
-    <?php if($taller->role_id == 5) { ?>
+    <?php if($taller->role_id == RolesEnum::TALLER) { ?>
     <div class="related">
         <h4><?= __('Alumnos inscriptos') ?></h4>
         <?php if (!empty($alumnos)): ?>
@@ -57,6 +58,9 @@
             <?php endforeach; ?>
         </table>
         <?php endif; ?>
-    </div>
-  <?php } ?>
+     </div>
+    <?php } ?>
+    <?php if($taller->role_id == RolesEnum::MATERIA) { ?>
+        <h3></h3>
+   <?php } ?>
 </div>

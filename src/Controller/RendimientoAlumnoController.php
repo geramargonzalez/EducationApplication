@@ -17,6 +17,7 @@ class RendimientoAlumnoController extends AppController
     {
         parent::initialize();
         $this->loadModel('Alumnos');
+         $this->loadModel('ProcesoAlumnos');
     }
     /**
      * Index method
@@ -28,7 +29,7 @@ class RendimientoAlumnoController extends AppController
         $id_user = $this->Auth->user('id');
 
         $alumno = $this->Alumnos->get($id_alumno);
-        $rendimientoAlumno = $this->paginate($this->RendimientoAlumno->find("all")->where(['id_alumno =' => $id_alumno,'id_user = ' => $id_user]));
+        $rendimientoAlumno = $this->RendimientoAlumno->find("all")->where(['id_alumno =' => $id_alumno,'id_user = ' => $id_user]);
 
         $query = $this->RendimientoAlumno->findById_alumno($id_alumno, $id_user);
 
@@ -40,7 +41,11 @@ class RendimientoAlumnoController extends AppController
         $tipoEva->enableHydration(false);
         $tipo_evaluacion = $tipoEva->toList(); 
 
-        $this->set(compact('tipo_evaluacion','alumno'));
+        $tipoEva->enableHydration(false);
+        $grafico_torta = $tipoEva->toList();
+
+
+        $this->set(compact('tipo_evaluacion','alumno','grafico_torta'));
     }
 
     /**

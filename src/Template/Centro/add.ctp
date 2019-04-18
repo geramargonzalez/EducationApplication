@@ -13,6 +13,7 @@
             echo $this->Form->control('name');
             echo $this->Form->control('direccion');
             echo $this->Form->control('tel');
+            echo $this->Form->control('subsistemas');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

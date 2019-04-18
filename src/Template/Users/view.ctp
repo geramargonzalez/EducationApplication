@@ -23,14 +23,8 @@
             <th scope="row"><?= __('Email') ?></th>
             <td><?= h($user->email) ?></td>
         </tr>
-        <tr>
-            <th scope="row"><?= __('Password') ?></th>
-            <td><?= h($user->password) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Image') ?></th>
-            <td><?= h($user->image) ?></td>
-        </tr>
+      
+        
         <tr>
             <th scope="row"><?= __('Id') ?></th>
             <td><?= $this->Number->format($user->id) ?></td>

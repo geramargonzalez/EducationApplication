@@ -36,6 +36,10 @@ class CentroTable extends Table
         $this->setTable('centro');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
+        $this->belongsTo('Subsistema', [
+            'foreignKey' => 'id_subsistema',
+            'joinType' => 'INNER'
+        ]);
 
         $this->addBehavior('Timestamp');
     }
@@ -69,6 +73,12 @@ class CentroTable extends Table
             ->maxLength('tel', 255)
             ->requirePresence('tel', 'create')
             ->allowEmptyString('tel', false);
+
+         $validator
+            ->scalar('id_subsistema')
+            ->maxLength('id_subsistema', 11)
+            ->requirePresence('id_subsistema', 'create')
+            ->allowEmptyString('id_subsistema', false);
 
         return $validator;
     }

@@ -85,6 +85,13 @@ class AppController extends Controller
         $this->set(compact('userSession'));
     }
 
+       public function beforeRender(Event $event)
+    {
+      
+             $this->viewBuilder()->layout('template_defualt');
+        
+    }
+
     public function isAuthorized($user)
     {
       return $this->Auth->user() ? true : false;

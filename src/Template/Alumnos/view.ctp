@@ -1,61 +1,29 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Alumno $alumno
- */
-?>
-<div class="alumnos view large-9 medium-8 columns content">
-    <h3><?= h($alumno->name) ?></h3>
-    <table class="vertical-table">
-        <tr>
-            <th scope="row"><?= __('Nombre') ?></th>
-            <td><?= h($alumno->name) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Apellido') ?></th>
-            <td><?= h($alumno->surname) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Procedencia') ?></th>
-            <td><?= h($alumno->procedencia) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Edad') ?></th>
-            <td><?= $this->Number->format($alumno->age) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Telefono') ?></th>
-            <td><?= h($alumno->tel) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Taller') ?></th>
-            <td><?= h($nombre) ?></td>
-        </tr>
-    </table>
-    <div class="row">
-        <h4><?= __('Antecedentes') ?></h4>
-        <?= $this->Text->autoParagraph(h($alumno->observation)); ?>
-    </div>
-    <div class="related">
-        <h4><?= __('Procesos') ?></h4>
-       
-        <table cellpadding="0" cellspacing="0">
-            <tr>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
-            
-            <tr>
-                <td class="actions">
-                   <?= $this->Html->link(__('Nuevo Proceso |'), ['controller' => 'ProcesoAlumnos', 'action' => 'add', $alumno->id]) ?>
-                    <?= $this->Html->link(__(' Ver Proceso |'), ['controller' => 'ProcesoAlumnos', 'action' => 'index', $alumno->id]) ?>
-                    <?= $this->Html->link(__('Nueva Observacion |'), ['controller' => 'ObservacionesAlumnos', 'action' => 'add', $alumno->id]) ?>
-                     <?= $this->Html->link(__('Observaciones |'), ['controller' => 'ObservacionesAlumnos', 'action' => 'index', $alumno->id]) ?>
-                    <?= $this->Html->link(__('Estadisticas Globales |'), ['controller' => 'ProcesoAlumnos', 'action' => 'statsAlumnosGenerales', $alumno->id]) ?>
-                    <?= $this->Html->link(__('Desgloce de rendimientos'), ['controller' => 'RendimientoAlumno', 'action' => 'index', $alumno->id]) ?>
-                </td>
-            </tr>
-            
-        </table>
-       
-    </div>
+
+<?php echo $this->element('menu_proceso'); ?>    
+<!-- resumt -->
+<div class="panel panel-default">
+       <div class="panel-heading resume-heading">
+          <div class="row">
+                <div class="col-lg-4 col-md-12 col-xs-12 col-sm-12">
+                    <?= $this->Html->image('../images/users/avatar-1.jpg',['height' => '300px','width' => '300px', 'class' => 'rounded-circle']); ?>
+                </div>
+                <div class="col-lg-8 col-md-12 col-xs-12 col-sm-12">
+                   <ul class="list-group">
+                      <li class="list-group-item"><?= h($alumno->name . " " . $alumno->surname) ?></li>
+                      <li class="list-group-item"><?= h("Procedencia: " .$alumno->procedencia) ?></li>
+                      <li class="list-group-item"><p><i class="fa fa-phone"></i><?= h($alumno->tel) ?></p></li>
+                      <li class="list-group-item"><p><i class="ion-laptop"></i><?= h( "   " . $nombre) ?></p></li>
+                       <li class="list-group-item"><?= $alumno->status == true ? "Estado: Concurriendo" : "Estado: Abandono"; ?></li>
+                       <li class="list-group-item"><?= $this->Html->link(__('Editar'), ['action' => 'edit', $alumno->id]) ?></li>
+                   </ul>
+                </div>
+          </div>
+       </div>
+       <div class="bs-callout bs-callout-danger">
+           <h4><?= __('Antecedentes') ?></h4>
+           <p>
+             <?= $this->Text->autoParagraph(h($alumno->observation)); ?>
+          </p>
+       </div>
 </div>
+

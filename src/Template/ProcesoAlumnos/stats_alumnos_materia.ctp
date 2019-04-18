@@ -22,7 +22,7 @@
             data.addColumn('string', 'Mes');
             data.addColumn('number', 'Rendimiento');
             data.addColumn('number', 'Conducta');
-            data.addColumn('number','Expresion oral');
+            data.addColumn('number', 'Expresion oral');
             data.addRows([
               <?php
                 for ($i = 0; $i < count($rendimiento); $i++) {
@@ -32,7 +32,6 @@
                 
               ?>
               ]);
-          
          var options = {'title' : 'Promedio mensual ',
                hAxis: {
                   title: 'Mes',
@@ -50,8 +49,7 @@
         chart.draw(data, options);
       }
 
-
-        function drawChartTipos() {
+      function drawChartTipos() {
             // Define the chart to be drawn.
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Tipo de tipo_evaluacion');
@@ -71,7 +69,6 @@
                'width':500,
                'height':400
             };
-
             // Instantiate and draw the chart.
             var chart = new google.visualization.PieChart(document.getElementById('grafica2'));
             chart.draw(data, options);
@@ -80,7 +77,7 @@
  </script>
 
 
-  <h3><?= __("Rendimiento general: " . $alumno->name . " " . $alumno->surname) ?></h3>
+  <h3><?= __("Rendimiento general: " . $taller->name) ?></h3>
 
 
 <div class="stats large-6 medium-6 columns content">

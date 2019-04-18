@@ -29,6 +29,7 @@ class Centro extends Entity
         'name' => true,
         'direccion' => true,
         'tel' => true,
+        'id_subsistema' => true,
         'modified' => true,
         'created' => true
     ];
