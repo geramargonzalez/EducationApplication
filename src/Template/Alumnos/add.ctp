@@ -2,7 +2,7 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Alumno $alumno
- */
+ */ 
 ?>
 <div class="row">
     <div class="col-12">

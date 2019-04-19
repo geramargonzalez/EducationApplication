@@ -161,6 +161,7 @@ class UsersController extends AppController
     public function edit($id = null)
     {
         $user = $this->Users->get($id);
+        $img = $user->image;
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if (!empty($data['image'])) {
@@ -171,6 +172,7 @@ class UsersController extends AppController
                   }
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
+
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));

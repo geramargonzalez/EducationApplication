@@ -10,7 +10,6 @@
                       <li class="list-group-item"><?= h("Materia: " . $taller->name) ?></li>
                       <li class="list-group-item"><p><i class="fa fa-envelope-o"></i><?= h("   " .$user->email) ?></p></li>
                       <li class="list-group-item"><p><i class="fa fa-mortar-board"></i><?= h("  " . $user->role->name) ?></p></li>
-                       
                      <li class="list-group-item"><?= $this->Html->link(__('Editar'), ['action' => 'edit', $user->id]) ?></li>
                    </ul>
                 </div>

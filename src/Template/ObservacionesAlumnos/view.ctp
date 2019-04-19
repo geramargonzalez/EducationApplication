@@ -4,20 +4,20 @@
  * @var \App\Model\Entity\ObservacionesAlumno $observacionesAlumno
  */
 ?>
-<div class="observacionesAlumnos view large-9 medium-8 columns content">
-    <h3><?= h($alumno->name . " " . $alumno->surname) ?></h3>
-    <table class="vertical-table">
-         <tr>
-            <th scope="row"><?= __('Docente') ?></th>
-            <td><?= h($user->name . " " . $user->surname ) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Created') ?></th>
-            <td><?= h($observacionesAlumno->created->day . " / " .$observacionesAlumno->created->month) ?></td>
-        </tr>
-    </table>
-    <div class="row">
-        <h4><?= __('Observaciones') ?></h4>
-        <?= $this->Text->autoParagraph(h($observacionesAlumno->observaciones)); ?>
+<?php echo $this->element('menu_proceso'); ?>    
+ <div class="row">
+    <div class="col-12">
+        <h4 class="m-t-20 m-b-20">Detalle de la observacion</h4>
+        <div class="card-columns">
+            <div class="card m-b-20">
+                <div class="card-block">
+                    <h4 class="card-title font-20 mt-0"><?= h($alumno->name . " " . $alumno->surname) ?></h4>
+                    <?= $this->Text->autoParagraph($observacionesAlumno->observaciones); ?>
+
+                    <p class="text-muted">Por <?= h($user->name . " " . $user->surname ) ?>,creada <?= h($observacionesAlumno->created->day . " / " .$observacionesAlumno->created->month) ?></p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+         

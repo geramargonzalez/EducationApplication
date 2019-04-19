@@ -23,3 +23,10 @@
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div>
+ 
+<?php
+/**
+ * @var \App\View\AppView $this
+ * @var \App\Model\Entity\Alumno $alumno
+ */
+?>

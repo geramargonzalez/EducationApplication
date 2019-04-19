@@ -76,7 +76,7 @@
     
  </script>
 
-
+<?php echo $this->element('menu_proceso'); ?>    
   <h3><?= __("Rendimiento general: " . $taller->name) ?></h3>
 
 

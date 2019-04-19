@@ -5,29 +5,36 @@
  */
 ?>
 
-<div class="rendimientoAlumno index large-6 medium-6 columns content">
-    <h3><?= __('Rendimiento Alumno: ' . $alumno->name ." " . $alumno->surname) ?></h3>
-    <table cellpadding="0" cellspacing="0">
-        <thead>
-            <tr>
-                <th scope="col"><?= $this->Paginator->sort('Tipo de evaluacion') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('Rendimiento promedio ') ?></th>
-               
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($tipo_evaluacion as $tipo): ?>
-            <tr>
-                <td><?= h($tipo['tipo_evaluacion']) ?></td>
-                <td><?= $this->Number->format($tipo['rendimiento']) ?></td>
-               
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+<?php echo $this->element('menu_proceso'); ?>    
 
-</div>
-
+<div class="row">
+      <div class="col-12">
+          <div class="card m-b-20">
+              <div class="card-block">
+                  <h4 class="mt-0 header-title"><?= __('Rendimiento: ' . $alumno->name ." " . $alumno->surname) ?></h4>
+                  <p class="text-muted m-b-30 font-14">Desgloce de cada una de las evaluaciones del estudiante hechas por el docente.
+                  </p>
+                  <table id="datatable-buttons" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                      <thead>
+                      <tr>
+                          <th><?= $this->Paginator->sort('Evaluacion') ?></th>
+                          <td><?= $this->Paginator->sort('Promedio ') ?></td>
+                      </tr>
+                      </thead>
+                       <tbody>
+                          <?php foreach ($tipo_evaluacion as $tipo): ?>
+                          <tr>
+                              <td><?= h($tipo['tipo_evaluacion']) ?></td>
+                              <td><?= $this->Number->format($tipo['rendimiento']) ?></td>
+                             
+                          </tr>
+                          <?php endforeach; ?>
+                      </tbody> 
+                  </table>
+              </div>
+          </div>
+      </div> <!-- end col -->
+  </div> <!-- end row -->
 
 
 <div class="stats large-6 medium-6 columns content">
@@ -38,9 +45,6 @@
 
 
 
-<?php
- 
-?>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type = "text/javascript">
       //var google;

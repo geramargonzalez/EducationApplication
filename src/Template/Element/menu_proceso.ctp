@@ -7,7 +7,7 @@ use App\Enums\RolesEnum;
                 <h4 class="mt-0 header-title">Procesos</h4>
                 <p class="text-muted m-b-30 font-14">Administre todo lo que tenga que ver con el alumno</p>
                 <div class="">
-                     <?php if($user['role_id'] == RolesEnum::PROFESOR || $user['role_id'] == RolesEnum::PROFESOR_ADMIN) { ?>
+                     <?php if($user_session['role_id'] == RolesEnum::PROFESOR || $user_session['role_id'] == RolesEnum::PROFESOR_ADMIN) { ?>
                     <div class="btn-group m-b-10">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Proceso</button>
                         <div class="dropdown-menu">
@@ -19,7 +19,7 @@ use App\Enums\RolesEnum;
                         <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Estadisticas</button>
                         <div class="dropdown-menu">
                             <?= $this->Html->link(__('Globales'), ['controller' => 'ProcesoAlumnos', 'action' => 'statsAlumnosGenerales', $alumno->id],['class' => 'dropdown-item']) ?>
-                            <?= $this->Html->link(__('Profesor'), ['controller' => 'ProcesoAlumnos', 'action' => 'statsAlumnosGenerales', $alumno->id],['class' => 'dropdown-item']) ?>
+                            <?= $this->Html->link(__('Profesor'), ['controller' => 'ProcesoAlumnos', 'action' => 'statsAlumnosMateria', $alumno->id],['class' => 'dropdown-item']) ?>
                             <?= $this->Html->link(__('Desgloce de rendimientos'),['controller' => 'RendimientoAlumno', 'action' => 'index', $alumno->id],['class' => 'dropdown-item']) ?>
                         </div>
                     </div>

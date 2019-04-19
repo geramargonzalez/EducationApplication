@@ -1,6 +1,43 @@
 <?php
  
 ?>
+
+<?php echo $this->element('menu_proceso'); ?>    
+
+<h3><?= __("Rendimiento general: " . $alumno->name . " " . $alumno->surname) ?></h3>
+  <div class="row">
+    <div class="col-lg-6">
+        <div class="card m-b-20">
+            <div class="card-block">
+
+                <h4 class="mt-0 header-title">Histograma de promedios generales</h4>
+                <p class="text-muted m-b-30 font-14">Se muestran los diagramas generales de todos los docentes que tienen al estudiante <?= __( $alumno->name . " " . $alumno->surname) ?>.</p>
+
+
+                <div id="grafica" height="300"></div>
+
+            </div>
+        </div>
+    </div> 
+     <div class="col-lg-6">
+        <div class="card m-b-20">
+            <div class="card-block">
+
+                <h4 class="mt-0 header-title">Diagrama de tortas</h4>
+                <p class="text-muted m-b-30 font-14">La distribucion de los diferentes tipos de evaluacion dada por los profesores.</p>
+
+        
+
+                <div id="grafica2" height="300"></div>
+
+            </div>
+        </div>
+    </div>
+  </div>
+
+
+
+
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type = "text/javascript">
       //var google;
@@ -12,7 +49,7 @@
       google.charts.setOnLoadCallback(drawChart);
       //google.charts.setOnLoadCallback(drawChartConducta);
       //google.charts.setOnLoadCallback(drawChartExpresion);
-       google.charts.setOnLoadCallback(drawChartTipos);
+      google.charts.setOnLoadCallback(drawChartTipos);
 
       // Función para poblar la gráfica
       // iniciar el gráfico, pasa los datos y los dibuja
@@ -33,17 +70,21 @@
               ?>
               ]);
           
+          
          var options = {'title' : 'Promedio mensual ',
                hAxis: {
                   title: 'Mes',
-                  minValue: 0
+                  minValue: 0,
+                  maxValue: 12
+
                },
                vAxis: {
                   title: 'Promedio',
-                  minValue: 0
+                  minValue: 0,
+                  maxValue: 12
                },   
-               'width':550,
-               'height':400   
+               'width':600,
+               'height':600   
             };
         // Inicia la gráfica
         var chart = new google.visualization.LineChart(document.getElementById('grafica'));
@@ -64,12 +105,13 @@
                  }
                 ?>
               
-            ]);  
+            ]);
+               
             // Set chart options
             var options = {
                'title':'Los tipos de evaluacion',
-               'width':500,
-               'height':400
+               'width':600,
+               'height':600
             };
 
             // Instantiate and draw the chart.
@@ -80,19 +122,5 @@
  </script>
 
 
-  <h3><?= __("Rendimiento general: " . $alumno->name . " " . $alumno->surname) ?></h3>
 
-
-<div class="stats large-6 medium-6 columns content">
-
-  <div id="grafica"></div>
-
-</div>
-
-<div class="stats large-6 medium-6 columns content">
-
-  <div id="grafica2"></div>
-
-  
-</div>
 

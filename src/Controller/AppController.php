@@ -77,12 +77,12 @@ class AppController extends Controller
         parent::beforeFilter($event);
         //request->getParam()
        // $params = $this->request->getParam('controller');
-        $userSession = $this->Auth->user();
+        $user_session = $this->Auth->user();
         /*if (!$userSession && ($params['controller'] == 'Users' && $params['action'] == 'add')) {
             $this->Auth->allow(['login']);
        }*/
 
-        $this->set(compact('userSession'));
+        $this->set(compact('user_session'));
     }
 
        public function beforeRender(Event $event)

@@ -47,6 +47,11 @@ class ObservacionesAlumnosTable extends Table
             'foreignKey' => 'id_alumno',
             'joinType' => 'INNER'
         ]);
+
+         $this->belongsTo('Tag', [
+            'foreignKey' => 'etiqueta',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
@@ -70,11 +75,6 @@ class ObservacionesAlumnosTable extends Table
             ->integer('id_user')
             ->requirePresence('id_user', 'create')
             ->allowEmptyString('id_user', false);
-
-        $validator
-            ->scalar('observaciones')
-            ->requirePresence('observaciones', 'create')
-            ->allowEmptyString('observaciones', false);
 
          $validator
             ->scalar('etiqueta')

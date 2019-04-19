@@ -22,8 +22,7 @@ class AlumnosController extends AppController
         $this->loadModel('Centro');
         $this->loadModel('UsersCentro');
         $this->loadModel('UsersTurno');
-        $this->loadComponent('FileUpload');
-        
+        $this->loadComponent('FileUpload'); 
     }
     /**
      
@@ -80,7 +79,7 @@ class AlumnosController extends AppController
      */
     public function view($id = null)
     {
-        $user = $this->Auth->user();
+        $user_session = $this->Auth->user();
         $alumno = $this->Alumnos->get($id);
         if($alumno->id_taller != 0){
             $taller  = $this->Taller->get($alumno->id_taller);
@@ -88,7 +87,7 @@ class AlumnosController extends AppController
         } else {
             $nombre = "No tiene taller asignado.";
         }
-        $this->set(compact('alumno','nombre','user'));
+        $this->set(compact('alumno','nombre','user_session'));
     }
     /**
      * Add method
@@ -186,26 +185,25 @@ class AlumnosController extends AppController
     public function edit($id = null)
     {
         $alumno = $this->Alumnos->get($id);
+         $img = $alumno->image;
         if ($this->request->is(['patch', 'post', 'put'])) {
             $alumno = $this->Alumnos->patchEntity($alumno, $this->request->getData());
             $alumno->id_centro = 1;
 
               if (!empty($data['image'])) {
                         $result = $this->FileUpload->fileUpload($data['image'], 'users');
-                        $user->image = USER_IMG_PATH . DS . $result['file_name'];
+                        $alumno->image = USER_IMG_PATH . DS . $result['file_name'];
                     } else {
-                        $user->image = $img;
+                        $alumno->image = $img;
                     }
-            
             if ($this->Alumnos->save($alumno)) {
-
                 $this->Flash->success(__('The alumno has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The alumno could not be saved. Please, try again.'));
         }
         
-       $turnos = $this->Turno->find('list', ['keyField' => 'id',
+        $turnos = $this->Turno->find('list', ['keyField' => 'id',
                                              'valueField' => 'nombre']);
         $centros = $this->Centro->find('list', ['keyField' => 'id',
                     'valueField' => 'name']);

@@ -4,21 +4,16 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-        <title>Admiry - Responsive Flat Admin Dashboard</title>
+        <title>Crece - Aplicacion a seguir el proceso de tus alumnos</title>
         <meta content="Admin Dashboard" name="description" />
         <meta content="ThemeDesign" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
         <link rel="shortcut icon" href="assets/images/favicon.ico">
-
         <!--Morris Chart CSS -->
-    
         <?= $this->Html->css('../plugins/morris/morris') ?>
-        
         <?= $this->Html->css('bootstrap.min') ?>
-         <?= $this->Html->css('icons') ?>
-         <?= $this->Html->css('style') ?>
-
+        <?= $this->Html->css('icons') ?>
+        <?= $this->Html->css('style') ?>
     </head>
 
 <body class="fixed-left widescreen">
@@ -92,8 +87,58 @@
     <?= $this->Html->script('../plugins/morris/morris.min'); ?>
     <?= $this->Html->script('../plugins/raphael/raphael-min'); ?>
     <?= $this->Html->script('../pages/dashborad'); ?>
- 
+    <?= $this->Html->script('../plugins/tinymce/tinymce.min'); ?>
+
+    
+
+    <!-- Required datatable js -->
+    <?= $this->Html->script('../plugins/datatables/jquery.dataTables.min'); ?>
+    <?= $this->Html->script('../plugins/datatables/dataTables.bootstrap4.min'); ?>
+    <?= $this->Html->script('../plugins/datatables/dataTables.buttons.min'); ?>
+    <?= $this->Html->script('../plugins/datatables/buttons.bootstrap4.min'); ?>
+
+    <?= $this->Html->script('../plugins/datatables/jszip.min'); ?>
+    <?= $this->Html->script('../plugins/datatables/pdfmake.min'); ?>
+    <?= $this->Html->script('../plugins/datatables/vfs_fonts'); ?>
+    
+    <!-- Buttons examples -->
+    <?= $this->Html->script('../plugins/datatables/buttons.html5.min'); ?>
+    <?= $this->Html->script('../plugins/datatables/buttons.print.min'); ?>
+    <?= $this->Html->script('../plugins/datatables/buttons.colVis.min'); ?>
+    <?= $this->Html->script('../plugins/datatables/dataTables.responsive.min'); ?>
+    
+    <!-- Responsive examples -->
+    <?= $this->Html->script('../plugins/datatables/responsive.bootstrap4.min'); ?>
+
+    <!-- Datatable init js -->
+    <?= $this->Html->script('../pages/datatables.init'); ?>
+    <?= $this->Html->script('../plugins/tiny-editable/mindmup-editabletable'); ?>
+    <?= $this->Html->script('../plugins/tiny-editable/numeric-input-example'); ?>
+
     <!-- App js -->
     <?= $this->Html->script('app'); ?>
+   
+    <script>
+        $(document).ready(function () {
+            if($("#observaciones").length > 0){
+                tinymce.init({
+                    selector: "#observaciones",
+                    theme: "modern",
+                    height:300,
+                    toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | link image |  forecolor backcolor emoticons",
+                    style_formats: [
+                        {title: 'Bold text', inline: 'b'},
+                        {title: 'Red text', inline: 'span', styles: {color: '#ff0000'}},
+                        {title: 'Red header', block: 'h1', styles: {color: '#ff0000'}},
+                        {title: 'Example 1', inline: 'span', classes: 'example1'},
+                        {title: 'Example 2', inline: 'span', classes: 'example2'},
+                        {title: 'Table styles'},
+                        {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
+                    ]
+                });
+            }
+        });
+        $('#mainTable').editableTableWidget().numericInputExample().find('td:first').focus();
+    </script>
 
 </body>

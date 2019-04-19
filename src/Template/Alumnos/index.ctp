@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\Alumno[]|\Cake\Collection\CollectionInterface $alumnos
  */
 ?>
-  <div class="page-content-wrapper ">
+<div class="page-content-wrapper ">
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -15,7 +15,7 @@
                             <p class="text-muted m-b-30 font-14">This is an experimental awesome solution for responsive tables with complex data.</p>
                             <div class="table-rep-plugin">
                                 <div class="table-responsive b-0" data-pattern="priority-columns">
-                                    <table id="tech-companies-1" class="table  table-striped">
+                                    <table id="datatable-buttons" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                         <thead>
                                         <tr>
                                             <th data-priority="1"><?= $this->Paginator->sort('C.I') ?></th>
@@ -48,25 +48,6 @@
         
     </div> <!-- Page content Wrapper -->
 
-<div class="col-lg-6">
-    <div class="card m-b-20">
-        <div class="card-block">
-            <nav class="paginator">
-                <ul class="pagination justify-content-end">
-                    <li class="page-item"><?= $this->Paginator->first('<< ' . __('first'),['class' =>'page-link']) ?></li>
-                    <li class="page-item"><?=$this->Paginator->prev('< ' . __('previous'),['class' =>'page-link']) ?></li>
-                    <li class="page-item"><?=$this->Paginator->numbers() ?></li>
-                    <li class="page-item">
-                        <?= $this->Paginator->next(__('next') . ' >',['class' =>'page-link']) ?>
-                    </li>
-                     <li class="page-item">
-                        <?= $this->Paginator->last(__('last') . ' >>',['class' =>'page-link']) ?>
-                    </li>
-                </ul>
-                <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
-            </nav>
-         </div>
-    </div>
-</div>
+
 
 

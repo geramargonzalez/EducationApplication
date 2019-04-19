@@ -26,13 +26,14 @@ class ObservacionesAlumnosController extends AppController
      */
     public function index($id = null)
     {
-        $qry = $this->ObservacionesAlumnos
+        $observacionesAlumnos = $this->ObservacionesAlumnos
             ->find('all')
             ->where([
                 'ObservacionesAlumnos.id_alumno' => $id
             ]);
         $alumno = $this->ObservacionesAlumnos->Alumnos->get($id);
-        $observacionesAlumnos = $this->paginate($qry, ['limit' => 100]);
+        
+        //$observacionesAlumnos = $this->paginate($qry, ['limit' => 100]);
         $this->set(compact('observacionesAlumnos','alumno'));
     }
     /**
@@ -62,7 +63,7 @@ class ObservacionesAlumnosController extends AppController
             $observacionesAlumno = $this->ObservacionesAlumnos->patchEntity($observacionesAlumno,$data);
             $observacionesAlumno->id_user = $id_user;
             $observacionesAlumno->id_alumno = $id;
-            $observacionesAlumno->etiqueta = $data['etiqueta'];
+            $observacionesAlumno->etiqueta = $data['tags'];
             if ($this->ObservacionesAlumnos->save($observacionesAlumno)) {
                 $this->Flash->success(__('The observaciones alumno has been saved.'));
                 return $this->redirect(['controller'=>'Alumnos','action' => 'view',$id]);

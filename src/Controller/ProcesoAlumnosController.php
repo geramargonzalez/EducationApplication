@@ -33,8 +33,8 @@ class ProcesoAlumnosController extends AppController
         $this->loadModel('Alumnos');
         $this->loadModel('TipoEvaluacion');
         $this->loadModel('RendimientoAlumno');
-         $this->loadModel('Taller');
-          $this->loadModel('Users');
+        $this->loadModel('Taller');
+        $this->loadModel('Users');
     }
     /**
      * Index method
@@ -112,9 +112,10 @@ class ProcesoAlumnosController extends AppController
 
           
             if($this->RendimientoAlumno->save($rendimientoAlumno)){
+              
                if ($this->ProcesoAlumnos->save($procesoAlumno)) {
                 $this->Flash->success(__('The proceso alumno has been saved.'));
-                return $this->redirect(['controller' => 'Alumnos','action' => 'view',$procesoAlumno->id_alumno]);
+                return $this->redirect(['controller' => 'ProcesoAlumnos','action' => 'view',$procesoAlumno->id_alumno]);
                }else{
                 $this->Flash->error(__('The proceso alumno could not be saved. Please, try again.'));
               }
@@ -152,55 +153,89 @@ class ProcesoAlumnosController extends AppController
     }
      
 
-    public function statsAlumnos($id_alumno = null)
+      public function statsAlumnos($id_alumno = null)
     {
+
+       // Estdisticas hechas por el profesor logeado
        $alumno = $this->Alumnos->get($id_alumno);
        $id_user = $this->Auth->user('id');
        $query = $this->ProcesoAlumnos->findById_alumnoAndId_user($id_alumno, $id_user);
        
-       $queryTortas = $this->RendimientoAlumno->findById_alumnoAndId_user($id_alumno, $id_user);
- 
+      // $queryTortas = $this->RendimientoAlumno->findById_alumnoAndId_user($id_alumno, $id_user);
+      
+        //'expresion_oral' => $query->func()->avg('expresion_oral'),'conducta' => $query->func()->avg('conducta'),
         $rendi= $query->select(['rendimiento' => $query->func()->avg('rendimiento'), 'Mes' =>'MONTH(created)'])
                   ->where(['id_alumno'  => $alumno->id])
                   ->group('MONTH(created)')
                   ->order(['MONTH(created)' => 'ASC']);
-        $rendi->enableHydration(false);
-        $rendimiento = $rendi->toList(); 
 
-        $rendi_pordia = $query->select(['rendimiento' => 'rendimiento', 'Fecha' =>'created'])
+         $cond = $query->select(['conducta' => $query->func()->avg('conducta'), 'Mes' =>'MONTH(created)'])
                   ->where(['id_alumno'  => $alumno->id])
                   ->group('MONTH(created)')
                   ->order(['MONTH(created)' => 'ASC']);
 
-    
-        $rendi_pordia->enableHydration(false);
-        $rendiPorDia = $rendi->toList(); 
-        
-
+        $expre = $query->select(['expresion_oral' => $query->func()->avg('expresion_oral'), 'Mes' =>'MONTH(created)'])
+                  ->where(['id_alumno'  => $alumno->id])
+                  ->group('MONTH(created)')
+                  ->order(['MONTH(created)' => 'ASC']);
 
        
-        $this->set(compact('alumno','rendimiento','rendiPorDia'));
+        $rendi->enableHydration(false);
+        $rendimiento = $rendi->toList(); 
+
+        $cond->enableHydration(false);
+        $conducta = $cond->toList();
+
+        $expre->enableHydration(false);
+        $expresion_oral = $expre->toList();
+
+
+       // Debug($tipo_evaluacion);
+       // exit; 
+
+       
+        $this->set(compact('alumno','rendimiento'));
     }
     
-    public function statsAlumnosGenerales($id_alumno = null){
-      
+   public function statsAlumnosGenerales($id_alumno = null){
+
+
+       // Estdisticas globales de ese alumno
       $alumno = $this->Alumnos->get($id_alumno);
+    //  $id_user = $this->Auth->user('id');
       $query = $this->ProcesoAlumnos->findById_alumno($id_alumno);
+
       $queryTortas = $this->RendimientoAlumno->findById_alumno($id_alumno);
-      
+
       $rendi= $query->select(['rendimiento' => $query->func()->avg('rendimiento'), 'Mes' =>'MONTH(created)'])
                 ->where(['id_alumno'  => $alumno->id])
                 ->group('MONTH(created)')
-                ->order(['rendimiento' => 'DESC']);
+                ->order(['MONTH(created)' => 'ASC']);
+
+       $cond = $query->select(['conducta' => $query->func()->avg('conducta'), 'Mes' =>'MONTH(created)'])
+                ->where(['id_alumno'  => $alumno->id])
+                ->group('MONTH(created)')
+                ->order(['MONTH(created)' => 'ASC']);
+
+      $expre = $query->select(['expresion_oral' => $query->func()->avg('expresion_oral'), 'Mes' =>'MONTH(created)'])
+                ->where(['id_alumno'  => $alumno->id])
+                ->group('MONTH(created)')
+                ->order(['MONTH(created)' => 'ASC']);
 
       $tipoEva = $queryTortas->select(['rendimiento' => $query->func()->Sum('rendimiento'), 'tipo_evaluacion' =>'tipoevaluacion'])
                 ->where(['id_alumno'  => $alumno->id])
                 ->group('tipoevaluacion')
-                ->order(['rendimiento' => 'DESC']);
+                ->order(['rendimiento' => 'ASC']);
 
        
       $rendi->enableHydration(false);
       $rendimiento = $rendi->toList(); 
+
+      $cond->enableHydration(false);
+      $conducta = $cond->toList();
+
+      $expre->enableHydration(false);
+      $expresion_oral = $expre->toList();
 
       $tipoEva->enableHydration(false);
       $tipo_evaluacion = $tipoEva->toList();
@@ -208,7 +243,7 @@ class ProcesoAlumnosController extends AppController
       $this->set(compact('alumno','rendimiento','tipo_evaluacion'));
        
     }
-    public function statsAlumnosMateria($id_taller = null){
+   /* public function statsAlumnosMateria($id_taller = null){
       
       $taller = $this->Taller->get($id_taller);
 
@@ -234,7 +269,7 @@ class ProcesoAlumnosController extends AppController
 
       $this->set(compact('rendimiento','tipo_evaluacion','taller'));
        
-    }
+    }*/
 
     public function statsAlumnosDesabilitadosHabilitados(){
       // Se van a mostar los alumnos que desabilitaron y los meses donde dejaron.

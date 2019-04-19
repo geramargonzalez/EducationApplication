@@ -6,7 +6,7 @@
                  <?= $this->Html->image('../images/users/avatar-1.jpg',['height' => '30px','width' => '30px', 'class' => 'rounded-circle']); ?>
             </a>
             <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
-                 <?= $this->Html->link('<i class="mdi mdi-account-circle m-r-5 text-muted"></i> Profile', ['controller'=>'Users','action' => 'profile',$userSession['id']], ['class' => 'dropdown-item','escape' => false]); ?>
+                 <?= $this->Html->link('<i class="mdi mdi-account-circle m-r-5 text-muted"></i> Profile', ['controller'=>'Users','action' => 'profile',$user_session['id']], ['class' => 'dropdown-item','escape' => false]); ?>
                 
                 <?= $this->Html->link('<i class="mdi mdi-logout m-r-5 text-muted"></i> Logout', ['controller'=>'Users','action' => 'logout'], ['class' => 'dropdown-item','escape' => false]); ?>
             </div>
