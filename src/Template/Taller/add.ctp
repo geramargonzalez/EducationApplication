@@ -3,7 +3,7 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Taller $taller
  */
-?>
+?> 
 <div class="row">
     <div class="col-12">
         <div class="card m-b-20">  

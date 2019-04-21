@@ -4,13 +4,13 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * UsersTurno Entity
+ * AlumnosTaller Entity
  *
  * @property int $id
- * @property int $id_turno
- * @property int $id_user
+ * @property int $id_alumno
+ * @property int $id_taller
  */
-class UsersTurno extends Entity
+class AlumnosTaller extends Entity
 {
 
     /**
@@ -23,7 +23,7 @@ class UsersTurno extends Entity
      * @var array
      */
     protected $_accessible = [
-        'id_turno' => true,
-        'id_user' => true
+        'id_alumno' => true,
+        'id_taller' => true
     ];
 }

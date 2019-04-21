@@ -39,7 +39,6 @@ class TurnoController extends AppController
 
         $this->set('turno', $turno);
     }
-
     /**
      * Add method
      *

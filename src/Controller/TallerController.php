@@ -5,7 +5,7 @@ use App\Controller\AppController;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 use App\Enums\RolesEnum;
-
+ 
 /**
  * Taller Controller
  * @property \App\Model\Table\TallerTable $Taller
@@ -13,8 +13,7 @@ use App\Enums\RolesEnum;
  */
 class TallerController extends AppController
 {
-    
-
+  
      public function initialize()
     {
         parent::initialize();
@@ -23,6 +22,7 @@ class TallerController extends AppController
         $this->loadModel('Roles');
         $this->loadModel('Turno');
         $this->loadModel('Users');
+        $this->loadModel('AlumnosTaller');
     }
     /**
      * Index method
@@ -31,8 +31,8 @@ class TallerController extends AppController
     public function index()
     {
         $user = $this->Auth->user();
-        $qry = $this->Taller->find('all')->where(['id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']]);
-        $talleres = $this->paginate($qry, ['limit' => 10]);
+        $qry = $this->Taller->find('all')->where(['id_turno =' => $user['id_turno'], 'id_centro =' => $user['id_centro']]);
+        $talleres = $this->paginate($qry, ['limit' => 50]);
         $this->set(compact('talleres'));
     }
     /**
@@ -43,21 +43,22 @@ class TallerController extends AppController
      */
     public function view($id = null)
     {
-         $usersession = $this->Auth->user();
-
-        $taller_query = $this->Taller->find('all')->where(['id ='=>$id,'id_centro =' => $usersession['id_centro'],'id_turno =' => $usersession['id_turno']]);
+       
+        $taller_query = $this->Taller->find('all')->where(['id ='=>$id]);
         $taller = $taller_query->first();
         if($taller->id_user != 0){
             $user= $this->Users->get($taller->id_user);
         } else {
-             $user = null;
+            $user = "No hay docente definido";
         }
-        $alumnos = $this->Alumnos->find('all')->where(['id_taller =' => $taller->id]);
-        $cant = $this->Alumnos->find();
-                          $cant->select(['count' => $cant->func()->count('*')])
-                               ->where(['id_taller' => $taller->id]);                    
-        $cantidad= $cant->first()->count;
-        $this->set(compact('taller', 'alumnos','user','cantidad'));
+        $talleresAlumnos = $this->AlumnosTaller->find('all')->where(['id_taller' => $id]);
+        $alumnos = array();
+        $cantidad = 0;
+        foreach ($talleresAlumnos as $tallerAlumno) {
+            $alumnos[] = $this->Alumnos->get($tallerAlumno->id_alumno);
+            $cantidad++;
+        }
+        $this->set(compact('taller', 'alumnos','cantidad','user'));
     }
     /**
      * Add method
@@ -68,6 +69,7 @@ class TallerController extends AppController
     {
         $usersession = $this->Auth->user();
         $taller = $this->Taller->newEntity();
+       
         if ($this->request->is('post')) {
             
             $data = $this->request->getData();
@@ -76,15 +78,12 @@ class TallerController extends AppController
             $taller->id_centro = $data['centros'];
             $taller->id_turno = $data['turnos'];
             
-            // Hacer un find buscando ese taller, y si no lo encuentro mandar un mensaje de error
-
             if ($this->Taller->save($taller)) {
                 $this->Flash->success(__('The taller has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The taller could not be saved. Please, try again.'));
         }
-        
         $roles = $this->Roles->find('list')->where(['id >' => 3]);
         $turnos = $this->Turno->find('list', ['keyField' => 'id',
                     'valueField' => 'nombre']);
@@ -95,11 +94,9 @@ class TallerController extends AppController
 
     public function addProfeToTaller($id_user = null)
     {
-       // $usersession = $this->Auth->user();
-
         $user = $this->Users->get($id_user);
-        
         $taller = $this->Taller->newEntity();
+        
         if ($this->request->is('post')) {
             
             $data = $this->request->getData();
@@ -107,9 +104,6 @@ class TallerController extends AppController
             $taller->id_user = $user->id;
             $taller->id_centro = $data['centros'];
             $taller->id_turno = $data['turnos'];
-            
-            // Hacer un find buscando ese taller, y si no lo encuentro mandar un mensaje de error
-
             if ($this->Taller->save($taller)) {
                 $this->Flash->success(__('The taller has been saved.'));
                 return $this->redirect(['action' => 'index']);

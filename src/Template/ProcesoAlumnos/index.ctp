@@ -11,7 +11,6 @@
         <div class="col-12">
             <div class="card m-b-20">
                 <div class="card-block">
-
                     <h4 class="mt-0 header-title">Tabla con toos los evaluados ingresados</h4>
                     <p class="text-muted m-b-30 font-14"></p>
 

@@ -44,7 +44,7 @@ class AlumnosTable extends Table
             'joinType' => 'INNER'
         ]);
 
-          $this->belongsTo('Centro', [
+        $this->belongsTo('Centro', [
             'foreignKey' => 'id_centro',
             'joinType' => 'INNER'
         ]);
@@ -104,10 +104,6 @@ class AlumnosTable extends Table
             ->scalar('ci')
             ->requirePresence('ci', 'create')
             ->allowEmptyString('ci', false);
-
-        $validator
-            ->integer('id_taller')
-            ->requirePresence('id_taller', 'create');
 
           $validator
             ->integer('id_centro')

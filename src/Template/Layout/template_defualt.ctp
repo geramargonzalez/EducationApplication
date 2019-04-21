@@ -47,13 +47,16 @@
 
         <!-- ========== main content start ========== -->
         <div class="content-page">
-            <?= $this->Flash->render() ?>
+           
             <!-- content -->
             <div class="content">
                 <div class="topbar">
                     <?php echo $this->element('top-bar'); ?>
-            <!-- LOGO --> 
+                    <!-- LOGO --> 
                  </div>
+                  
+                 <?= $this->Flash->render() ?>
+                  
                  <?= $this->fetch('content') ?>
             </div>
 

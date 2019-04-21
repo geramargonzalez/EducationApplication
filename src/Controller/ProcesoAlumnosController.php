@@ -80,15 +80,17 @@ class ProcesoAlumnosController extends AppController
      */
     public function add($id = null)
     {
+        
+        $id_user = $this->Auth->user('id');
         $procesoAlumno = $this->ProcesoAlumnos->newEntity();
+        
         if ($this->request->is('post')) {
-            $data = $this->request->getData();
-
-            $procesoAlumno = $this->ProcesoAlumnos->patchEntity($procesoAlumno, $this->request->getData());
             
+            $data = $this->request->getData();
+            $procesoAlumno = $this->ProcesoAlumnos->patchEntity($procesoAlumno, $this->request->getData());
             $procesoAlumno->promedio = ($procesoAlumno->conducta + $procesoAlumno->rendimiento + $procesoAlumno->expresion_oral)/3;
             $procesoAlumno->id_alumno = $id;
-            $procesoAlumno->id_user = $this->Auth->user('id');
+            $procesoAlumno->id_user = $id_user;
 
             if(empty($data['conducta'])){
               $procesoAlumno->conducta = 6;
@@ -99,23 +101,22 @@ class ProcesoAlumnosController extends AppController
              if(empty($data['rendimiento'])){
               $procesoAlumno->rendimiento = 6;
             }
-            
-
+          
             $rendimientoAlumno = $this->RendimientoAlumno->newEntity();
             $datos  =  array(
                   "id_alumno" =>  $id,
                   'rendimiento' => $data['rendimiento'],
-                  'id_user' =>  $procesoAlumno->id_user,
+                  'id_user' =>  $id_user,
                   'tipoevaluacion' => $data['tipoevaluacion']
                 );
+
             $rendimientoAlumno = $this->RendimientoAlumno->patchEntity($rendimientoAlumno,$datos);
 
-          
             if($this->RendimientoAlumno->save($rendimientoAlumno)){
-              
+               
                if ($this->ProcesoAlumnos->save($procesoAlumno)) {
-                $this->Flash->success(__('The proceso alumno has been saved.'));
-                return $this->redirect(['controller' => 'ProcesoAlumnos','action' => 'view',$procesoAlumno->id_alumno]);
+                  $this->Flash->success(__('The proceso alumno has been saved.'));
+                  return $this->redirect(['controller' => 'ProcesoAlumnos','action' => 'view', $id]);
                }else{
                 $this->Flash->error(__('The proceso alumno could not be saved. Please, try again.'));
               }
@@ -189,11 +190,6 @@ class ProcesoAlumnosController extends AppController
         $expre->enableHydration(false);
         $expresion_oral = $expre->toList();
 
-
-       // Debug($tipo_evaluacion);
-       // exit; 
-
-       
         $this->set(compact('alumno','rendimiento'));
     }
     

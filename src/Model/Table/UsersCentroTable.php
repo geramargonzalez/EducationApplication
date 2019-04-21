@@ -30,10 +30,25 @@ class UsersCentroTable extends Table
     public function initialize(array $config)
     {
         parent::initialize($config);
-
         $this->setTable('users_centro');
+        
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+
+        $this->belongsTo('Users', [
+            'foreignKey' => 'id_user',
+            'joinType' => 'INNER'
+        ]);
+
+        $this->belongsTo('Centro', [
+            'foreignKey' => 'id_centro',
+            'joinType' => 'INNER'
+        ]);
+
+        $this->belongsTo('Turno', [
+            'foreignKey' => 'id_turno',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
@@ -57,6 +72,11 @@ class UsersCentroTable extends Table
             ->integer('id_user')
             ->requirePresence('id_user', 'create')
             ->allowEmptyString('id_user', false);
+
+         $validator
+            ->integer('id_turno')
+            ->requirePresence('id_turno', 'create')
+            ->allowEmptyString('id_turno', false);
 
         return $validator;
     }

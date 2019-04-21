@@ -30,9 +30,10 @@ class UsersController extends AppController
      */
     public function index()
     {
-     
         $user_session = $this->Auth->user();
-        $users = $this->paginate($this->Users,['limit' => 15]);
+        $users = $this->paginate($this->Users->find('all',[
+            'contain' => ['Roles']
+        ]),['limit' => 15]);
         $this->set(compact('users','user_session'));
     }
     /**
@@ -85,34 +86,21 @@ class UsersController extends AppController
             } else {
                $user->image = "null";
             }
-            
-
             if ($this->Users->save($user)) {
 
-                $usersCentro = $this->UsersCentro->newEntity();
-                $datos1  =  array(
-                  'id_centro' => $data['centros'],
-                  "id_user" =>  $user->id
-                  
-                );
+              $usersCentro = $this->UsersCentro->newEntity();
+              $datos1  =  array(
+                'id_centro' => $data['centros'],
+                "id_user" =>  $user->id,
+                'id_turno' => $data['turnos']
+              );
               $userCentro = $this->UsersCentro->patchEntity($usersCentro,$datos1);
-              $usersTurno = $this->UsersTurno->newEntity();
-              $datos2  =  array(
-                    'id_turno' => $data['turnos'],
-                    "id_user" =>  $user->id
-                  );
-              $usersTurno = $this->UsersTurno->patchEntity($usersTurno,$datos2);
-           
-
-                if ($this->UsersCentro->save($userCentro)) {
-                    if ($this->UsersTurno->save($usersTurno)) {
-                        return $this->redirect(['controller'=>'Taller','action' => 'addProfeToTaller',$user->id]);
-                    }
-                }
+              if ($this->UsersCentro->save($userCentro)) {  
+                  return $this->redirect(['controller'=>'Taller','action' => 'addProfeToTaller',$user->id]);  
+              }
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
-        //$talleres = $this->Taller->find('list', ['limit' => 200]);
         $roles = $this->Users->Roles->find('list');
         $turnos = $this->Users->Turno->find('list', ['keyField' => 'id',
                     'valueField' => 'nombre']);
@@ -172,16 +160,16 @@ class UsersController extends AppController
                   }
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
-
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
+
         $talleres = $this->Taller->find('list', ['limit' => 200]);
         $roles = $this->Users->Roles->find('list', ['limit' => 200]);
         $turnos = $this->Users->Turno->find('list', ['keyField' => 'id',
                     'valueField' => 'nombre']);
-         $centros = $this->Users->Centro->find('list', ['keyField' => 'id',
+        $centros = $this->Users->Centro->find('list', ['keyField' => 'id',
                     'valueField' => 'name']);
         $this->set(compact('user', 'roles','turnos','talleres','centros'));
     }
@@ -204,7 +192,6 @@ class UsersController extends AppController
         return $this->redirect(['action' => 'index']);
     }
     
-    //
      public function login()
     {
         if ($this->Auth->user()) {

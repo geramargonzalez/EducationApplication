@@ -1,45 +1,18 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\User $user
- */
-?>
-<div class="users view large-9 medium-8 columns content">
-    <h3><?= h($user->name) ?></h3>
-    <table class="vertical-table">
-        <tr>
-            <th scope="row"><?= __('Name') ?></th>
-            <td><?= h($user->name) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Surname') ?></th>
-            <td><?= h($user->surname) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Materia') ?></th>
-            <td><?= h($user->materia) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Email') ?></th>
-            <td><?= h($user->email) ?></td>
-        </tr>
-      
-        
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($user->id) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Role Id') ?></th>
-            <td><?= $this->Number->format($user->role_id) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Created') ?></th>
-            <td><?= h($user->created) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Modified') ?></th>
-            <td><?= h($user->modified) ?></td>
-        </tr>
-    </table>
+<div class="panel panel-default">
+       <div class="panel-heading resume-heading">
+          <div class="row">
+                <div class="col-lg-4 col-md-12 col-xs-12 col-sm-12">
+                    <?= $this->Html->image('../images/users/avatar-1.jpg',['height' => '300px','width' => '300px', 'class' => 'rounded-circle']); ?>
+                </div>
+                <div class="col-lg-8 col-md-12 col-xs-12 col-sm-12">
+                   <ul class="list-group">
+                      <li class="list-group-item"><?= h($user->name . " " . $user->surname) ?></li>
+                      <li class="list-group-item"><?= h("Materia: " . $taller->name) ?></li>
+                      <li class="list-group-item"><p><i class="fa fa-envelope-o"></i><?= h("   " .$user->email) ?></p></li>
+                      <li class="list-group-item"><p><i class="fa fa-mortar-board"></i><?= h("  " . $user->role->name) ?></p></li>
+                      <li class="list-group-item"><?= $this->Html->link(__('Editar'), ['action' => 'edit', $user->id]) ?></li>
+                   </ul>
+                </div>
+          </div>
+       </div>
 </div>
