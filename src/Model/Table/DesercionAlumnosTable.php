@@ -38,6 +38,15 @@ class DesercionAlumnosTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+
+        $this->belongsTo('Alumnos', [
+            'foreignKey' => 'id_alumno',
+            'joinType' => 'INNER'
+        ]);
+         $this->belongsTo('Users', [
+            'foreignKey' => 'id_user',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
@@ -62,6 +71,16 @@ class DesercionAlumnosTable extends Table
             ->maxLength('descripcion', 255)
             ->requirePresence('descripcion', 'create')
             ->allowEmptyString('descripcion', false);
+
+        $validator
+            ->scalar('status')
+            ->requirePresence('status', 'create')
+            ->allowEmptyString('status', false);
+
+            $validator
+            ->integer('id_user')
+            ->requirePresence('id_user', 'create')
+            ->allowEmptyString('id_user', false);
 
         return $validator;
     }

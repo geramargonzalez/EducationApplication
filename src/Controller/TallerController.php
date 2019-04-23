@@ -59,7 +59,7 @@ class TallerController extends AppController
             $cantidad++;
         }
         $this->set(compact('taller', 'alumnos','cantidad','user'));
-    }
+    } 
     /**
      * Add method
      *

@@ -116,7 +116,7 @@ class ProcesoAlumnosController extends AppController
                
                if ($this->ProcesoAlumnos->save($procesoAlumno)) {
                   $this->Flash->success(__('The proceso alumno has been saved.'));
-                  return $this->redirect(['controller' => 'ProcesoAlumnos','action' => 'view', $id]);
+                  return $this->redirect(['controller' => 'ProcesoAlumnos','action' => 'index', $id]);
                }else{
                 $this->Flash->error(__('The proceso alumno could not be saved. Please, try again.'));
               }

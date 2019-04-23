@@ -28,6 +28,8 @@ class DesercionAlumno extends Entity
         'id_alumno' => true,
         'descripcion' => true,
         'created' => true,
-        'modified' => true
+        'modified' => true,
+        'status' => true,
+        'id_user' => true
     ];
 }

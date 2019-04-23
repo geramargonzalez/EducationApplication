@@ -3,6 +3,7 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Alumno $alumno
  */
+use App\Enums\RolesEnum;
 ?>
 <div class="row">
     <div class="col-12">
@@ -43,6 +44,8 @@
                         </div>
                     </div>
                 
+   
+            <?php if($user_session['role_id'] == RolesEnum::PROFESOR_ADMIN) { ?>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Rol</label>
                     <div class="col-sm-10">
@@ -50,6 +53,8 @@
                          <?= $this->Form->control('role_id', ['label' => false, 'class' => 'form-control', 'options' => $roles]); ?>
                     </div>
                 </div>
+
+            <?php } ?>
                
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Turno</label>

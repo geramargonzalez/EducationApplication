@@ -9,10 +9,10 @@
         <div class="card m-b-20">  
             <div class="card-block"> 
                   <?= $this->Form->create($desercionAlumno) ?>
-                <h4 class="mt-0 header-title">Deshabilitar estudiante</h4>
+                <h4 class="mt-0 header-title">Habilidar estudiante</h4>
                 <p class="text-muted m-b-30 font-14">lorep ipsum lorep ipsum lorep ipsum</p>               
                 <div class="form-group row">
-                    <label for="example-text-input" class="col-sm-2 col-form-label">¿Cúal es el motivo de la deserción?</label>
+                    <label for="example-text-input" class="col-sm-2 col-form-label">Escribe algun comentario sobre el reingreso</label>
                     <div class="col-sm-10">
                         <?php echo $this->Form->control('descripcion',['class' => 'form-control','label' => false]); ?>
                     </div>

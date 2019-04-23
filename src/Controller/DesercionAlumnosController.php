@@ -16,12 +16,8 @@ class DesercionAlumnosController extends AppController
        public function initialize()
     {
         parent::initialize();
-        $this->loadModel('Alumnos');
-       
-        
+        $this->loadModel('Alumnos');   
     }
-
-
     /**
      * Index method
      *
@@ -29,7 +25,9 @@ class DesercionAlumnosController extends AppController
      */
     public function index()
     {
-        $desercionAlumnos = $this->paginate($this->DesercionAlumnos);
+        $desercionAlumnos = $this->paginate($this->DesercionAlumnos->find('all',[
+            'contain' => ['Alumnos']
+        ]));
 
         $this->set(compact('desercionAlumnos'));
     }
@@ -63,7 +61,9 @@ class DesercionAlumnosController extends AppController
             $desercionAlumno = $this->DesercionAlumnos->patchEntity($desercionAlumno,$data);
             $desercionAlumno->id_alumno = $data['alumnos'];
             $alumno = $this->Alumnos->get($data['alumnos']);
-            $alumno->status = false; 
+            $alumno->status = false;
+            $desercionAlumno->status = true;
+            $desercionAlumno->id_user = $user['id']; 
             if ($this->Alumnos->save($alumno)) {
                 if ($this->DesercionAlumnos->save($desercionAlumno)) {
                     $this->Flash->success(__('The desercion alumno has been saved.'));
@@ -75,6 +75,33 @@ class DesercionAlumnosController extends AppController
         }
         $alumnos = $this->Alumnos->find("list",['keyField' => 'id',
                     'valueField' => 'name'])->where(['status =' => true, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']]);
+
+        $this->set(compact('desercionAlumno','alumnos'));
+    }
+
+      public function habilitar()
+    {
+        $user = $this->Auth->user();
+        $desercionAlumno = $this->DesercionAlumnos->newEntity();
+        if ($this->request->is('post')) {
+            $data = $this->request->getData();
+            $desercionAlumno = $this->DesercionAlumnos->patchEntity($desercionAlumno,$data);
+            $alumno = $this->Alumnos->get($data['alumnos']);
+            $alumno->status = true; 
+            $desercionAlumno->status = false; 
+            $desercionAlumno->id_user = $user['id'];
+            $desercionAlumno->id_alumno = $data['alumnos']; 
+
+            if ($this->Alumnos->save($alumno)) {
+                if ($this->DesercionAlumnos->save($desercionAlumno)) {
+                    $this->Flash->success(__('El alumno ha sido habilitado con exito.'));
+                    return $this->redirect(['controller'=>'Alumnos','action' => 'index']);
+                }
+            }
+            $this->Flash->error(__('El alumno no ha podido ser habilitado con exito.'));
+        }
+        $alumnos = $this->Alumnos->find("list",['keyField' => 'id',
+                    'valueField' => 'name'])->where(['status =' => false, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']]);
         
         $this->set(compact('desercionAlumno','alumnos'));
     }

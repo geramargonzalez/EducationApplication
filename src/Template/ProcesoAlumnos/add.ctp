@@ -47,4 +47,7 @@
             </div>
         </div>
     </div> <!-- end col -->
+
+    <div class="col-12">
+    </div>
 </div> <!-- end row -->

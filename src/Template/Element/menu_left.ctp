@@ -9,9 +9,16 @@ use App\Enums\RolesEnum;
 	        <li><?= $this->Html->link(__('Nuevo'), ['controller' => 'Alumnos', 'action' => 'add']) ?></li>
 	          <?php if($user_session['role_id'] == RolesEnum::PROFESOR_ADMIN | $user_session['role_id'] == RolesEnum::PROFESOR) { ?>
 	        <li><?= $this->Html->link(__('Agregar a materia'), ['controller' => 'Alumnos', 'action' => 'addAlumnoToTaller']) ?></li>
-	           <?php } ?>
-	        <li><?= $this->Html->link(__('Desercion'), ['controller' => 'DesercionAlumnos', 'action' => 'add']) ?></li>
+	       <?php } ?>
         </ul>
+    </li>
+    <li class="has_sub">
+              <a href="javascript:void(0);" class="waves-effect"> <span> Deserción/Reinserción </span> </a>
+              <ul class="list-unstyled">
+                 <li><?= $this->Html->link(__('Todas'), ['controller' => 'DesercionAlumnos', 'action' => 'index']) ?>
+                 <li><?= $this->Html->link(__('Deshabilitar'), ['controller' => 'DesercionAlumnos', 'action' => 'add']) ?>
+                 <li><?= $this->Html->link(__('Habilitar'), ['controller' => 'DesercionAlumnos', 'action' => 'habilitar']) ?>
+              </ul>   
     </li>
     <li class="has_sub">
         <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cube-outline"></i> <span> Materias </span> </a>

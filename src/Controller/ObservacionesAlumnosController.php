@@ -30,7 +30,7 @@ class ObservacionesAlumnosController extends AppController
             ->find('all')
             ->where([
                 'ObservacionesAlumnos.id_alumno' => $id
-            ]);
+            ])->order(['MONTH(created)' => 'DESC']);;
         $alumno = $this->ObservacionesAlumnos->Alumnos->get($id);
         
         //$observacionesAlumnos = $this->paginate($qry, ['limit' => 100]);
