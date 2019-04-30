@@ -18,6 +18,7 @@ class ObservacionesAlumnosController extends AppController
     {
         parent::initialize();
         $this->loadModel('Tag');
+        $this->loadModel('Alumnos');
     }
     /**
      * index method
@@ -30,7 +31,7 @@ class ObservacionesAlumnosController extends AppController
             ->find('all')
             ->where([
                 'ObservacionesAlumnos.id_alumno' => $id
-            ])->order(['MONTH(created)' => 'DESC']);;
+            ])->order(['created' => 'DESC']);;
         $alumno = $this->ObservacionesAlumnos->Alumnos->get($id);
         
         //$observacionesAlumnos = $this->paginate($qry, ['limit' => 100]);
@@ -120,5 +121,29 @@ class ObservacionesAlumnosController extends AppController
             $this->Flash->error(__('The observaciones alumno could not be deleted. Please, try again.'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+
+
+      public function statsAlumnoObservacion($id_alumno = null)
+    {
+
+       // Estdisticas hechas por el profesor logeado
+       $alumno = $this->Alumnos->get($id_alumno);
+      // $id_user = $this->Auth->user('id');
+       
+       $query = $this->ObservacionesAlumnos->findById_alumno($id_alumno);
+
+     
+        $obs = $query->select(['cantidad' => $query->func()->count('etiqueta'), 'etiqueta' =>'etiqueta'])
+                  ->where(['id_alumno'  => $alumno->id])
+                  ->group('etiqueta');
+                 
+
+        $obs->enableHydration(false);
+        $observaciones = $obs->toList(); 
+
+
+
+        $this->set(compact('alumno','observaciones'));
     }
 }

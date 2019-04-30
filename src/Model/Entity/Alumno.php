@@ -20,6 +20,8 @@ use Cake\ORM\Entity;
 class Alumno extends Entity
 {
 
+    //protected $_virtual = ['full_name'];
+
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -43,4 +45,10 @@ class Alumno extends Entity
         'id_centro'=> true,
         'status' => true
     ];
+
+      protected function _getFullName()
+    {
+        return $this->name . '  ' . $this->surname;
+    }
+
 }

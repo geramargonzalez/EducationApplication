@@ -7,7 +7,7 @@
 
  <?php echo $this->element('menu_proceso'); ?>    
 
- <div class="row">
+ <div class="row"> 
         <div class="col-12">
             <div class="card m-b-20">
                 <div class="card-block">
@@ -21,8 +21,8 @@
                                 <th scope="col"><?= $this->Paginator->sort('Conducta') ?></th>
                                 <th scope="col"><?= $this->Paginator->sort('Rendimiento') ?></th>
                                 <th scope="col"><?= $this->Paginator->sort('Expresion oral') ?></th>
-                                <th scope="col"><?= $this->Paginator->sort('Fecha') ?></th>
                                 <th scope="col"><?= $this->Paginator->sort('Promedio Diario') ?></th>
+                                <th scope="col"><?= $this->Paginator->sort('Fecha') ?></th>
                                 <th scope="col" class="actions"><?= __('Actions') ?></th>
                             </tr>
                         </thead>
@@ -30,11 +30,11 @@
                                 <?php foreach ($procesoAlumnos as $procesoAlumno): ?>
                                 <tr>
                                     <td></td>
-                                    <td><?= $this->Number->format($procesoAlumno->conducta) ?></td>
-                                    <td><?= $this->Number->format($procesoAlumno->rendimiento) ?></td>
-                                    <td><?= $this->Number->format($procesoAlumno->expresion_oral) ?></td>
-                                    <td><?= h($procesoAlumno->created->day .' / '.$procesoAlumno->created->month) ?></td>
+                                    <td><?= $procesoAlumno->conducta > 0 ? $this->Number->format($procesoAlumno->conducta) : ""; ?></td>
+                                    <td><?= $procesoAlumno->rendimiento > 0 ? $this->Number->format($procesoAlumno->rendimiento) : ""; ?></td>
+                                    <td><?= $procesoAlumno->expresion_oral > 0 ? $this->Number->format($procesoAlumno->expresion_oral) : ""; ?></td>
                                     <td><?= $this->Number->format($procesoAlumno->promedio) ?></td>
+                                    <td><?= h($procesoAlumno->created->day .' / '.$procesoAlumno->created->month) ?></td>
                                     <td class="actions">
                                         <?= $this->Html->link(__('View'), ['action' => 'view', $procesoAlumno->id]) ?>
                                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $procesoAlumno->id]) ?>

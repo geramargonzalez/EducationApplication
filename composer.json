@@ -9,7 +9,6 @@
         "cakephp/cakephp": "3.7.*",
         "cakephp/migrations": "^2.0.0",
         "cakephp/plugin-installer": "^1.0",
-        "friendsofcake/bootstrap-ui": "^1.4",
         "mobiledetect/mobiledetectlib": "2.*"
     },
     "require-dev": {
@@ -26,8 +25,7 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/",
-            "GoogleCharts\\": "./plugins/GoogleCharts/src"
+            "App\\": "src/"
         }
     },
     "autoload-dev": {

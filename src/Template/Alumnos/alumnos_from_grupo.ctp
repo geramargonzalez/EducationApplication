@@ -13,7 +13,7 @@
                         <?= $this->Form->create() ?>
                         <div class="card-block">
                              <h3></h3>
-                            <h4 class="mt-0 header-title"><?= __('Agregar alumnos a taller de ' . $taller->name) ?></h4>
+                            <h4 class="mt-0 header-title"><?= __('Agregar alumnos al grupo de ' . $grupo->name) ?></h4>
                             <p class="text-muted m-b-30 font-14">This is an experimental awesome solution for responsive tables with complex data.</p>
                             <div class="table-rep-plugin">
                                 <div class="table-responsive b-0" data-pattern="priority-columns">

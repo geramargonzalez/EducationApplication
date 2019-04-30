@@ -46,6 +46,16 @@ class GrupoTable extends Table
             'targetForeignKey' => 'alumno_id',
             'joinTable' => 'grupo_alumnos'
         ]);
+        
+         $this->belongsTo('Centro', [
+            'foreignKey' => 'id_centro',
+            'joinType' => 'INNER'
+        ]);
+
+          $this->belongsTo('Turno', [
+            'foreignKey' => 'id_turno',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
@@ -75,6 +85,10 @@ class GrupoTable extends Table
             ->integer('id_turno')
             ->requirePresence('id_turno', 'create')
             ->allowEmptyString('id_turno', false);
+
+           $validator
+            ->integer('status')
+            ->allowEmptyString('status', 'create');
 
         return $validator;
     }

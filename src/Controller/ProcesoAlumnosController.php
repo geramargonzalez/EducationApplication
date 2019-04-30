@@ -72,7 +72,6 @@ class ProcesoAlumnosController extends AppController
         $procesoAlumno = $this->ProcesoAlumnos->get($id);
         $this->set('procesoAlumno', $procesoAlumno);
     }
-
     /**
      * Add method
      *
@@ -91,17 +90,16 @@ class ProcesoAlumnosController extends AppController
             $procesoAlumno->promedio = ($procesoAlumno->conducta + $procesoAlumno->rendimiento + $procesoAlumno->expresion_oral)/3;
             $procesoAlumno->id_alumno = $id;
             $procesoAlumno->id_user = $id_user;
-
+            
             if(empty($data['conducta'])){
-              $procesoAlumno->conducta = 6;
+              $procesoAlumno->conducta = 0;
             } 
             if(empty($data['expresion_oral'])){
-              $procesoAlumno->expresion_oral = 6;
+              $procesoAlumno->expresion_oral = 0;
             } 
              if(empty($data['rendimiento'])){
-              $procesoAlumno->rendimiento = 6;
+              $procesoAlumno->rendimiento = 0;
             }
-          
             $rendimientoAlumno = $this->RendimientoAlumno->newEntity();
             $datos  =  array(
                   "id_alumno" =>  $id,
@@ -160,23 +158,29 @@ class ProcesoAlumnosController extends AppController
        // Estdisticas hechas por el profesor logeado
        $alumno = $this->Alumnos->get($id_alumno);
        $id_user = $this->Auth->user('id');
+       
        $query = $this->ProcesoAlumnos->findById_alumnoAndId_user($id_alumno, $id_user);
+
+       $queryDiarios = $this->ProcesoAlumnos->findById_alumnoAndId_user($id_alumno, $id_user);
        
       // $queryTortas = $this->RendimientoAlumno->findById_alumnoAndId_user($id_alumno, $id_user);
       
         //'expresion_oral' => $query->func()->avg('expresion_oral'),'conducta' => $query->func()->avg('conducta'),
         $rendi= $query->select(['rendimiento' => $query->func()->avg('rendimiento'), 'Mes' =>'MONTH(created)'])
                   ->where(['id_alumno'  => $alumno->id])
+                  ->andWhere(['rendimiento >'  => 0])
                   ->group('MONTH(created)')
                   ->order(['MONTH(created)' => 'ASC']);
 
          $cond = $query->select(['conducta' => $query->func()->avg('conducta'), 'Mes' =>'MONTH(created)'])
                   ->where(['id_alumno'  => $alumno->id])
+                  ->andWhere(['conducta >'  => 0])
                   ->group('MONTH(created)')
                   ->order(['MONTH(created)' => 'ASC']);
 
         $expre = $query->select(['expresion_oral' => $query->func()->avg('expresion_oral'), 'Mes' =>'MONTH(created)'])
                   ->where(['id_alumno'  => $alumno->id])
+                  ->andWhere(['expresion_oral >'  => 0])
                   ->group('MONTH(created)')
                   ->order(['MONTH(created)' => 'ASC']);
 
@@ -190,7 +194,36 @@ class ProcesoAlumnosController extends AppController
         $expre->enableHydration(false);
         $expresion_oral = $expre->toList();
 
-        $this->set(compact('alumno','rendimiento'));
+        ////////////////////////// @@@@@@@@@@@@ ///////////////////
+
+
+        $rendi_diario = $queryDiarios->select(['rendimiento' => 'rendimiento', 'Dia' =>'DAY(created)','Mes' =>'MONTH(created)'])
+                  ->where(['id_alumno'  => $alumno->id])
+                  ->andWhere(['rendimiento >'  => 0])
+                  ->order(['DAY(created)' => 'ASC']);
+        
+        $rendi_diario->enableHydration(false);
+        $rendimiento_diario = $rendi_diario->toList(); 
+
+        $condu_diario = $queryDiarios->select(['conducta' => 'conducta', 'Dia' =>'DAY(created)','Mes' =>'MONTH(created)'])
+                  ->where(['id_alumno'  => $alumno->id])
+                  ->andWhere(['conducta >'  => 0])
+                  ->order(['DAY(created)' => 'ASC']);
+       
+        $condu_diario->enableHydration(false);
+        $conducta_diario = $condu_diario->toList(); 
+
+        $expre_diario = $queryDiarios->select(['expresion_oral' => 'expresion_oral', 'Dia' =>'DAY(created)','Mes' =>'MONTH(created)'])
+                                ->where(['id_alumno'  => $alumno->id])
+                                ->andWhere(['expresion_oral >'  => 0])
+                                ->order(['MONTH(created)' => 'ASC']);
+
+        $expre_diario->enableHydration(false);
+        $expresion_oral_diario = $expre_diario->toList(); 
+
+        //debug($expresion_oral_diario);
+       // exit;
+        $this->set(compact('alumno','rendimiento','expresion_oral_diario'));
     }
     
    public function statsAlumnosGenerales($id_alumno = null){
@@ -201,20 +234,23 @@ class ProcesoAlumnosController extends AppController
     //  $id_user = $this->Auth->user('id');
       $query = $this->ProcesoAlumnos->findById_alumno($id_alumno);
 
+    //  $queryDiarios = $this->ProcesoAlumnos->findById_alumno($id_alumno);
+
       $queryTortas = $this->RendimientoAlumno->findById_alumno($id_alumno);
 
       $rendi= $query->select(['rendimiento' => $query->func()->avg('rendimiento'), 'Mes' =>'MONTH(created)'])
-                ->where(['id_alumno'  => $alumno->id])
-                ->group('MONTH(created)')
-                ->order(['MONTH(created)' => 'ASC']);
+                 ->andWhere(['rendimiento >'  => 0])
+                  ->group('MONTH(created)')
+                  ->order(['MONTH(created)' => 'ASC']);
 
-       $cond = $query->select(['conducta' => $query->func()->avg('conducta'), 'Mes' =>'MONTH(created)'])
-                ->where(['id_alumno'  => $alumno->id])
-                ->group('MONTH(created)')
-                ->order(['MONTH(created)' => 'ASC']);
+      $cond = $query->select(['conducta' => $query->func()->avg('conducta'), 'Mes' =>'MONTH(created)'])
+                  ->andWhere(['conducta >'  => 0])
+                  ->group('MONTH(created)')
+                  ->order(['MONTH(created)' => 'ASC']);
 
       $expre = $query->select(['expresion_oral' => $query->func()->avg('expresion_oral'), 'Mes' =>'MONTH(created)'])
                 ->where(['id_alumno'  => $alumno->id])
+                ->andWhere(['expresion_oral >'  => 0])
                 ->group('MONTH(created)')
                 ->order(['MONTH(created)' => 'ASC']);
 

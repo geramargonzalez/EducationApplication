@@ -21,7 +21,8 @@ class AlumnosController extends AppController
         $this->loadModel('Turno');
         $this->loadModel('Centro');
         $this->loadModel('UsersCentro');
-        $this->loadModel('AlumnosTaller');
+        $this->loadModel('GrupoAlumnos');
+        $this->loadModel('Grupo');
         $this->loadComponent('FileUpload'); 
     }
     /**
@@ -35,12 +36,26 @@ class AlumnosController extends AppController
         $user = $this->Auth->user();
         $query = $this->Taller->findById_user($user['id']);
         $taller = $query->first();
-        
-       $qry = $this->Alumnos->find("all")->where(['status =' => true, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']]);
+    
+        $subquery = $this->UsersCentro->find()
+                ->select(['UsersCentro.id_centro'])
+                ->where(['UsersCentro.id_user =' => $user['id']]);
 
-        $alumnos = $this->paginate($qry,['limit' => 100]);      
+        $subquery2 = $this->UsersCentro->find()
+                                       ->select(['UsersCentro.id_turno'])
+                                       ->where(['UsersCentro.id_user =' => $user['id']]);
+
+        $query = $this->Alumnos->find()
+                    ->where(['status =' => true])
+                    ->andWhere([
+                        'Alumnos.id_centro  IN' => $subquery])
+                          ->andWhere([
+                        'Alumnos.id_turno IN' => $subquery2]);
+
+        $alumnos = $this->paginate($query,['limit' => 100]);      
         $this->set(compact('alumnos'));
     }
+
     /**
      * View method
      *
@@ -98,10 +113,10 @@ class AlumnosController extends AppController
         $this->set(compact('alumno','turnos','centros'));
     }
 
-     public function addAlumnosToTaller($id = null)
+     public function alumnosToGrupo($id = null,$id_taller = null)
     {
         $user = $this->Auth->user();
-        $taller = $this->Alumnos->Taller->get($id);
+        $grupo = $this->Grupo->get($id);
         $alum_reg = 0;
         
         if ($this->request->is('post')) {
@@ -113,54 +128,138 @@ class AlumnosController extends AppController
                 if ($value == 1) {
                 
                     $alumno = $this->Alumnos->get($key);
-                    $alumnosTaller = $this->AlumnosTaller->newEntity();
+                    $alumnosGrupo = $this->GrupoAlumnos->newEntity();
                     $datos  =  array(
-                        'id_alumno' => $alumno->id,
-                        'id_taller' => $taller->id 
+                         'id_grupo' => $grupo->id,
+                         'id_alumno' => $alumno->id
                       );
-                    $alumnosTaller = $this->AlumnosTaller->patchEntity($alumnosTaller,$datos);
+                    $alumnosTaller = $this->GrupoAlumnos->patchEntity($alumnosGrupo,$datos);
 
-                    if ($this->AlumnosTaller->save($alumnosTaller)) {
+                    if ($this->GrupoAlumnos->save($alumnosGrupo)) {
                        $alum_reg++; 
                     }    
                 }
             }
             if($alum_reg > 0){
                  $this->Flash->success(__('Los alumnos han sido registrados.'));
-                 return $this->redirect(['controller' =>'Taller', 'action' => 'view',$taller->id]);
+                 return $this->redirect(['controller' =>'Taller', 'action' => 'view',$id_taller]);
             } else{
                  $this->Flash->error(__('Se produjo un error.'));
             }
         }
-        $alumnos = $this->Alumnos->find("all")->where(['status =' => true, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']]);
-        $this->set(compact('alumnos','taller'));
+
+        $subquery = $this->GrupoAlumnos->find()
+                ->select(['GrupoAlumnos.id_alumno']);
+
+        $query = $this->Alumnos->find()
+                    ->where(['status =' => true, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']])
+                     ->andWhere([
+                    'Alumnos.id NOT IN' => $subquery
+                ]);
+
+        $alumnos = $query->toList();
+        $this->set(compact('alumnos','grupo'));
     }
 
-     public function addAlumnoToTaller(){
+
+     public function alumnosFromGrupo($id = null)
+    {
+        $user = $this->Auth->user();
+        $grupo = $this->Grupo->get($id);
+        $alum_reg = 0;
+        
+        if ($this->request->is('post')) {
+           
+            $data = $this->request->getData();
+            
+            foreach ($data as $key => $value) {
+                
+                if ($value == 1) {
+                
+                    $alumno = $this->Alumnos->get($key);
+                    $alumnosGrupo = $this->GrupoAlumnos->newEntity();
+                    $datos  =  array(
+                         'id_grupo' => $grupo->id,
+                         'id_alumno' => $alumno->id
+                      );
+                    $alumnosTaller = $this->GrupoAlumnos->patchEntity($alumnosGrupo,$datos);
+
+                    if ($this->GrupoAlumnos->save($alumnosGrupo)) {
+                       $alum_reg++; 
+                    }    
+                }
+            }
+            if($alum_reg > 0){
+                 $this->Flash->success(__('Los alumnos han sido registrados.'));
+                 return $this->redirect(['controller' =>'Grupo', 'action' => 'view',$id]);
+            } else{
+                 $this->Flash->error(__('Se produjo un error.'));
+            }
+        }
+
+        $subquery = $this->GrupoAlumnos->find()
+                ->select(['GrupoAlumnos.id_alumno']);
+
+        $query = $this->Alumnos->find()
+                    ->where(['status =' => true, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']])
+                     ->andWhere([
+                    'Alumnos.id NOT IN' => $subquery
+                ]);
+
+        $alumnos = $query->toList();
+        $this->set(compact('alumnos','grupo'));
+    }
+
+
+
+    public function alumnoToGrupo(){
 
         $user = $this->Auth->user();
+        
         if ($this->request->is(['patch', 'post', 'put'])) {
            
             $data = $this->request->getData();
-            $taller = $this->Alumnos->Taller->get($data['talleres']);
-            $alumno = $this->Alumnos->get($data['alumnos']);
-            $alumnosTaller = $this->AlumnosTaller->newEntity();
 
+            //debug($data);
+            //exit;
+
+            $grupo = $this->Grupo->get($data['grupos']);
+            $alumno = $this->Alumnos->get($data['alumnos']);
+
+            //debug($alumno);
+            //exit;
+            $alumnosGrupo = $this->GrupoAlumnos->newEntity();
             $datos  =  array(
                 'id_alumno' => $alumno->id,
-                'id_taller' => $taller->id 
+                'id_grupo' => $grupo->id 
               );
-            $alumnosTaller = $this->AlumnosTaller->patchEntity($alumnosTaller,$datos);
-            if ($this->AlumnosTaller->save($alumnosTaller)) {
+            
+            $alumnosGrupo = $this->GrupoAlumnos->patchEntity($alumnosGrupo,$datos);
+            
+            if ($this->GrupoAlumnos->save($alumnosGrupo)) {
                  $this->Flash->success(__('El alumno se a ingresado en la materia.'));
                  return $this->redirect(['action' => 'index']);
             }    
             $this->Flash->error(__('Se produjo un error. Verifique sus datos.'));
         }
-        $talleres = $this->Alumnos->Taller->find('list')->where(['id_turno' => $user['id_turno'], 'id_centro' => $user['id_centro']]);
-        $alumnos = $this->Alumnos->find('list')->where(['status =' => true, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']]);
+
+        $grupos = $this->Grupo->find('list')->where(['id_turno' => $user['id_turno'], 'id_centro' => $user['id_centro']]);
        
-        $this->set(compact('alumnos','talleres'));
+        $subquery = $this->GrupoAlumnos->find()
+                ->select(['GrupoAlumnos.id_alumno']);
+
+        $alumnos = $this->Alumnos->find('list',['keyField' => 'id',
+                                               'valueField' => 'full_name'])
+                    ->where(['status =' => true, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']])
+                     ->andWhere([
+                    'Alumnos.id NOT IN' => $subquery
+                ]);
+
+        //$alumnos = $query->toList();
+
+        //debug($alumnos);
+       // exit;
+        $this->set(compact('alumnos','grupos'));
     }
     /**
      * Edit method
@@ -189,7 +288,6 @@ class AlumnosController extends AppController
             }
             $this->Flash->error(__('The alumno could not be saved. Please, try again.'));
         }
-        
         $turnos = $this->Turno->find('list', ['keyField' => 'id',
                                              'valueField' => 'nombre']);
         $centros = $this->Centro->find('list', ['keyField' => 'id',
@@ -221,18 +319,21 @@ class AlumnosController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-       public function deleteByAlumno($id = null, $id_taller = null)
+       public function deleteByAlumno($id = null, $id_grupo = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        //$this->request->allowMethod(['post', 'delete']);
         $alumno = $this->Alumnos->get($id);
-        $query = $this->AlumnosTaller->findById_tallerAndId_alumno($id_taller,$id);
-        $alumnoTaller = $query->first();
-
-        if ($this->AlumnosTaller->delete($alumnoTaller)) {
+        $query = $this->GrupoAlumnos->findById_grupoAndId_alumno($id_grupo,$id);
+        $alumnoGrupo = $query->first();
+        if ($this->GrupoAlumnos->delete($alumnoGrupo)) {
             $this->Flash->success(__('El alumno ha sido quitado del taller'));
         } else {
             $this->Flash->error(__('Se produjo un error, el alumno no puede ser quitado.'));
         }
-        return $this->redirect(['controller'=>'Taller', 'action' => 'view', $id_taller]);
+        return $this->redirect(['controller'=>'Grupo', 'action' => 'view', $id_grupo]);
     }
+
+   
+
+
 }

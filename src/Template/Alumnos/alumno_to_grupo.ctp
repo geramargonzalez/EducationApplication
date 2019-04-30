@@ -4,19 +4,18 @@
  * @var \App\Model\Entity\Taller $taller
  */
 ?>
-
 <div class="row">
     <div class="col-12">
         <div class="card m-b-20">  
             <div class="card-block"> 
                   <?= $this->Form->create() ?>
-                <h4 class="mt-0 header-title">Agregar alumno al taller</h4>
-                <p class="text-muted m-b-30 font-14">Solo en caso de los C.E.C</p>
+                <h4 class="mt-0 header-title">Agregar alumno al grupo</h4>
+                <p class="text-muted m-b-30 font-14"></p>
                
                <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Elije el alumno</label>
+                    <label class="col-sm-2 col-form-label">Elije el grupo</label>
                     <div class="col-sm-10">
-                         <?= $this->Form->control('talleres', ['label' => false, 'class' => 'form-control', 'options' => $talleres]); ?>
+                         <?= $this->Form->control('grupos', ['label' => false, 'class' => 'form-control', 'options' => $grupos]); ?>
                     </div>
                 </div>
           

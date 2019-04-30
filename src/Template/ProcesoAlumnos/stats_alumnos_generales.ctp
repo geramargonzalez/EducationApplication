@@ -34,10 +34,7 @@
         </div>
     </div>
   </div>
-
-
-
-
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type = "text/javascript">
       //var google;
@@ -83,8 +80,8 @@
                   minValue: 0,
                   maxValue: 12
                },   
-               'width':600,
-               'height':600   
+               'width':500,
+               'height':500   
             };
         // Inicia la gráfica
         var chart = new google.visualization.LineChart(document.getElementById('grafica'));
@@ -110,14 +107,21 @@
             // Set chart options
             var options = {
                'title':'Los tipos de evaluacion',
-               'width':600,
-               'height':600
+               'width':500,
+               'height':500
             };
 
             // Instantiate and draw the chart.
             var chart = new google.visualization.PieChart(document.getElementById('grafica2'));
             chart.draw(data, options);
          }
+
+          $(window).resize(function(){
+
+          drawChart();
+          drawChartTipos();
+          // drawChart2();
+      });
     
  </script>
 

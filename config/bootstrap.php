@@ -191,8 +191,7 @@ Configure::load('custom', 'default');
 
 //$this->addPlugin('GoogleCharts');
 
-$this->addPlugin('BootstrapUI');
-
+//$this->addPlugin('BootstrapUI');
 
 /*
  * Custom Inflector rules, can be set to correctly pluralize or singularize

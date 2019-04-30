@@ -33,6 +33,7 @@ class Grupo extends Entity
         'id_turno' => true,
         'created' => true,
         'modified' => true,
-        'alumnos' => true
+        'status' => true
     ];
+
 }

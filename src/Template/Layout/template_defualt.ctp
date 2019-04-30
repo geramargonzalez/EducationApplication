@@ -2,15 +2,19 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+       
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
         <title>Crece - Aplicacion a seguir el proceso de tus alumnos</title>
         <meta content="Admin Dashboard" name="description" />
         <meta content="ThemeDesign" name="author" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        ]
         <link rel="shortcut icon" href="assets/images/favicon.ico">
         <!--Morris Chart CSS -->
+       
+
+        <?= $this->Html->css('../plugins/fullcalendar/css/fullcalendar.min') ?>
         <?= $this->Html->css('../plugins/morris/morris') ?>
+        <?=$this->Html->css('../plugins/RWD-Table-Patterns/dist/css/rwd-table.min')?>
         <?= $this->Html->css('bootstrap.min') ?>
         <?= $this->Html->css('icons') ?>
         <?= $this->Html->css('style') ?>
@@ -109,7 +113,8 @@
     <?= $this->Html->script('../plugins/datatables/buttons.print.min'); ?>
     <?= $this->Html->script('../plugins/datatables/buttons.colVis.min'); ?>
     <?= $this->Html->script('../plugins/datatables/dataTables.responsive.min'); ?>
-    
+
+
     <!-- Responsive examples -->
     <?= $this->Html->script('../plugins/datatables/responsive.bootstrap4.min'); ?>
 
@@ -117,6 +122,11 @@
     <?= $this->Html->script('../pages/datatables.init'); ?>
     <?= $this->Html->script('../plugins/tiny-editable/mindmup-editabletable'); ?>
     <?= $this->Html->script('../plugins/tiny-editable/numeric-input-example'); ?>
+    
+    <?= $this->Html->script('../plugins/jquery-ui/jquery-ui.min'); ?>
+    <?= $this->Html->script('../plugins/moment/moment'); ?>
+    <?= $this->Html->script('../plugins/fullcalendar/js/fullcalendar.min'); ?>
+    <?= $this->Html->script('../pages/calendar-init'); ?>
 
     <!-- App js -->
     <?= $this->Html->script('app'); ?>

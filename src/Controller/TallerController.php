@@ -12,7 +12,7 @@ use App\Enums\RolesEnum;
  * @method \App\Model\Entity\Taller[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class TallerController extends AppController
-{
+{ 
   
      public function initialize()
     {
@@ -22,7 +22,9 @@ class TallerController extends AppController
         $this->loadModel('Roles');
         $this->loadModel('Turno');
         $this->loadModel('Users');
-        $this->loadModel('AlumnosTaller');
+        $this->loadModel('UsersCentro');
+        $this->loadModel('GrupoAlumnos');
+        $this->loadModel('Grupo');
     }
     /**
      * Index method
@@ -30,9 +32,26 @@ class TallerController extends AppController
      */
     public function index()
     {
-        $user = $this->Auth->user();
-        $qry = $this->Taller->find('all')->where(['id_turno =' => $user['id_turno'], 'id_centro =' => $user['id_centro']]);
-        $talleres = $this->paginate($qry, ['limit' => 50]);
+      $user = $this->Auth->user();
+      
+
+      $subquery = $this->UsersCentro->find()
+                ->select(['UsersCentro.id_centro'])
+                ->where(['UsersCentro.id_user =' => $user['id']]);
+
+      $subquery2 = $this->UsersCentro->find()
+                        ->select(['UsersCentro.id_turno'])
+                        ->where(['UsersCentro.id_user =' => $user['id']]);
+       
+      $query = $this->Taller->find('all',[
+                                'contain' => ['Centro']
+                            ])
+                            ->Where([
+                                'Taller.id_centro  IN' => $subquery])
+                            ->andWhere([
+                                'Taller.id_turno IN' => $subquery2]);
+
+        $talleres = $this->paginate($query, ['limit' => 50]);
         $this->set(compact('talleres'));
     }
     /**
@@ -43,23 +62,20 @@ class TallerController extends AppController
      */
     public function view($id = null)
     {
-       
+        $user = $this->Auth->user();
         $taller_query = $this->Taller->find('all')->where(['id ='=>$id]);
         $taller = $taller_query->first();
+        $info = "";
+        $alumnos = array();
+        $cantidad = 0;
+        
         if($taller->id_user != 0){
             $user= $this->Users->get($taller->id_user);
         } else {
-            $user = "No hay docente definido";
+            $info = "No hay docente definido";
         }
-        $talleresAlumnos = $this->AlumnosTaller->find('all')->where(['id_taller' => $id]);
-        $alumnos = array();
-        $cantidad = 0;
-        foreach ($talleresAlumnos as $tallerAlumno) {
-            $alumnos[] = $this->Alumnos->get($tallerAlumno->id_alumno);
-            $cantidad++;
-        }
-        $this->set(compact('taller', 'alumnos','cantidad','user'));
-    } 
+        $this->set(compact('taller','user','info'));
+    }  
     /**
      * Add method
      *

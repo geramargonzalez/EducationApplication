@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-        <title>Admiry - Responsive Flat Admin Dashboard</title>
+        <title>Memoria Escolar</title>
         <meta content="Admin Dashboard" name="description" />
         <meta content="ThemeDesign" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -16,8 +16,8 @@
         <?= $this->Html->css('plugins/morris/morris.css') ?>
         
         <?= $this->Html->css('bootstrap.min.css') ?>
-         <?= $this->Html->css('icons.css') ?>
-         <?= $this->Html->css('style.css') ?>
+        <?= $this->Html->css('icons.css') ?>
+        <?= $this->Html->css('style.css') ?>
 
     </head>
 

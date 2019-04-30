@@ -5,7 +5,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-
+ 
 /**
  * GrupoAlumnos Model
  *
@@ -30,10 +30,16 @@ class GrupoAlumnosTable extends Table
     public function initialize(array $config)
     {
         parent::initialize($config);
-
         $this->setTable('grupo_alumnos');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+
+        $this->belongsTo('Alumnos', [
+            'foreignKey' => 'id_alumno',
+            'joinType' => 'INNER'
+        ]);
+
+        
     }
 
     /**

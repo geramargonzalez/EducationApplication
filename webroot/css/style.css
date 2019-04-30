@@ -2441,4 +2441,21 @@ File: Responsive
   .notify-details {
     margin-left: 0 !important; } }
 
-/*# sourceMappingURL=style.css.map */
+/*# MIIIASSSS */
+
+#chart_wrap {
+    position: relative;
+    padding-bottom: 100%;
+    height: 0;
+    overflow:hidden;
+}
+
+#piechart {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width:100%;
+    height:500px;
+}
+
+

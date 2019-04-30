@@ -12,6 +12,19 @@ use App\Controller\AppController;
  */
 class GrupoController extends AppController
 {
+   
+         public function initialize()
+    {
+        parent::initialize();
+        //$this->loadModel('Taller');
+        $this->loadModel('Turno');
+        $this->loadModel('Centro');
+        $this->loadModel('Alumnos');
+        $this->loadModel('UsersCentro');
+        $this->loadModel('GrupoAlumnos');
+        //$this->loadModel('UsersCentro');
+       
+    }
 
     /**
      * Index method
@@ -20,11 +33,32 @@ class GrupoController extends AppController
      */
     public function index()
     {
-        $grupo = $this->paginate($this->Grupo);
+         $user = $this->Auth->user();
 
-        $this->set(compact('grupo'));
+        $subquery = $this->UsersCentro->find()
+                ->select(['UsersCentro.id_centro'])
+                ->where(['UsersCentro.id_user =' => $user['id']]);
+
+        $subquery2 = $this->UsersCentro->find()
+                ->select(['UsersCentro.id_turno'])
+                ->where(['UsersCentro.id_user =' => $user['id']]);
+       
+        $query = $this->Grupo->find('all',[
+                        'contain' => ['Centro']
+                    ])
+                    ->Where([
+                    'Grupo.status =' => true])
+                    ->andWhere([
+                    'Grupo.id_centro  IN' => $subquery])
+                      ->andWhere([
+                    'Grupo.id_turno IN' => $subquery2]);
+
+        $grupos = $this->paginate($query,['limit' => 100]);
+
+        //debug($grupos);
+      //  exit;
+        $this->set(compact('grupos'));
     }
-
     /**
      * View method
      *
@@ -32,15 +66,40 @@ class GrupoController extends AppController
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+        public function view($id = null)
     {
-        $grupo = $this->Grupo->get($id, [
-            'contain' => ['Alumnos']
-        ]);
+        $user = $this->Auth->user();
+       // $info = "";
+        $alumnos = array();
+        $cantidad = 0;
 
-        $this->set('grupo', $grupo);
-    }
+        $talleresGrupos = $this->GrupoAlumnos->find('all')->where(['id_grupo' => $id]);
+        $grupo = $this->Grupo->get($id);
+ 
 
+         foreach ($talleresGrupos as $alumnoGrupo) {
+            $alumnos[] = $this->Alumnos->get($alumnoGrupo->id_alumno);
+            $cantidad++;
+        }
+
+        $subquery = $this->UsersCentro->find()
+                ->select(['UsersCentro.id_centro'])
+                ->where(['UsersCentro.id_user =' => $user['id']]);
+
+        $subquery2 = $this->UsersCentro->find()
+                ->select(['UsersCentro.id_turno'])
+                ->where(['UsersCentro.id_user =' => $user['id']]);
+       
+        $grupos = $this->Grupo->find('list', ['keyField' => 'id','valueField' => 'name'])
+                      ->Where([
+                      'Grupo.status =' => true])
+                      ->andWhere([
+                      'Grupo.id_centro  IN' => $subquery])
+                        ->andWhere([
+                      'Grupo.id_turno IN' => $subquery2]);
+                        
+        $this->set(compact('alumnos','cantidad','grupos','grupo'));
+    }  
     /**
      * Add method
      *
@@ -48,20 +107,30 @@ class GrupoController extends AppController
      */
     public function add()
     {
+        $user = $this->Auth->user();
         $grupo = $this->Grupo->newEntity();
+        
         if ($this->request->is('post')) {
-            $grupo = $this->Grupo->patchEntity($grupo, $this->request->getData());
-            if ($this->Grupo->save($grupo)) {
+            
+            $data = $this->request->getData();
+            $grupo = $this->Grupo->patchEntity($grupo, $data);
+            $grupo->id_centro = $data['centros'];
+            $grupo->id_turno = $data['turnos'];
+            $grupo->status = true;
+            if ($this->Grupo->save($grupo)) { 
                 $this->Flash->success(__('The grupo has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller'=>'Alumnos','action' => 'alumnosFromGrupo',$grupo->id]);
             }
-            $this->Flash->error(__('The grupo could not be saved. Please, try again.'));
-        }
-        $alumnos = $this->Grupo->Alumnos->find('list', ['limit' => 200]);
-        $this->set(compact('grupo', 'alumnos'));
-    }
+                $this->Flash->error(__('The grupo could not be saved. Please, try again.'));
+            }
 
+        $turnos = $this->Turno->find('list', ['keyField' => 'id',
+                                             'valueField' => 'nombre']);
+        $centros = $this->Centro->find('list', ['keyField' => 'id',
+                    'valueField' => 'name']);
+        
+        $this->set(compact('grupo', 'turnos','centros'));
+    }
     /**
      * Edit method
      *
@@ -71,9 +140,7 @@ class GrupoController extends AppController
      */
     public function edit($id = null)
     {
-        $grupo = $this->Grupo->get($id, [
-            'contain' => ['Alumnos']
-        ]);
+        $grupo = $this->Grupo->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $grupo = $this->Grupo->patchEntity($grupo, $this->request->getData());
             if ($this->Grupo->save($grupo)) {
@@ -83,10 +150,14 @@ class GrupoController extends AppController
             }
             $this->Flash->error(__('The grupo could not be saved. Please, try again.'));
         }
-        $alumnos = $this->Grupo->Alumnos->find('list', ['limit' => 200]);
-        $this->set(compact('grupo', 'alumnos'));
+        
+        $turnos = $this->Turno->find('list', ['keyField' => 'id',
+                                             'valueField' => 'nombre']);
+        $centros = $this->Centro->find('list', ['keyField' => 'id',
+                    'valueField' => 'name']);
+        
+        $this->set(compact('grupo','turnos','centros'));
     }
-
     /**
      * Delete method
      *
@@ -96,9 +167,10 @@ class GrupoController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
+       // $this->request->allowMethod(['post', 'delete']);
         $grupo = $this->Grupo->get($id);
-        if ($this->Grupo->delete($grupo)) {
+        $grupo->status = false;
+        if ($this->Grupo->save($grupo)) {
             $this->Flash->success(__('The grupo has been deleted.'));
         } else {
             $this->Flash->error(__('The grupo could not be deleted. Please, try again.'));

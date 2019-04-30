@@ -16,7 +16,8 @@ class DesercionAlumnosController extends AppController
        public function initialize()
     {
         parent::initialize();
-        $this->loadModel('Alumnos');   
+        $this->loadModel('Alumnos'); 
+         $this->loadModel('GrupoAlumnos');  
     }
     /**
      * Index method
@@ -56,7 +57,9 @@ class DesercionAlumnosController extends AppController
     {
         $user = $this->Auth->user();
         $desercionAlumno = $this->DesercionAlumnos->newEntity();
+        
         if ($this->request->is('post')) {
+           
             $data = $this->request->getData();
             $desercionAlumno = $this->DesercionAlumnos->patchEntity($desercionAlumno,$data);
             $desercionAlumno->id_alumno = $data['alumnos'];
@@ -64,17 +67,24 @@ class DesercionAlumnosController extends AppController
             $alumno->status = false;
             $desercionAlumno->status = true;
             $desercionAlumno->id_user = $user['id']; 
+            
             if ($this->Alumnos->save($alumno)) {
                 if ($this->DesercionAlumnos->save($desercionAlumno)) {
                     $this->Flash->success(__('The desercion alumno has been saved.'));
                     return $this->redirect(['action' => 'index']);
                 }
             }
-            
             $this->Flash->error(__('The desercion alumno could not be saved. Please, try again.'));
         }
-        $alumnos = $this->Alumnos->find("list",['keyField' => 'id',
-                    'valueField' => 'name'])->where(['status =' => true, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']]);
+        $subquery = $this->GrupoAlumnos->find()
+                ->select(['GrupoAlumnos.id_alumno']);
+        
+        $alumnos = $this->Alumnos->find('list',['keyField' => 'id',
+                                               'valueField' => 'full_name'])
+                    ->where(['status =' => true, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']])
+                     ->andWhere([
+                    'Alumnos.id NOT IN' => $subquery
+                ]);
 
         $this->set(compact('desercionAlumno','alumnos'));
     }
@@ -101,7 +111,7 @@ class DesercionAlumnosController extends AppController
             $this->Flash->error(__('El alumno no ha podido ser habilitado con exito.'));
         }
         $alumnos = $this->Alumnos->find("list",['keyField' => 'id',
-                    'valueField' => 'name'])->where(['status =' => false, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']]);
+                    'valueField' => 'full_name'])->where(['status =' => false, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']]);
         
         $this->set(compact('desercionAlumno','alumnos'));
     }

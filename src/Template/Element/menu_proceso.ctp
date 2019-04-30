@@ -19,7 +19,7 @@ use App\Enums\RolesEnum;
                         <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Estadisticas</button>
                         <div class="dropdown-menu">
                             <?= $this->Html->link(__('Globales'), ['controller' => 'ProcesoAlumnos', 'action' => 'statsAlumnosGenerales', $alumno->id],['class' => 'dropdown-item']) ?>
-                            <?= $this->Html->link(__('Profesor'), ['controller' => 'ProcesoAlumnos', 'action' => 'statsAlumnosMateria', $alumno->id],['class' => 'dropdown-item']) ?>
+                            <?= $this->Html->link(__('Profesor'), ['controller' => 'ProcesoAlumnos', 'action' => 'statsAlumnos', $alumno->id],['class' => 'dropdown-item']) ?>
                             <?= $this->Html->link(__('Desgloce de rendimientos'),['controller' => 'RendimientoAlumno', 'action' => 'index', $alumno->id],['class' => 'dropdown-item']) ?>
                         </div>
                     </div>
@@ -29,11 +29,11 @@ use App\Enums\RolesEnum;
                         <div class="dropdown-menu">
                            <?= $this->Html->link(__('Nueva'), ['controller' => 'ObservacionesAlumnos', 'action' => 'add', $alumno->id],['class' => 'dropdown-item']) ?>
                            <?= $this->Html->link(__('Ver'), ['controller' => 'ObservacionesAlumnos', 'action' => 'index', $alumno->id],['class' => 'dropdown-item']) ?>
+                           <?= $this->Html->link(__('Estadisticas'), ['controller' => 'ObservacionesAlumnos', 'action' => 'statsAlumnoObservacion', $alumno->id],['class' => 'dropdown-item']) ?>
                         </div>
                     </div><!-- /btn-group -->
                 </div>
 
             </div>
         </div>
-
     </div> 

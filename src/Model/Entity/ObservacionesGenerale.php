@@ -4,13 +4,18 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * AlumnosTaller Entity
+ * ObservacionesGenerale Entity
  *
  * @property int $id
- * @property int $id_alumno
- * @property int $id_taller
+ * @property string $descripcion
+ * @property int $id_user
+ * @property int $id_centro
+ * @property int $id_turno
+ * @property \Cake\I18n\FrozenTime $created
+ * @property string $modifed
+ * @property bool $status
  */
-class AlumnosTaller extends Entity
+class ObservacionesGenerale extends Entity
 {
 
     /**
@@ -23,7 +28,12 @@ class AlumnosTaller extends Entity
      * @var array
      */
     protected $_accessible = [
-        'id_alumno' => true,
-        'id_taller' => true
+        'descripcion' => true,
+        'id_user' => true,
+        'id_centro' => true,
+        'id_turno' => true,
+        'created' => true,
+        'modified' => true,
+        'status' => true
     ];
 }
