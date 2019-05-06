@@ -4,8 +4,9 @@
 <div class="panel panel-default">
        <div class="panel-heading resume-heading">
           <div class="row">
-                <div class="col-lg-4 col-md-12 col-xs-12 col-sm-12">
-                    <?= $this->Html->image('../images/users/avatar-1.jpg',['height' => '300px','width' => '300px', 'class' => 'rounded-circle']); ?>
+                <div class="col-lg-4 col-md-12 col-xs-12 col-sm-12"> 
+                    <?= $alumno->image == "Null" ? $this->Html->image('../images/users/avatar-1.jpg', ['height' => '300px','width' => '300px', 'class' => 'rounded-circle']) : $this->Html->image($alumno->image, ['height' => '300px','width' => '300px', 'class' => 'rounded-circle'])
+                     ?>
                 </div>
                 <div class="col-lg-8 col-md-12 col-xs-12 col-sm-12">
                    <ul class="list-group">

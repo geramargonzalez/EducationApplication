@@ -35,8 +35,8 @@
             </button>
               <div class="topbar-left">
                     <div class="text-center">
-                        <!--<a href="index.html" class="logo">Admiry</a>-->
-                        <a href="index.html" class="logo"> <?= $this->Html->image('../images/logo.png'); ?></a>
+                    
+                         <?= $this->Html->image('../images/logo.png'); ?>
                     </div>
                 </div>
             <div class="sidebar-inner slimscrollleft">
@@ -89,6 +89,8 @@
     <?= $this->Html->script('waves'); ?>
     <?= $this->Html->script('jquery.nicescroll'); ?>
     <?= $this->Html->script('jquery.scrollTo.min'); ?>
+    <?= $this->Html->script("password_validation.js"); ?>
+    <?= $this->Html->script("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-show-password/1.0.3/bootstrap-show-password.min.js"); ?>
 
     <!--Morris Chart--> 
     <?= $this->Html->script('../plugins/morris/morris.min'); ?>
@@ -128,6 +130,9 @@
     <?= $this->Html->script('../plugins/fullcalendar/js/fullcalendar.min'); ?>
     <?= $this->Html->script('../pages/calendar-init'); ?>
 
+    
+   
+
     <!-- App js -->
     <?= $this->Html->script('app'); ?>
    
@@ -150,8 +155,16 @@
                     ]
                 });
             }
+
+         $("#password").password('toggle');
+         $("#r_password").password('toggle');
+
+       
+
         });
-        $('#mainTable').editableTableWidget().numericInputExample().find('td:first').focus();
+
+         $('#mainTable').editableTableWidget().numericInputExample().find('td:first').focus();
+       
     </script>
 
 </body>

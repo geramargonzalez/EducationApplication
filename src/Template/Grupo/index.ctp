@@ -30,7 +30,7 @@
                                         <td><?= h($grupo->name) ?></td>
                                         <td><?= $grupo->id_turno == 1 ? "Matutino" : "Vespertino"; ?></td>
                                         <td><?= $grupo->centro->name ?></td>
-                                    
+                                        
                                         <td class="actions">
                                             <?= $this->Html->link(__('Ver'), ['action' => 'view', $grupo->id],['class'=>'btn btn-success btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
                                             <?= $this->Html->link(__('Edit'), ['action' => 'edit', $grupo->id],['class'=>'btn btn-warning btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>

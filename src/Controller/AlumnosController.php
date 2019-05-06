@@ -33,7 +33,11 @@ class AlumnosController extends AppController
      */
     public function index()
     {
+        
         $user = $this->Auth->user();
+
+        // Contra -- 4954d62f ---
+
         $query = $this->Taller->findById_user($user['id']);
         $taller = $query->first();
     
@@ -46,11 +50,11 @@ class AlumnosController extends AppController
                                        ->where(['UsersCentro.id_user =' => $user['id']]);
 
         $query = $this->Alumnos->find()
-                    ->where(['status =' => true])
-                    ->andWhere([
-                        'Alumnos.id_centro  IN' => $subquery])
-                          ->andWhere([
-                        'Alumnos.id_turno IN' => $subquery2]);
+                        ->where(['status =' => true])
+                        ->andWhere([
+                            'Alumnos.id_centro  IN' => $subquery])
+                              ->andWhere([
+                            'Alumnos.id_turno IN' => $subquery2]);
 
         $alumnos = $this->paginate($query,['limit' => 100]);      
         $this->set(compact('alumnos'));
@@ -84,11 +88,13 @@ class AlumnosController extends AppController
     {
         $user = $this->Auth->user();
         $alumno = $this->Alumnos->newEntity();
+        $ok = true;
+        
         if ($this->request->is('post')) {
+            
             $data = $this->request->getData();
             $alumno = $this->Alumnos->patchEntity($alumno,$data);
             $alumno->id_centro = $data['centros'];
-           // $alumno->id_taller = 0;
             $alumno->id_turno = $data['turnos'];
             $alumno->status = true;
 
@@ -96,20 +102,20 @@ class AlumnosController extends AppController
                   $result = $this->FileUpload->fileUpload($data['image'], 'users');
                   $alumno->image = USER_IMG_PATH . DS . $result['file_name'];
             } else {
-               $alumno->image = "null";
+               $alumno->image = "Null";
             }
-            // Hacer un find buscando ese Alumno, y si no lo encuentro mandar un mensaje de error
-            if ($this->Alumnos->save($alumno)) {
-                $this->Flash->success(__('The alumno has been saved.'));
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The alumno could not be saved. Please, try again.'));
+            if($ok){
+                if ($this->Alumnos->save($alumno)) {
+                    $ok = false;
+                    $this->Flash->success(__('The alumno has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                } 
+                $this->Flash->error(__('Los alumnos no pudieron ser guardados. Porfavor, intenta de nuevo.'));  
+            }  
         }
         
-        $turnos = $this->Turno->find('list', ['keyField' => 'id',
-                                             'valueField' => 'nombre']);
-        $centros = $this->Centro->find('list', ['keyField' => 'id',
-                    'valueField' => 'name']);
+        $turnos = $this->Turno->find('list', ['keyField' => 'id','valueField' => 'nombre']);
+        $centros = $this->Centro->find('list', ['keyField' => 'id','valueField' => 'name']);
         $this->set(compact('alumno','turnos','centros'));
     }
 
@@ -118,7 +124,7 @@ class AlumnosController extends AppController
         $user = $this->Auth->user();
         $grupo = $this->Grupo->get($id);
         $alum_reg = 0;
-        
+
         if ($this->request->is('post')) {
            
             $data = $this->request->getData();
@@ -134,7 +140,6 @@ class AlumnosController extends AppController
                          'id_alumno' => $alumno->id
                       );
                     $alumnosTaller = $this->GrupoAlumnos->patchEntity($alumnosGrupo,$datos);
-
                     if ($this->GrupoAlumnos->save($alumnosGrupo)) {
                        $alum_reg++; 
                     }    
@@ -147,16 +152,14 @@ class AlumnosController extends AppController
                  $this->Flash->error(__('Se produjo un error.'));
             }
         }
-
-        $subquery = $this->GrupoAlumnos->find()
-                ->select(['GrupoAlumnos.id_alumno']);
+        $subquery = $this->GrupoAlumnos->find()->select(['GrupoAlumnos.id_alumno']);
 
         $query = $this->Alumnos->find()
-                    ->where(['status =' => true, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']])
+                    ->where(['status =' => true, 'id_turno =' => $user['id_turno'],
+                        'id_centro =' => $user['id_centro']])
                      ->andWhere([
                     'Alumnos.id NOT IN' => $subquery
                 ]);
-
         $alumnos = $query->toList();
         $this->set(compact('alumnos','grupo'));
     }
@@ -219,16 +222,11 @@ class AlumnosController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
            
             $data = $this->request->getData();
-
-            //debug($data);
-            //exit;
-
+            
             $grupo = $this->Grupo->get($data['grupos']);
             $alumno = $this->Alumnos->get($data['alumnos']);
-
-            //debug($alumno);
-            //exit;
             $alumnosGrupo = $this->GrupoAlumnos->newEntity();
+
             $datos  =  array(
                 'id_alumno' => $alumno->id,
                 'id_grupo' => $grupo->id 
@@ -255,10 +253,6 @@ class AlumnosController extends AppController
                     'Alumnos.id NOT IN' => $subquery
                 ]);
 
-        //$alumnos = $query->toList();
-
-        //debug($alumnos);
-       // exit;
         $this->set(compact('alumnos','grupos'));
     }
     /**
@@ -270,18 +264,22 @@ class AlumnosController extends AppController
      */
     public function edit($id = null)
     {
+        
         $alumno = $this->Alumnos->get($id);
-         $img = $alumno->image;
+        $img = $alumno->image;
+        
         if ($this->request->is(['patch', 'post', 'put'])) {
+            
             $alumno = $this->Alumnos->patchEntity($alumno, $this->request->getData());
             $alumno->id_centro = 1;
 
-              if (!empty($data['image'])) {
-                        $result = $this->FileUpload->fileUpload($data['image'], 'users');
-                        $alumno->image = USER_IMG_PATH . DS . $result['file_name'];
-                    } else {
-                        $alumno->image = $img;
-                    }
+            if (!empty($data['image'])) {
+                $result = $this->FileUpload->fileUpload($data['image'], 'users');
+                $alumno->image = USER_IMG_PATH . DS . $result['file_name'];
+            } else {
+                $alumno->image = $img;
+            }
+
             if ($this->Alumnos->save($alumno)) {
                 $this->Flash->success(__('The alumno has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -319,9 +317,8 @@ class AlumnosController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-       public function deleteByAlumno($id = null, $id_grupo = null)
+     public function deleteByAlumno($id = null, $id_grupo = null)
     {
-        //$this->request->allowMethod(['post', 'delete']);
         $alumno = $this->Alumnos->get($id);
         $query = $this->GrupoAlumnos->findById_grupoAndId_alumno($id_grupo,$id);
         $alumnoGrupo = $query->first();

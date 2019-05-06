@@ -9,14 +9,14 @@
                <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Elije el turno</label>
                     <div class="col-sm-10">
-                         <?= $this->Form->control('turnos', ['label' => false, 'class' => 'form-control', 'options' => $turnos]); ?>
+                         <?= $this->Form->control('id_turno', ['label' => false, 'class' => 'form-control', 'options' => $turnos]); ?>
                     </div>
                 </div>
           
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Elije el centro</label>
                     <div class="col-sm-10">
-                         <?= $this->Form->control('centros', ['label' => false, 'class' => 'form-control', 'options' => $centros]); ?>
+                         <?= $this->Form->control('id_centro', ['label' => false, 'class' => 'form-control', 'options' => $centros]); ?>
                     </div>
                 </div>
                  

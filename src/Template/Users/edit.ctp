@@ -37,14 +37,8 @@ use App\Enums\RolesEnum;
                         <?php  echo $this->Form->control('email',['class' => 'form-control','label' => false]); ?>
                     </div>
                 </div>
-                  <div class="form-group row">
-                    <label for="example-password-input" class="col-sm-2 col-form-label">Password</label>
-                        <div class="col-sm-10">
-                            <?php echo $this->Form->control('password',['class' => 'form-control','label' => false]); ?>
-                        </div>
-                    </div>
+            
                 
-   
             <?php if($user_session['role_id'] == RolesEnum::PROFESOR_ADMIN) { ?>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Rol</label>

@@ -13,6 +13,15 @@ use App\Controller\AppController;
 class CentroController extends AppController
 {
 
+     public function initialize()
+    {
+        parent::initialize();
+        
+        $this->loadModel('UsersCentro');
+        //$this->loadModel('GrupoAlumnos');
+        $this->loadModel('Grupo');
+       // $this->loadComponent('FileUpload'); 
+    }
     /**
      * Index method
      *
@@ -21,6 +30,9 @@ class CentroController extends AppController
     public function index()
     {
         $centro = $this->paginate($this->Centro);
+
+
+
         $this->set(compact('centro'));
     }
 
@@ -36,7 +48,12 @@ class CentroController extends AppController
         $centro = $this->Centro->get($id, [
             'contain' => []
         ]);
-        $this->set('centro', $centro);
+
+        $query = $this->Grupo->findById_centro($id);
+        $grupos = $query->toList();
+
+       // $this->set('centro', $centro);
+         $this->set(compact('centro','grupos'));
     }
 
     /**
@@ -50,7 +67,7 @@ class CentroController extends AppController
         if ($this->request->is('post')) {
             $data = $this->request->getData();
             $centro = $this->Centro->patchEntity($centro, $data);
-            $centro->id_subsistema = $data['subsistemas'];
+            //$centro->id_subsistema = $data['id_'];
             if ($this->Centro->save($centro)) {
                 $this->Flash->success(__('The centro has been saved.'));
                 return $this->redirect(['action' => 'index']);

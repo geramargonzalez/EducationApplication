@@ -21,7 +21,6 @@ class SubsistemaController extends AppController
     public function index()
     {
         $subsistema = $this->paginate($this->Subsistema);
-
         $this->set(compact('subsistema'));
     }
 
@@ -37,7 +36,6 @@ class SubsistemaController extends AppController
         $subsistema = $this->Subsistema->get($id, [
             'contain' => []
         ]);
-
         $this->set('subsistema', $subsistema);
     }
 

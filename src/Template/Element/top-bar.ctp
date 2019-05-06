@@ -3,7 +3,7 @@
            <li class="list-inline-item dropdown notification-list">
             <a class="nav-link dropdown-toggle arrow-none waves-effect nav-user" data-toggle="dropdown" href="#" role="button"
                aria-haspopup="false" aria-expanded="false">
-                 <?= $this->Html->image('../images/users/avatar-1.jpg',['height' => '30px','width' => '30px', 'class' => 'rounded-circle']); ?>
+                 <?= $this->Html->image($user_session['image'],['height' => '30px','width' => '30px', 'class' => 'rounded-circle']); ?>
             </a>
             <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                  <?= $this->Html->link('<i class="mdi mdi-account-circle m-r-5 text-muted"></i> Profile', ['controller'=>'Users','action' => 'profile',$user_session['id']], ['class' => 'dropdown-item','escape' => false]); ?>

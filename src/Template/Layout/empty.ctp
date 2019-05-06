@@ -28,11 +28,10 @@
 
 
         <div class="accountbg"></div>
+        
         <div class="wrapper-page">
-
+            <?= $this->Flash->render() ?>
             <?= $this->fetch('content') ?>
-
-
     </div>
     <!-- scripts -->
    

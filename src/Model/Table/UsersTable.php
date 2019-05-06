@@ -93,6 +93,20 @@ class UsersTable extends Table
             ->requirePresence('password', 'create')
             ->allowEmptyString('password', false);
 
+          $validator
+            ->scalar('r_password')
+            ->maxLength('r_password', 255)
+            ->requirePresence('r_password', 'create');
+           
+
+        $validator
+            ->add('r_password', 'user', [
+                'message' => __('La contraseñas no coinciden.'),
+                'rule' => function ($r_password, $context) {
+                    return $r_password == $context['data']['password'];
+                }
+            ]);
+
         $validator
             ->scalar('image')
             ->maxLength('image', 255)

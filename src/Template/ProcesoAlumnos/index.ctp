@@ -30,9 +30,9 @@
                                 <?php foreach ($procesoAlumnos as $procesoAlumno): ?>
                                 <tr>
                                     <td></td>
-                                    <td><?= $procesoAlumno->conducta > 0 ? $this->Number->format($procesoAlumno->conducta) : ""; ?></td>
-                                    <td><?= $procesoAlumno->rendimiento > 0 ? $this->Number->format($procesoAlumno->rendimiento) : ""; ?></td>
-                                    <td><?= $procesoAlumno->expresion_oral > 0 ? $this->Number->format($procesoAlumno->expresion_oral) : ""; ?></td>
+                                    <td><?= $procesoAlumno->conducta > 0 ? $this->Number->format($procesoAlumno->conducta) : "-"; ?></td>
+                                    <td><?= $procesoAlumno->rendimiento > 0 ? $this->Number->format($procesoAlumno->rendimiento) : "-"; ?></td>
+                                    <td><?= $procesoAlumno->expresion_oral > 0 ? $this->Number->format($procesoAlumno->expresion_oral) : "-"; ?></td>
                                     <td><?= $this->Number->format($procesoAlumno->promedio) ?></td>
                                     <td><?= h($procesoAlumno->created->day .' / '.$procesoAlumno->created->month) ?></td>
                                     <td class="actions">

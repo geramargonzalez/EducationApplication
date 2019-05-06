@@ -18,7 +18,8 @@
                                 <table id="datatable-buttons" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                     <thead>
                                     <tr>
-                                        <th data-priority="1"><?= $this->Paginator->sort('C.I') ?></th>
+                                        <th data-priority="1"><?= $this->Paginator->sort('Avatar') ?></th>
+                                        
                                         <th data-priority="1"><?= $this->Paginator->sort('Nombre') ?></th>
                                         <th data-priority="1" class="actions"><?= __('Actions') ?></th>
                                     </tr>
@@ -26,7 +27,9 @@
                                     <tbody>
                                         <?php foreach ($alumnos as $alumno): ?>
                                         <tr>
-                                            <td><?= $this->Number->format($alumno->ci) ?></td>
+                                            <td><?= $alumno->image == "Null" ? $this->Html->image('../images/users/avatar-1.jpg', ['height' => 40,'class' => 'rounded-circle']) : $this->Html->image($alumno->image, ['height' => 40,'class' => 'rounded-circle'])
+                                             ?></td>
+                                            
                                             <td><?= h($alumno->name ." " .$alumno->surname) ?></td>                                          
                                             <td class="actions">
                                                 <?= $this->Html->link(__('Proceso'), ['action' => 'view', $alumno->id]) ?>

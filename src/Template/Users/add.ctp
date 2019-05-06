@@ -37,9 +37,17 @@
                     </div>
                 </div>
                   <div class="form-group row">
-                    <label for="example-password-input" class="col-sm-2 col-form-label">Password</label>
+                    <label for="example-password-input" class="col-sm-2 col-form-label">Contraseña</label>
                         <div class="col-sm-10">
-                            <?php echo $this->Form->control('password',['class' => 'form-control','label' => false]); ?>
+                            <?php echo $this->Form->control('password',['class' => 'form-control','label' => false, 'type' => 'password','id'=>'password','data-toggle'=>"password"]); ?>
+
+                        </div>
+                    </div>
+
+                 <div class="form-group row">
+                    <label for="example-password-input" class="col-sm-2 col-form-label">Contraseña validacion</label>
+                        <div class="col-sm-10">
+                            <?php echo $this->Form->control('r_password',['class' => 'form-control','label' => false,'type' => 'password','id'=>'r_password','data-toggle'=>"password"]); ?>
                         </div>
                     </div>
                 

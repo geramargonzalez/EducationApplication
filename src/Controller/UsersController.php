@@ -4,6 +4,8 @@ namespace App\Controller;
 use App\Controller\AppController;
 use App\Enum\RolesEnum;
 use Cake\I18n\Time;
+use Cake\Mailer\Email;
+use Cake\Auth\DefaultPasswordHasher;
 
 /**
  * Users Controller
@@ -15,13 +17,18 @@ use Cake\I18n\Time;
 class UsersController extends AppController
 {
 
+
+
      public function initialize()
     {
         parent::initialize();
         $this->loadModel('Taller');
         $this->loadModel('UsersCentro');
-        $this->loadModel('UsersTurno');
+        $this->loadModel('Centro');
+        //$this->loadModel('UsersTurno');
         $this->loadComponent('FileUpload');
+
+        $this->Auth->allow('forgotMyPassword');
     }
     /**
      * Index method
@@ -34,6 +41,9 @@ class UsersController extends AppController
         $users = $this->paginate($this->Users->find('all',[
             'contain' => ['Roles']
         ]),['limit' => 15]);
+
+       
+
         $this->set(compact('users','user_session'));
     }
     /**
@@ -58,11 +68,17 @@ class UsersController extends AppController
         $user = $this->Users->get($id, [
             'contain' => ['Roles']
         ]);
+        $centros =  array();
         $taller_query = $this->Taller->findById_user($id);
         $taller = $taller_query->first();
+        
+        $centros_query = $this->UsersCentro->findById_user($id);
+       
+        foreach ($centros_query as $centroUser) {
+          $centros[] =  $this->Centro->get($centroUser->id_centro);
+        }
 
-       // $this->set('user', $user,'taller',$taller);
-         $this->set(compact('user','taller'));
+        $this->set(compact('user','centros','taller'));
     }
     /**
      * Add method
@@ -76,6 +92,7 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             
             $data = $this->request->getData();
+
             $user = $this->Users->patchEntity($user, $this->request->getData());
             $user->id_centro = $data['centros'];
             $user->id_turno = $data['turnos'];
@@ -107,36 +124,33 @@ class UsersController extends AppController
         $centros = $this->Users->Centro->find('list', ['keyField' => 'id',
                     'valueField' => 'name']);
         $this->set(compact('user','roles','turnos','centros'));
-    }
+    } 
 
     public function addCentroTurnoUsers(){
 
         $user_session = $this->Auth->user();
+        
         if ($this->request->is('post')) {
             
             $data = $this->request->getData();
             $usersCentro = $this->UsersCentro->newEntity();
             $datos  =  array(
                   "id_user" =>  $user_session['id'],
-                  'id_centro' => $data['centros']
+                  'id_centro' => $data['id_centro'],
+                  'id_turno' => $data['id_turno'] 
                 );
             $userCentro = $this->UsersCentro->patchEntity($usersCentro,$datos);
-            $usersTurno = $this->UsersTurno->newEntity();
-            $datos  =  array(
-                  "id_user" =>  $user_session['id'],
-                  'id_turno' => $data['turnos']
-                );
-            $usersTurno = $this->UsersTurno->patchEntity($usersTurno,$datos);
+            
             if ($this->UsersCentro->save($userCentro)) {
-                if ($this->UsersTurno->save($usersTurno)) {
-                    return $this->redirect(['controller'=>'Alumnos','action' => 'index']);
-              }
+                
+                return $this->redirect(['controller'=>'Alumnos','action' => 'index']);
             } 
         }
         $turnos = $this->Users->Turno->find('list', ['keyField' => 'id',
                     'valueField' => 'nombre']);
         $centros = $this->Users->Centro->find('list', ['keyField' => 'id',
                     'valueField' => 'name']);
+
         $this->set(compact('user_session','roles','turnos','centros'));
     }
     /**
@@ -169,7 +183,7 @@ class UsersController extends AppController
         $roles = $this->Users->Roles->find('list', ['limit' => 200]);
         $turnos = $this->Users->Turno->find('list', ['keyField' => 'id',
                     'valueField' => 'nombre']);
-        $centros = $this->Users->Centro->find('list', ['keyField' => 'id',
+        $centros = $this->Users->Centro->find('all', ['keyField' => 'id',
                     'valueField' => 'name']);
         $this->set(compact('user', 'roles','turnos','talleres','centros'));
     }
@@ -191,7 +205,84 @@ class UsersController extends AppController
         }
         return $this->redirect(['action' => 'index']);
     }
+
+    public function forgotMyPassword() {
+        
+        $data = $this->request->getData();
+        
+        if ($this->request->is('post')) {
+            
+            $user = $this->Users
+                ->findByEmail($data['email'])
+                ->first();
+            
+            if ($user) {
+                
+                $new_pass= substr(md5(time()), 0, 8);
+                $email = new Email();
+                $email->transport('default');
+                $email->setViewVars(['password' => $new_pass, 'username' => $user->name]);
+                $email
+                    ->template('reset_pass')
+                    ->emailFormat('html')
+                    ->subject('Recuperacion de contraseña')
+                    ->to($data['email'])
+                    ->from('contacto@memoriaescolar.com');
+                
+                if ($email->send() != null) {
+
+                    $user->password = $new_pass;
+                    $this->Users->save($user);
+                    $this->Flash->success(__('Se te envio un email con tu nueva contraseña.'));
+                
+                }
+            }
+        }
+    }
+
+    public function changePassword() {
+        
+        $user = $this->Users->get($this->Auth->user('id'));
+        
+        if ($this->request->is(['patch', 'post', 'put'])) {
+           
+            $data = $this->request->getData();
+
+
+            if ((new DefaultPasswordHasher)->check($data['0_password'], $user->password)) {
+
+              $user = $this->Users->patchEntity($user, $data);
+
+              $user->password = $data['pass'];
+
+                if ($this->Users->save($user)) {
+                    
+                    $this->Auth->setUser($user->toArray());
+                    $this->Flash->success(__('La contraseña ha sido cambiada.'));
+                
+                } else {
+                    
+                    $this->Flash->error(__('Hubo un error la contraseña no pudo cambiarse. Verifique los datos.'));
+                }
+            
+            } else{
+            
+              $this->Flash->error(__('No ha ingresado correctamente su contraseña. Porfavor, intentelo de nuevo.'));
+              return $this->redirect(['action' => 'changePassword']);
+            
+            } 
+           
+            
+          
+         
+        
+        }
+
+        $this->set(compact('user'));
+    }
     
+
+
      public function login()
     {
         if ($this->Auth->user()) {

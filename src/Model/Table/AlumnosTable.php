@@ -105,6 +105,12 @@ class AlumnosTable extends Table
             ->requirePresence('ci', 'create')
             ->allowEmptyString('ci', false);
 
+        /*$validator
+             ->add('ci', 'validFormat',[
+                        'rule' => "/(\W\d*[0-9]{2})/",
+                        'message' => 'Por favor, ingrese un numero de cedula valido.'
+                ]);*/
+
           $validator
             ->integer('id_centro')
             ->allowEmptyString('id_centro', 'create');
@@ -118,4 +124,11 @@ class AlumnosTable extends Table
 
         return $validator;
     }
+
+
+    public function buildRules(RulesChecker $rules)
+        {
+            $rules->add($rules->isUnique(['ci'],['message' => 'La cedula ya ha sido ingresada en el sistema.']));
+            return $rules;
+        }
 }
