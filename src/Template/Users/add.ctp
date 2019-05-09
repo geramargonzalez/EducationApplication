@@ -8,7 +8,7 @@
     <div class="col-12">
         <div class="card m-b-20">  
             <div class="card-block"> 
-                 <?= $this->Form->create($user,['type' => 'file']) ?>
+                 <?= $this->Form->create($user,array('enctype'=>'multipart/form-data')) ?>
                 <h4 class="mt-0 header-title">Agregar profesor</h4>
                 <p class="text-muted m-b-30 font-14">lorep ipsum lorep ipsum lorep ipsum</p>
                 <div class="form-group row">
@@ -43,13 +43,12 @@
 
                         </div>
                     </div>
-
-                 <div class="form-group row">
+                <div class="form-group row">
                     <label for="example-password-input" class="col-sm-2 col-form-label">Contraseña validacion</label>
                         <div class="col-sm-10">
-                            <?php echo $this->Form->control('r_password',['class' => 'form-control','label' => false,'type' => 'password','id'=>'r_password','data-toggle'=>"password"]); ?>
+                            <?php echo $this->Form->control('r_password',['class' => 'form-control','label' => false,'id'=>'r_password','data-toggle'=>"password",'type' => 'password']); ?>
                         </div>
-                    </div>
+                </div>
                 
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Rol</label>

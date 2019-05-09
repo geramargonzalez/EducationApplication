@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\Grupo[]|\Cake\Collection\CollectionInterface $grupo
  */
 ?>
-<<div class="page-content-wrapper ">
+<div class="page-content-wrapper ">
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -15,7 +15,8 @@
                         <p class="text-muted m-b-30 font-14">This is an experimental awesome solution for responsive tables with complex data.</p>
                         <div class="table-rep-plugin">
                             <div class="table-responsive b-0" data-pattern="priority-columns">
-                                <table id="datatable-buttons" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                  
+                                  <table id="datatable" class="table table-bordered">
                                     <thead>
                                     <tr>
                                         <th><?= $this->Paginator->sort('name') ?></th>
@@ -34,7 +35,7 @@
                                         <td class="actions">
                                             <?= $this->Html->link(__('Ver'), ['action' => 'view', $grupo->id],['class'=>'btn btn-success btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
                                             <?= $this->Html->link(__('Edit'), ['action' => 'edit', $grupo->id],['class'=>'btn btn-warning btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
-                                            <?= $this->Html->link(__('Delete'), ['action' => 'delete', $grupo->id],['class'=>'btn btn-info btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
+                                          
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>

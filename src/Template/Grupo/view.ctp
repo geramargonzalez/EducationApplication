@@ -14,12 +14,14 @@
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu</button>
                                 <div class="dropdown-menu">
                                     <?= $this->Html->link(__('Agregar alumnos'), ['controller' => 'Alumnos', 'action' => 'alumnosFromGrupo',$grupo->id],['class' => 'dropdown-item']) ?>
+                                     <?= $this->Html->link(__('Estadisticas'), ['action' => 'estadisticasGrupo',$grupo->id],['class' => 'dropdown-item']) ?>
                                 </div>
                             </div>
                     
                 <div class="table-rep-plugin">
                     <div class="table-responsive b-0" data-pattern="priority-columns">
-                        <table id="datatable-buttons" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                         
+                                  <table id="datatable" class="table table-bordered">
                             <thead>
                              <tr>
                                 <th scope="col"><?= __('Nombre') ?></th>

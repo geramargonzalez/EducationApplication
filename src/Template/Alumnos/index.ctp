@@ -12,7 +12,7 @@
                     <div class="card-block">
                          <h3></h3>
                         <h4 class="mt-0 header-title"><?= __('Alumnos') ?></h4>
-                        <p class="text-muted m-b-30 font-14">This is an experimental awesome solution for responsive tables with complex data.</p>
+                        <p class="text-muted m-b-30 font-14">Se muestran todos los estudiantes que pertenecen a todos los centros en donde trabajas.</p>
                         <div class="table-rep-plugin">
                             <div class="table-responsive b-0" data-pattern="priority-columns">
                                 <table id="datatable-buttons" class="table table-striped table-bordered" cellspacing="0" width="100%">

@@ -30,7 +30,7 @@
                                             <tr>
                                                 <td><?= h($alumno->name . " " . $alumno->surname) ?></td>
                                                 <td class="actions" style="white-space:nowrap">
-                                                    <?= $this->Form->control($alumno->id, ['type'=>'checkbox','label'=>false,'class'=>'form-control checkbox','id' => $alumno->id]); ?></td>                               
+                                                    <?= $this->Form->control($alumno->id, ['type'=>'checkbox','label'=>false,'class' => 'form-control select2','id' => $alumno->id]); ?></td>                               
                                             </tr>
                                         <?php endforeach; ?>                 
                                         </tbody>

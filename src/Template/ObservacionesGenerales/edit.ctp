@@ -7,7 +7,7 @@
 <?php echo $this->element('menu_equipo_trabajo'); ?>    
   <div class="row">
     <div class="col-12">
-   <?= $this->Form->create($observacionesGenerale) ?>
+   <?= $this->Form->create($observacionesGeneral) ?>
     <div class="card m-b-20">
         <div class="card-block">
             <h4 class="mt-0 header-title">Observaciones </h4>
@@ -22,7 +22,7 @@
                     <div class="col-sm-10">
                        <?php echo $this->Form->control('status',['class' => 'form-control','label' => false]); ?>
                     </div>
-                </div>
+            </div>
           </div>
       </div>
       <?= $this->Form->button(__('submit'),['class' => 'btn btn-primary btn-sm']) ?>
@@ -33,4 +33,4 @@
 
 
  
- 
+  

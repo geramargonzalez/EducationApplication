@@ -37,19 +37,20 @@ class TallerController extends AppController
 
       $subquery = $this->UsersCentro->find()
                 ->select(['UsersCentro.id_centro'])
-                ->where(['UsersCentro.id_user =' => $user['id']]);
+                ->where(['UsersCentro.id_user =' => $user['id']]) ->order(['id_centro']);
 
       $subquery2 = $this->UsersCentro->find()
                         ->select(['UsersCentro.id_turno'])
                         ->where(['UsersCentro.id_user =' => $user['id']]);
        
       $query = $this->Taller->find('all',[
-                                'contain' => ['Centro']
+                                'contain' => ['Centro','Users']
                             ])
                             ->Where([
                                 'Taller.id_centro  IN' => $subquery])
                             ->andWhere([
                                 'Taller.id_turno IN' => $subquery2]);
+
 
         $talleres = $this->paginate($query, ['limit' => 50]);
         $this->set(compact('talleres'));

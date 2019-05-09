@@ -21,6 +21,7 @@ class GrupoController extends AppController
         $this->loadModel('Alumnos');
         $this->loadModel('UsersCentro');
         $this->loadModel('GrupoAlumnos');
+         $this->loadModel('ProcesoAlumnos');
     }
 
     /**
@@ -123,7 +124,7 @@ class GrupoController extends AppController
         
         $this->set(compact('grupo', 'turnos','centros'));
     }
-    /**
+    /** 
      * Edit method
      *
      * @param string|null $id Grupo id.
@@ -154,6 +155,53 @@ class GrupoController extends AppController
         
         $this->set(compact('grupo','turnos','centros'));
     }
+
+
+    public function estadisticasGrupo($id_grupo){
+
+
+       $id_user = $this->Auth->user('id');
+      // $alumnos = $this->Grupo->findById_alumnoAndId_user($id_alumno, $id_user);
+    
+        $alums = $this->GrupoAlumnos->find("all")
+                ->select(['GrupoAlumnos.id_alumno'])
+                ->where(['GrupoAlumnos.id_grupo =' => $id_grupo]);
+        
+        $alumnoPromedio = array();
+       
+
+ 
+            foreach ($alums as $alum){
+                # code...
+                $alumnoPromedio[] = $this->ProcesoAlumnos->find("all")->select([
+                                                    "Alumnos.name",
+                                                    "Alumnos.surname",
+                                                    'ProcesoAlumnos.promedio'
+                                                ])
+                                                ->join([
+                                                    "Alumnos" => [
+                                                        "table" => "alumnos",
+                                                        "type" => "left",
+                                                        "conditions" => "Alumnos.id =" . $alum->id_alumno
+                                                    ]
+                                                ])->where([
+                                                    "ProcesoAlumnos.promedio" =>
+                                                    $this->ProcesoAlumnos->find("all")
+                                                    ->select(["AVG(ProcesoAlumnos.promedio)"])
+                                                    ->where(["ProcesoAlumnos.id_alumno =" => $alum->id_alumno])
+                                                ]);
+
+            }
+                                                
+
+
+         debug($alumnoPromedio["0"]->first());
+         exit;
+
+
+    }
+
+
     /**
      * Delete method
      *

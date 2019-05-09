@@ -155,8 +155,8 @@ $(document).ready(function() {
               
                  if(valid) $(element).css("border","2px solid green");
                  if(!valid) $(element).css("border","2px solid red");
-                 if(valid && match) $("#pass_confirmation").css("border","2px solid green");
-                 if(!valid || !match) $("#pass_confirmation").css("border","2px solid red");
+                if(valid && match) $("#pass_confirmation").css("border","2px solid green");
+                if(!valid || !match) $("#pass_confirmation").css("border","2px solid red");
         });
     });
 

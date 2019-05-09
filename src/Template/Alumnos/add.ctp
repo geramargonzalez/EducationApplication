@@ -10,7 +10,7 @@
             <div class="card-block"> 
                  <?= $this->Form->create($alumno,['type' => 'file']) ?>
                 <h4 class="mt-0 header-title">Agregar Estudiante</h4>
-                <p class="text-muted m-b-30 font-14">lorep ipsum lorep ipsum lorep ipsum</p>
+                <p class="text-muted m-b-30 font-14">Verifica bien los datos antes de ingresarlos.</p>
                 <div class="form-group row">
                     <label for="example-text-input" class="col-sm-2 col-form-label">Imagen</label>
                     <div class="col-sm-10">

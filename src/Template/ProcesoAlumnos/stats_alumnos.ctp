@@ -15,7 +15,8 @@
 
 
                 <div id="chart_wrap">
-                    <div id="grafica" class="piechart"></div>
+                   
+                <div id="grafica" height="300"></div>
                 </div>
 
             </div>
@@ -27,7 +28,8 @@
                 <h4 class="mt-0 header-title">Histograma de promedios conducta</h4>
                 <p class="text-muted m-b-30 font-14">Se muestran los diagramas conducta de todos los docentes que tienen al estudiante <?= __( $alumno->name . " " . $alumno->surname) ?>.</p>
                 <div id="chart_wrap">
-                    <div id="grafica2" class="piechart"></div>
+                  
+                <div id="grafica2" height="300"></div>
                 </div>
 
             </div>
@@ -41,10 +43,9 @@
 
                 <h4 class="mt-0 header-title">Histograma de promedios expresion general</h4>
                 <p class="text-muted m-b-30 font-14">Se muestran los diagramas expresion generl de todos los docentes que tienen al estudiante <?= __( $alumno->name . " " . $alumno->surname) ?>.</p>
-
-
                 <div id="chart_wrap">
-                    <div id="grafica3" class="piechart"></div>
+                   
+                <div id="grafica3" height="300"></div>
                 </div>
 
             </div>
@@ -56,7 +57,8 @@
                 <h4 class="mt-0 header-title">Histograma de evaluaciones diarias</h4>
                 <p class="text-muted m-b-30 font-14">Se muestran los diagramas generales de todos los docentes que tienen al estudiante <?= __( $alumno->name . " " . $alumno->surname) ?>.</p>
                 <div id="chart_wrap">
-                    <div id="grafica4" class="piechart"></div>
+                   
+                <div id="grafica4" height="300"></div>
                 </div>
 
             </div>
@@ -74,7 +76,7 @@
       // Define la función callback para crear la gráfica
       google.charts.setOnLoadCallback(drawChartRendimiento);
       google.charts.setOnLoadCallback(drawChartConducta); //drawChartExpresion
-      google.charts.setOnLoadCallback(drawChartExpresion);
+      google.charts.setOnLoadCallback(drawChartExpresionOral);
       google.charts.setOnLoadCallback(drawChartByDay);
       //google.charts.setOnLoadCallback(drawChartConducta);
       //google.charts.setOnLoadCallback(drawChartExpresion);
@@ -82,12 +84,11 @@
 
       // Función para poblar la gráfica
       // iniciar el gráfico, pasa los datos y los dibuja
-      function drawChartRendimiento() {
+     function drawChartRendimiento() {
 
            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Mes');
-            data.addColumn('number', 'Rendimiento');
-           
+           data.addColumn('string', 'Mes');
+            data.addColumn('number', 'Promedio');
             data.addRows([
               <?php
                 for ($i = 0; $i < count($rendimiento); $i++) {
@@ -100,31 +101,33 @@
               ]);
           
           
-         var options = {'title' : 'Promedio Mensual Rendimiento ',
+         var options = {'title' : 'Promedio Mensual Rendimiento',
+               colors: ['red'],
+               lineWidth: 3,
                hAxis: {
                   title: 'Mes',
-                  minValue: 1,
+                  minValue: 0,
                   maxValue: 12
+ 
                },
                vAxis: {
                   title: 'Promedio',
-                  minValue: 1,
+                  minValue: 0,
                   maxValue: 12
                },   
-               'width':'100%',
-               'height':600   
+               'width':500,
+               'height':500   
             };
-    
+        // Inicia la gráfica
         var chart = new google.visualization.LineChart(document.getElementById('grafica'));
         chart.draw(data, options);
       }
 
-      function drawChartConducta() {
+       function drawChartConducta() {
 
            var data = new google.visualization.DataTable();
             data.addColumn('string', 'Mes');
-            data.addColumn('number', 'Rendimiento');
-           
+            data.addColumn('number', 'Promedio');
             data.addRows([
               <?php
                 for ($i = 0; $i < count($conducta); $i++) {
@@ -133,38 +136,40 @@
                   if($i+1 < count($conducta)) print ",";
                  }
                 
+                
               ?>
               ]);
           
           
-         var options = {'title' : 'Promedio Mensual Conducta ',
+         var options = {'title' : 'Promedio Mensual Conducta',
+               colors: ['green'],
+               lineWidth: 3,
                hAxis: {
                   title: 'Mes',
-                  minValue: 1,
+                  minValue: 0,
                   maxValue: 12
+
                },
                vAxis: {
                   title: 'Promedio',
-                  minValue: 1,
+                  minValue: 0,
                   maxValue: 12
                },   
-               'width':'100%',
-               'height':600   
+               'width':500,
+               'height':500   
             };
-    
+        // Inicia la gráfica
         var chart = new google.visualization.LineChart(document.getElementById('grafica2'));
         chart.draw(data, options);
       }
-
-          function drawChartExpresion() {
+   function drawChartExpresionOral() {
 
            var data = new google.visualization.DataTable();
             data.addColumn('string', 'Mes');
-            data.addColumn('number', 'Rendimiento');
-           
+            data.addColumn('number', 'Promedio');
             data.addRows([
               <?php
-                for ($i = 0; $i < count($expresion_oral); $i++) {
+               for ($i = 0; $i < count($expresion_oral); $i++) {
                   
                    print "['" .$expresion_oral[$i]["Mes"] ."'," .$expresion_oral[$i]["expresion_oral"]."]";
                   if($i+1 < count($expresion_oral)) print ",";
@@ -174,21 +179,24 @@
               ]);
           
           
-         var options = {'title' : 'Promedio mensual Expresion Oral ',
+         var options = {'title' : 'Promedio Mensual Expresion Oral',
+                colors: ['blue'],
+                lineWidth: 3,
                hAxis: {
                   title: 'Mes',
-                  minValue: 1,
+                  minValue: 0,
                   maxValue: 12
+
                },
                vAxis: {
                   title: 'Promedio',
-                  minValue: 1,
+                  minValue: 0,
                   maxValue: 12
                },   
-               'width':'100%',
-               'height':600   
+               'width':500,
+               'height':500   
             };
-    
+        // Inicia la gráfica
         var chart = new google.visualization.LineChart(document.getElementById('grafica3'));
         chart.draw(data, options);
       }
@@ -216,6 +224,7 @@
           
           
          var options = {'title' : ' Registro diario ',
+               colors: ['red','green','blue'],
                hAxis: {
                   title: 'Dia y Mes',
                   minValue: 1,

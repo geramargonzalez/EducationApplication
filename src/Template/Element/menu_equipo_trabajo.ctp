@@ -18,7 +18,6 @@ use App\Enums\RolesEnum;
                          <div class="dropdown-menu">
                            <?= $this->Html->link(__('Nueva'), ['controller' => 'ObservacionesGenerales', 'action' => 'add'],['class' => 'dropdown-item']) ?>
                            <?= $this->Html->link(__('Ver'), ['controller' => 'ObservacionesGenerales', 'action' => 'index'],['class' => 'dropdown-item']) ?>
-                           <?= $this->Html->link(__('Estadisticas'), ['controller' => 'ObservacionesGenerales', 'action' => 'statsObservacionesGen'],['class' => 'dropdown-item']) ?>
                         </div>
                     </div>
                 </li>

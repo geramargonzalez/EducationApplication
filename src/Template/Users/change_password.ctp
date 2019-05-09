@@ -3,7 +3,7 @@
     <div class="col-12">
         <div class="card m-b-20">  
             <div class="card-block"> 
-                 <?= $this->Form->create() ?>
+                 <?= $this->Form->create($user) ?>
                 <h4 class="mt-0 header-title">Cambio de contraseña</h4>
                 <p class="text-muted m-b-30 font-14">lorep ipsum lorep ipsum lorep ipsum</p>
                
@@ -17,14 +17,14 @@
                  <div class="form-group row">
                     <label for="example-password-input" class="col-sm-2 col-form-label">Contraseña nueva</label>
                         <div class="col-sm-10">
-                            <?php echo $this->Form->control('password',['class' => 'form-control','label' => false,'type' => 'password','name' =>'pass','data-validation'=>'length','data-validation-length'=>'min8', 'id' => 'pass']); ?>
+                            <?php echo $this->Form->control('password',['class' => 'form-control','label' => false,'type' => 'password','data-validation'=>'length','name' =>'password','data-validation-length'=>'min8', 'id' => 'pass','value' => '','data-toggle'=>'password']); ?>
                         </div>
                     </div>
                 
                 <div class="form-group row">
                     <label for="example-password-input" class="col-sm-2 col-form-label">Rescribe la contraseña</label>
                         <div class="col-sm-10">
-                            <?php echo $this->Form->control('r_password',['class' => 'form-control','label' => false,'type' => 'password','name' =>'pass_confirmation','data-validation'=>'confirmation','id'=>'pass_confirmation']); ?>
+                            <?php echo $this->Form->control('r_password',['class' => 'form-control','label' => false,'type' => 'password','name' =>'r_password','data-validation'=>'confirmation','id'=>'pass_confirmation', 'data-toggle'=>'password']); ?>
                         </div>
                 </div>
                 <div id="errors">

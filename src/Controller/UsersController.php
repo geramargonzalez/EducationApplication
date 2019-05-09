@@ -71,7 +71,7 @@ class UsersController extends AppController
         $centros =  array();
         $taller_query = $this->Taller->findById_user($id);
         $taller = $taller_query->first();
-        
+
         $centros_query = $this->UsersCentro->findById_user($id);
        
         foreach ($centros_query as $centroUser) {
@@ -93,15 +93,17 @@ class UsersController extends AppController
             
             $data = $this->request->getData();
 
-            $user = $this->Users->patchEntity($user, $this->request->getData());
+            $user = $this->Users->patchEntity($user, $data);
             $user->id_centro = $data['centros'];
             $user->id_turno = $data['turnos'];
            
             if (!empty($data['image'])) {
-                  $result = $this->FileUpload->fileUpload($data['image'], 'users');
-                  $user->image = USER_IMG_PATH . DS . $result['file_name'];
+                 
+
+                   $result = $this->FileUpload->fileUpload($data['image'], 'users');
+                   $user->image = $result['status'] == 200 ? USER_IMG_PATH . DS . $result['file_name'] : 'avatar-1.jpg';
             } else {
-               $user->image = "null";
+               $user->image = "Null";
             }
             if ($this->Users->save($user)) {
 
@@ -165,13 +167,20 @@ class UsersController extends AppController
         $user = $this->Users->get($id);
         $img = $user->image;
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
+
+            $data = $this->request->getData();
+            $user = $this->Users->patchEntity($user,$data );
             if (!empty($data['image'])) {
-                      $result = $this->FileUpload->fileUpload($data['image'], 'users');
-                      $user->image = USER_IMG_PATH . DS . $result['file_name'];
+                      
+                    $result = $this->FileUpload->fileUpload($data['image'], 'users');
+                   $user->image = $result['status'] == 200 ? USER_IMG_PATH . DS . $result['file_name'] : 'avatar-1.jpg';
                   } else {
                       $user->image = $img;
                   }
+
+                 // debug($this->request->getData());
+                 // exit;
+
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -196,10 +205,15 @@ class UsersController extends AppController
      */
     public function delete($id = null)
     {
+
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
+        $query = $this->UsersCentro->findById_user($id);
         if ($this->Users->delete($user)) {
             $this->Flash->success(__('The user has been deleted.'));
+             foreach ($query as $uc) {
+                $this->UsersCentro->delete($uc);
+            }
         } else {
             $this->Flash->error(__('The user could not be deleted. Please, try again.'));
         }
@@ -248,33 +262,24 @@ class UsersController extends AppController
            
             $data = $this->request->getData();
 
-
             if ((new DefaultPasswordHasher)->check($data['0_password'], $user->password)) {
 
               $user = $this->Users->patchEntity($user, $data);
-
-              $user->password = $data['pass'];
+              $user->password = $data['password'];
 
                 if ($this->Users->save($user)) {
-                    
                     $this->Auth->setUser($user->toArray());
                     $this->Flash->success(__('La contraseña ha sido cambiada.'));
-                
                 } else {
-                    
-                    $this->Flash->error(__('Hubo un error la contraseña no pudo cambiarse. Verifique los datos.'));
+                    $this->Flash->error(__('Verifique sus datos.'));
                 }
             
             } else{
             
               $this->Flash->error(__('No ha ingresado correctamente su contraseña. Porfavor, intentelo de nuevo.'));
-              return $this->redirect(['action' => 'changePassword']);
+              return $this->redirect(['action' => 'profile',$user->id]);
             
             } 
-           
-            
-          
-         
         
         }
 

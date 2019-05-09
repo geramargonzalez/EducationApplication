@@ -159,6 +159,10 @@
          $("#password").password('toggle');
          $("#r_password").password('toggle');
 
+         $("#pass").password('toggle');
+         $("#pass_confirmation").password('toggle');
+
+
        
 
         });

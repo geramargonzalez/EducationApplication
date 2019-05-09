@@ -10,7 +10,7 @@
             <div class="card-block">
                 <h4 class="mt-0 header-title">Diferentes tipos de evaluaciones</h4>
                 <p class="text-muted m-b-30 font-14"> Todas las evaluaciones han sido creadas por diferentes docentes. </p>
-                <table class="table">
+                 <table id="datatable-buttons" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th scope="col"><?= $this->Paginator->sort('nombre') ?></th>
@@ -23,8 +23,10 @@
                                
                                 <td><?= h($tipoEvaluacion->nombre) ?></td>
                                 <td class="actions">
-                                    <?= $this->Html->link(__('View'), ['action' => 'view', $tipoEvaluacion->id]) ?>
-                                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $tipoEvaluacion->id]) ?>
+                                  
+
+                                    <?= $this->Html->link(__('Editar'), ['action' => 'edit', $tipoEvaluacion->id],['class'=>'btn btn-info btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
+                                  
                                    
                                 </td>
                             </tr>

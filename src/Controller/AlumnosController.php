@@ -99,8 +99,8 @@ class AlumnosController extends AppController
             $alumno->status = true;
 
            if (!empty($data['image'])) {
-                  $result = $this->FileUpload->fileUpload($data['image'], 'users');
-                  $alumno->image = USER_IMG_PATH . DS . $result['file_name'];
+                   $result = $this->FileUpload->fileUpload($data['image'], 'users');
+                   $alumno->image = $result['status'] == 200 ? USER_IMG_PATH . DS . $result['file_name'] : 'avatar-1.jpg';
             } else {
                $alumno->image = "Null";
             }

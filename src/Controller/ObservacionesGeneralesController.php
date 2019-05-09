@@ -12,6 +12,16 @@ use App\Controller\AppController;
  */
 class ObservacionesGeneralesController extends AppController
 {
+ 
+      public function initialize()
+    {
+        parent::initialize();
+        $this->loadModel('Turno');
+        $this->loadModel('UsersCentro');
+        $this->loadModel('Centro');
+       
+    } 
+
 
     /**
      * Index method
@@ -20,8 +30,24 @@ class ObservacionesGeneralesController extends AppController
      */
     public function index()
     {
-        $observacionesGenerales = $this->paginate($this->ObservacionesGenerales->find()->where(['status =' => true]));
 
+        $user = $this->Auth->user();
+
+        $subquery = $this->UsersCentro->find()
+                ->select(['UsersCentro.id_centro'])
+                ->where(['UsersCentro.id_user =' => $user['id']]);
+
+        $subquery2 = $this->UsersCentro->find()
+                        ->select(['UsersCentro.id_turno'])
+                        ->where(['UsersCentro.id_user =' => $user['id']]);
+
+        $qry = $this->ObservacionesGenerales->find('all',['contain' => ['Centro','Users']])->where(['status =' => true])->andWhere(['ObservacionesGenerales.id_centro IN'=> $subquery])
+             ->andWhere(['ObservacionesGenerales.id_turno IN'=> $subquery2])->order(['ObservacionesGenerales.created' => 'DESC']);
+
+
+        $observacionesGenerales = $this->paginate($qry, ['limit' => 200]);
+       // debug($observacionesGenerales);
+        //exit;
         $this->set(compact('observacionesGenerales'));
     }
 
@@ -31,7 +57,6 @@ class ObservacionesGeneralesController extends AppController
 
         $this->set(compact('observacionesGenerales'));
     }
-
     /**
      * View method
      *
@@ -57,28 +82,36 @@ class ObservacionesGeneralesController extends AppController
     {
         
         $user = $this->Auth->user();
-        $observacionesGenerale = $this->ObservacionesGenerales->newEntity();
+        $observacionesGeneral = $this->ObservacionesGenerales->newEntity();
         
         if ($this->request->is('post')) {
             
             $data = $this->request->getData();
-            $observacionesGenerale = $this->ObservacionesGenerales->patchEntity($observacionesGenerale, $data);
-            $observacionesGenerale->id_user = $user['id'];
-            $observacionesGenerale->id_centro = $user['id_centro'];
-            $observacionesGenerale->id_turno = $user['id_turno'];
-            $observacionesGenerale->status = true;
-
-            //debug($observacionesGenerale);
-            //exit;
+            $observacionesGeneral = $this->ObservacionesGenerales->patchEntity($observacionesGeneral, $data);
+            $observacionesGeneral->id_user = $user['id'];
+            $observacionesGeneral->id_centro = $data['centros'];
+            $observacionesGeneral->id_turno = $data['turnos'];
+            $observacionesGeneral->status = true;
             
-            if ($this->ObservacionesGenerales->save($observacionesGenerale)) {
+            if ($this->ObservacionesGenerales->save($observacionesGeneral)) {
                 $this->Flash->success(__('The observaciones generale has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The observaciones generale could not be saved. Please, try again.'));
         }
-        $this->set(compact('observacionesGenerale'));
+
+        $subquery = $this->UsersCentro->find()
+                ->select(['UsersCentro.id_centro'])
+                ->where(['UsersCentro.id_user =' => $user['id']]);
+        
+        $centros = $this->Centro->find('list', ['keyField' => 'id',
+                    'valueField' => 'name'])->where(['Centro.id IN'=> $subquery]);
+        
+        $turnos = $this->Turno->find('list', ['keyField' => 'id','valueField' => 'nombre']);
+
+       
+        $this->set(compact('observacionesGeneral','centros','turnos'));
     }
 
     /**
@@ -91,17 +124,19 @@ class ObservacionesGeneralesController extends AppController
     public function edit($id = null)
     {
         $user = $this->Auth->user();
-        $observacionesGenerale = $this->ObservacionesGenerales->get($id, [
+        $observacionesGeneral = $this->ObservacionesGenerales->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $observacionesGenerale = $this->ObservacionesGenerales->patchEntity($observacionesGenerale, $this->request->getData());
-            if ($this->ObservacionesGenerales->save($observacionesGenerale)) {
+            $observacionesGeneral = $this->ObservacionesGenerales->patchEntity($observacionesGenerale, $this->request->getData());
+            if ($this->ObservacionesGenerales->save($observacionesGeneral)) {
                 $this->Flash->success(__('The observaciones ha sido generada.'));
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The observaciones generale could not be saved. Please, try again.'));
         }
+
+
         $this->set(compact('observacionesGeneral'));
     }
 

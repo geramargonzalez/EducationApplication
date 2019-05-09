@@ -2,9 +2,7 @@
        <div class="panel-heading resume-heading">
           <div class="row">
                 <div class="col-lg-4 col-md-12 col-xs-12 col-sm-12">
-
-                    <?= $this->Html->image($user->image,['height' => '300','width' => '300', 'class' => 'rounded-circle']); ?>
-                  
+                    <?= $user->image == "Null" ? $this->Html->image('../images/users/avatar-1.jpg', ['height' => '300','class' => 'rounded-circle']) : $this->Html->image($user->image,['height' => '300px', 'class' => 'rounded-circle']); ?>
                 </div>
                 <div class="col-lg-8 col-md-12 col-xs-12 col-sm-12">
                    <ul class="list-group">
@@ -17,17 +15,18 @@
                    </ul> 
                 </div>
           </div>
-       </div>
-         <div class="table-responsive b-0" data-pattern="priority-columns">
-          <P> Tus centros</P>
-              <table id="datatable-buttons" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    
+                  <h3>Centros</h3>
+                      
+                  <table id="datatable" class="table table-bordered">
+                   
                    <thead>
                       <tr>
                           <th scope="col"><?= $this->Paginator->sort('Centro') ?></th>
-
                           <th scope="col" class="actions"><?= __('Acciones') ?></th>
                       </tr>
                    </thead>
+                  
                   <tbody>
                       <?php foreach ($centros as $centro): ?>
                       <tr>
