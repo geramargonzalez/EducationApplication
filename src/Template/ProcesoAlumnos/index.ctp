@@ -56,6 +56,7 @@
                                <?= $this->Html->link(__('Estadisticas'), ['controller' => 'ProcesoAlumnos', 'action' => 'statsAlumnos', $alumno->id]) ?>
                         </td>
                     </tr>
+                    </tfoot>
                     </table>
 
                 </div>

@@ -5,19 +5,13 @@
  */
 ?>
 <div class="row">
+     <?php echo $this->element('menu_grupo'); ?>    
     <div class="col-12">
         <div class="card m-b-20">
             <div class="card-block">
                 <h3 class="mt-0 header-title"><?= __('Grupo:' . $grupo->name ) ?></h3>
                     <p class="text-muted m-b-30 font-14"> </p>
-                            <div class="btn-group m-b-10">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu</button>
-                                <div class="dropdown-menu">
-                                    <?= $this->Html->link(__('Agregar alumnos'), ['controller' => 'Alumnos', 'action' => 'alumnosFromGrupo',$grupo->id],['class' => 'dropdown-item']) ?>
-                                     <?= $this->Html->link(__('Estadisticas'), ['action' => 'estadisticasGrupo',$grupo->id],['class' => 'dropdown-item']) ?>
-                                </div>
-                            </div>
-                    
+                         
                 <div class="table-rep-plugin">
                     <div class="table-responsive b-0" data-pattern="priority-columns">
                          

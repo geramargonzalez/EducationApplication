@@ -1,5 +1,5 @@
   <?php
-use App\Enums\RolesEnum;
+  use App\Enums\RolesEnum;
 ?>
 
  <div class="col-lg-12">
@@ -18,6 +18,16 @@ use App\Enums\RolesEnum;
                          <div class="dropdown-menu">
                            <?= $this->Html->link(__('Nueva'), ['controller' => 'ObservacionesGenerales', 'action' => 'add'],['class' => 'dropdown-item']) ?>
                            <?= $this->Html->link(__('Ver'), ['controller' => 'ObservacionesGenerales', 'action' => 'index'],['class' => 'dropdown-item']) ?>
+                        </div>
+                    </div>
+                </li>
+                 <li class="nav-item">
+                      <div class="dropdown mo-mb-2">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Estadistica Profesores 
+                        </button>
+                         <div class="dropdown-menu">
+                           <?= $this->Html->link(__('Ver'), ['controller' => 'ProcesoAlumnos', 'action' => 'statsAlumnosMateria'],['class' => 'dropdown-item']) ?>
                         </div>
                     </div>
                 </li>

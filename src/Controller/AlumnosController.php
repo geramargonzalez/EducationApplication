@@ -24,6 +24,7 @@ class AlumnosController extends AppController
         $this->loadModel('GrupoAlumnos');
         $this->loadModel('Grupo');
         $this->loadComponent('FileUpload'); 
+        $this->loadModel('FaltasAlumnos');
     }
     /**
      
@@ -35,8 +36,6 @@ class AlumnosController extends AppController
     {
         
         $user = $this->Auth->user();
-
-        // Contra -- 4954d62f ---
 
         $query = $this->Taller->findById_user($user['id']);
         $taller = $query->first();
@@ -99,18 +98,40 @@ class AlumnosController extends AppController
             $alumno->status = true;
 
            if (!empty($data['image'])) {
-                   $result = $this->FileUpload->fileUpload($data['image'], 'users');
-                   $alumno->image = $result['status'] == 200 ? USER_IMG_PATH . DS . $result['file_name'] : 'avatar-1.jpg';
+                   $result = $this->FileUpload->fileUpload($data['image'], 'alumnos');
+                   $alumno->image = $result['status'] == 200 ? ALUMNOS_IMG_PATH . DS . $result['file_name'] : 'avatar-1.jpg';
             } else {
                $alumno->image = "Null";
             }
+            $faltaAlumnos = $this->FaltasAlumnos->newEntity();
+
             if($ok){
                 if ($this->Alumnos->save($alumno)) {
-                    $ok = false;
+                    $ok = false;   
+                      
+                    $datos  =  array(
+                        'id_alumno' => $alumno->id,
+                        'id_user' => $user['id'],
+                        "faltas" =>  0,
+                        'cant_horas' => 0
+                      );
+                    
+                $faltaAlumnos = $this->FaltasAlumnos->patchEntity($faltaAlumnos,$datos);
+                
+                if ($this->FaltasAlumnos->save($faltaAlumnos)) {
+                    
                     $this->Flash->success(__('The alumno has been saved.'));
                     return $this->redirect(['action' => 'index']);
-                } 
-                $this->Flash->error(__('Los alumnos no pudieron ser guardados. Porfavor, intenta de nuevo.'));  
+                 
+                } else {
+                    
+                    $this->Flash->error(__('Los alumnos no pudieron ser guardados. Porfavor, intenta de nuevo.'));
+                  }
+                } else {
+                    
+                    $this->Flash->error(__('Los alumnos no pudieron ser guardados. Porfavor, intenta de nuevo.'));
+                  }
+                  
             }  
         }
         
@@ -269,15 +290,16 @@ class AlumnosController extends AppController
         $img = $alumno->image;
         
         if ($this->request->is(['patch', 'post', 'put'])) {
-            
-            $alumno = $this->Alumnos->patchEntity($alumno, $this->request->getData());
+             
+            $data = $this->request->getData();
+            $alumno = $this->Alumnos->patchEntity($alumno, $data);
             $alumno->id_centro = 1;
 
-            if (!empty($data['image'])) {
-                $result = $this->FileUpload->fileUpload($data['image'], 'users');
-                $alumno->image = USER_IMG_PATH . DS . $result['file_name'];
+             if (!empty($data['image'])) {
+                   $result = $this->FileUpload->fileUpload($data['image'], 'alumnos');
+                   $alumno->image = $result['status'] == 200 ? ALUMNOS_IMG_PATH . DS . $result['file_name'] : 'avatar-1.jpg';
             } else {
-                $alumno->image = $img;
+               $alumno->image = $img;
             }
 
             if ($this->Alumnos->save($alumno)) {

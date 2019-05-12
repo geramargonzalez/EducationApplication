@@ -13,11 +13,14 @@
        
 
         <?= $this->Html->css('../plugins/fullcalendar/css/fullcalendar.min') ?>
-        <?= $this->Html->css('../plugins/morris/morris') ?>
+      
         <?=$this->Html->css('../plugins/RWD-Table-Patterns/dist/css/rwd-table.min')?>
         <?= $this->Html->css('bootstrap.min') ?>
+
         <?= $this->Html->css('icons') ?>
         <?= $this->Html->css('style') ?>
+
+
     </head>
 
 <body class="fixed-left widescreen">
@@ -89,15 +92,12 @@
     <?= $this->Html->script('waves'); ?>
     <?= $this->Html->script('jquery.nicescroll'); ?>
     <?= $this->Html->script('jquery.scrollTo.min'); ?>
+    <?= $this->Html->script("password_toggle.js"); ?>
     <?= $this->Html->script("password_validation.js"); ?>
-    <?= $this->Html->script("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-show-password/1.0.3/bootstrap-show-password.min.js"); ?>
+    
+    
 
-    <!--Morris Chart--> 
-    <?= $this->Html->script('../plugins/morris/morris.min'); ?>
-    <?= $this->Html->script('../plugins/raphael/raphael-min'); ?>
-    <?= $this->Html->script('../pages/dashborad'); ?>
-    <?= $this->Html->script('../plugins/tinymce/tinymce.min'); ?>
-
+   
     
 
     <!-- Required datatable js -->
@@ -164,7 +164,7 @@
 
 
        
-
+ 
         });
 
          $('#mainTable').editableTableWidget().numericInputExample().find('td:first').focus();

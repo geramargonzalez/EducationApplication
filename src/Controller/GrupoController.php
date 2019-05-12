@@ -21,7 +21,7 @@ class GrupoController extends AppController
         $this->loadModel('Alumnos');
         $this->loadModel('UsersCentro');
         $this->loadModel('GrupoAlumnos');
-         $this->loadModel('ProcesoAlumnos');
+        $this->loadModel('ProcesoAlumnos');
     }
 
     /**
@@ -92,6 +92,8 @@ class GrupoController extends AppController
                         ->andWhere([
                       'Grupo.id_turno IN' => $subquery2]);
 
+       
+
         $this->set(compact('alumnos','cantidad','grupos','grupo'));
     }  
     /**
@@ -159,46 +161,29 @@ class GrupoController extends AppController
 
     public function estadisticasGrupo($id_grupo){
 
-
-       $id_user = $this->Auth->user('id');
-      // $alumnos = $this->Grupo->findById_alumnoAndId_user($id_alumno, $id_user);
-    
+        $id_user = $this->Auth->user('id');
+        $grupo = $this->Grupo->get($id_grupo);
         $alums = $this->GrupoAlumnos->find("all")
-                ->select(['GrupoAlumnos.id_alumno'])
-                ->where(['GrupoAlumnos.id_grupo =' => $id_grupo]);
-        
-        $alumnoPromedio = array();
-       
+                        ->select(['GrupoAlumnos.id_alumno'])
+                        ->where(['GrupoAlumnos.id_grupo =' => $id_grupo]);
+        $alumnoPromedios = array();   
 
- 
-            foreach ($alums as $alum){
-                # code...
-                $alumnoPromedio[] = $this->ProcesoAlumnos->find("all")->select([
-                                                    "Alumnos.name",
-                                                    "Alumnos.surname",
-                                                    'ProcesoAlumnos.promedio'
-                                                ])
+        foreach ($alums as $alum){
+            
+            $alumnoPromedios[] = $this->ProcesoAlumnos->find("all")->where(['ProcesoAlumnos.id_alumno' => $alum->id_alumno])
                                                 ->join([
-                                                    "Alumnos" => [
-                                                        "table" => "alumnos",
-                                                        "type" => "left",
-                                                        "conditions" => "Alumnos.id =" . $alum->id_alumno
-                                                    ]
-                                                ])->where([
-                                                    "ProcesoAlumnos.promedio" =>
-                                                    $this->ProcesoAlumnos->find("all")
-                                                    ->select(["AVG(ProcesoAlumnos.promedio)"])
-                                                    ->where(["ProcesoAlumnos.id_alumno =" => $alum->id_alumno])
-                                                ]);
-
-            }
-                                                
-
-
-         debug($alumnoPromedio["0"]->first());
-         exit;
-
-
+                                                    'table' => 'alumnos',
+                                                    'alias' => 'a',
+                                                    'type' => 'right',
+                                                    "conditions" => "a.id = " . $alum->id_alumno
+                                                 ])
+                                                  ->select([
+                                                         'name' => "a.name",
+                                                         'surname' => "a.surname",
+                                                         'prom_general' => "AVG(ProcesoAlumnos.promedio)"  
+                                                    ]);
+        }                         
+        $this->set(compact('grupo','alumnoPromedios'));
     }
 
 

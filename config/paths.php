@@ -91,3 +91,5 @@ define('CAKE', CORE_PATH . 'src' . DS);
 define('IMG', WWW_ROOT . 'images');
 
 define('USER_IMG_PATH', DS . 'images' . DS . 'users');
+
+define('ALUMNOS_IMG_PATH', DS . 'images' . DS . 'alumnos');

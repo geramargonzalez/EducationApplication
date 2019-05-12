@@ -231,55 +231,7 @@ class ProcesoAlumnosController extends AppController
         $this->set(compact('alumno','rendimiento','conducta','expresion_oral','expresion_oral_diario'));
     }
     
-   /*public function statsAlumnosGenerales($id_alumno = null){
-      
-      $alumno = $this->Alumnos->get($id_alumno);
-      $query = $this->ProcesoAlumnos->findById_alumno($id_alumno);
-
-      $query2 = $this->ProcesoAlumnos->findById_alumno($id_alumno);
-
-      $query3 = $this->ProcesoAlumnos->findById_alumno($id_alumno);
-
-
-      $queryTortas = $this->RendimientoAlumno->findById_alumno($id_alumno);
-
-      $rendi= $query->select(['rendimiento' => $query->func()->avg('rendimiento'), 'Mes' =>'MONTH(created)'])
-                     ->where(['rendimiento >'  => 0])
-                      ->group('MONTH(created)')
-                      ->order(['MONTH(created)' => 'ASC']);
-
-      $cond = $query2->select(['conducta' => $query2->func()->avg('conducta'), 'Mes' =>'MONTH(created)'])
-                      ->where(['conducta >'  => 0])
-                      ->group('MONTH(created)')
-                      ->order(['MONTH(created)' => 'ASC']);
-
-      $expre = $query3->select(['expresion_oral' => $query3->func()->avg('expresion_oral'), 'Mes' =>'MONTH(created)'])
-                ->where(['expresion_oral >'  => 0])
-                ->group('MONTH(created)')
-                ->order(['MONTH(created)' => 'ASC']);
-
-      $tipoEva = $queryTortas->select(['rendimiento' => $query->func()->Sum('rendimiento'), 'tipo_evaluacion' =>'tipoevaluacion'])
-                ->where(['tipoevaluacion !='  => 'No hubo evaluacion'])
-                ->group('tipoevaluacion')
-                ->order(['rendimiento' => 'ASC']);
-
-       
-      $rendi->enableHydration(false);
-      $rendimiento = $rendi->toList(); 
-
-      $cond->enableHydration(false);
-      $conducta = $cond->toList();
-
-      $expre->enableHydration(false);
-      $expresion_oral = $expre->toList();
-
-      $tipoEva->enableHydration(false);
-      $tipo_evaluacion = $tipoEva->toList();
-
-      $this->set(compact('alumno','rendimiento','conducta','expresion_oral','tipo_evaluacion'));
-       
-    }*/
-
+ 
 
    public function statsAlumnosGenerales($id_alumno = null){
       
@@ -334,6 +286,10 @@ class ProcesoAlumnosController extends AppController
 
     public function statsAlumnosDesabilitadosHabilitados(){
       // Se van a mostar los alumnos que desabilitaron y los meses donde dejaron.
+    }
+
+     public function statsAlumnosMateria(){
+      
     }
 
     /**

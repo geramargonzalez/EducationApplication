@@ -39,6 +39,11 @@ class ProcesoAlumnosTable extends Table
 
         $this->addBehavior('Timestamp');
 
+        $this->belongsTo('Alumnos', [
+            'foreignKey' => 'id_alumno',
+            'joinType' => 'INNER'
+        ]);
+
         $this->hasMany('Users', [
             'foreignKey' => 'id_user'
         ]);

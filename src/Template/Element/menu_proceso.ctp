@@ -16,7 +16,7 @@ use App\Enums\RolesEnum;
                         </div>
                     </div>
                     <div class="btn-group m-b-10">
-                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Estadisticas</button>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Estadisticas</button>
                         <div class="dropdown-menu">
                             <?= $this->Html->link(__('Globales'), ['controller' => 'ProcesoAlumnos', 'action' => 'statsAlumnosGenerales', $alumno->id],['class' => 'dropdown-item']) ?>
                             <?= $this->Html->link(__('Profesor'), ['controller' => 'ProcesoAlumnos', 'action' => 'statsAlumnos', $alumno->id],['class' => 'dropdown-item']) ?>
@@ -32,6 +32,13 @@ use App\Enums\RolesEnum;
                            <?= $this->Html->link(__('Estadisticas'), ['controller' => 'ObservacionesAlumnos', 'action' => 'statsAlumnoObservacion', $alumno->id],['class' => 'dropdown-item']) ?>
                         </div>
                     </div><!-- /btn-group -->
+                     <div class="btn-group m-b-10">
+                        <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Faltas</button>
+                        <div class="dropdown-menu">
+                           <?= $this->Html->link(__('Ver'), ['controller' => 'FaltasAlumnos', 'action' => 'view', $alumno->id],['class' => 'dropdown-item']) ?>
+                           <?= $this->Html->link(__('Estadisticas'), ['controller' => 'FaltasAlumnos', 'action' => 'statsAlumnosFaltasMes', $alumno->id],['class' => 'dropdown-item']) ?>
+                        </div>
+                    </div>
                 </div>
 
             </div>
