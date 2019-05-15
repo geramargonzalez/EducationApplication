@@ -19,8 +19,9 @@ class FaltasAlumnosController extends AppController
         parent::initialize();
         $this->loadModel('Grupo');
         $this->loadModel('UsersCentro');
-         $this->loadModel('GrupoAlumnos');
-           $this->loadModel('Alumnos');
+        $this->loadModel('GrupoAlumnos');
+        $this->loadModel('Alumnos');
+        $this->loadModel('FaltasGrupo');
     }
     /**
      * Index method
@@ -63,7 +64,7 @@ class FaltasAlumnosController extends AppController
                 $faltas[$grupo->id] = $grupo->name;
             }
 
-    
+     
         $this->set(compact('faltas'));
     }
     /**
@@ -145,7 +146,6 @@ class FaltasAlumnosController extends AppController
                     if ($this->FaltasAlumnos->save($alumnosFaltas)) {
                        $alum_reg++; 
                     }    
-                
                 }
                 if($alum_reg > 0){
                      $this->Flash->success(__('La lista fue pasada muchas gracias.'));
@@ -158,8 +158,20 @@ class FaltasAlumnosController extends AppController
             }       
                 
         }
+        $faltas = $this->totalFaltasGrupo($id_grupo);
 
-        $this->set(compact('alumnos','grupo'));
+
+        if($faltas != null){
+           $this->Flash->success(__('Un usuario paso la lista en este grupo.'));
+        }
+
+         $falta_mismo_dia  = $this->FaltasGrupo->find('list')->where(['MONTH(created) = ' => $mes])->andWhere(['DAY(created) = ' => $day])->andWhere(['FaltasGrupo.id_grupo = ' => $id_grupo]);
+        $falta_mismo_dia->enableHydration(false);
+        $falta_mismo_dia = $falta_mismo_dia->toList(); 
+        $grupoAsis = count($falta_mismo_dia);
+        
+
+        $this->set(compact('alumnos','grupo','grupoAsis'));
             
     }
 
@@ -184,6 +196,7 @@ class FaltasAlumnosController extends AppController
                                                     "conditions" => "a.id = " . $alumno->id
                                                  ])
                                                 ->select([
+                                                         'id'=> $alumno->id,
                                                          'name' => "a.name",
                                                          'surname' => "a.surname",
                                                          'faltas' => "SUM(FaltasAlumnos.faltas)",
@@ -194,52 +207,56 @@ class FaltasAlumnosController extends AppController
         $faltas = $this->totalFaltasGrupo($id_grupo);
         $horas = $this->totalCantHorasGrupo($id_grupo);
 
-        $this->set(compact('grupo','alumnosFaltas','faltas','horas'));
-    }
-
-
-    /*public function resumenDelDiaCentro($id_grupo){
-
-        $time = Time::now();
-        $mes = $time->month; 
-        $day = $time->day;
-        $alumnos = $this->alumnosPerGrupo($id_grupo);
-        $alumnosFaltas = array();
-
-        $falta_mismo_dia  = $this->FaltasAlumnos->find('list')->where(['MONTH(created) = ' => $mes])->andWhere(['DAY(created) = ' => $day]);
+        $falta_mismo_dia  = $this->FaltasGrupo->find('list')->where(['MONTH(created) = ' => $mes])->andWhere(['DAY(created) = ' => $day])->andWhere(['FaltasGrupo.id_grupo = ' => $id_grupo]);
         $falta_mismo_dia->enableHydration(false);
         $falta_mismo_dia = $falta_mismo_dia->toList(); 
 
-        foreach ($alumnos as $alumno){
+        if($faltas != null  && count($falta_mismo_dia) < 1){
             
-            $alumnosFaltas[] = $this->FaltasAlumnos->find("all")->where(['FaltasAlumnos.id_alumno' =>$alumno->id_alumno])->andWhere(['MONTH(created) = ' => $mes])->andWhere(['DAY(created) = ' => $day])
-                                                ->join([
-                                                    'table' => 'alumnos',
-                                                    'alias' => 'a',
-                                                    'type' => 'right',
-                                                    "conditions" => "a.id = " . $alumno->id_alumno
-                                                 ])
-                                                  ->select([
-                                                         'name' => "a.name",
-                                                         'surname' => "a.surname",
-                                                         'faltas' => "SUM(FaltasAlumnos.faltas)",
-                                                         'cant_horas' => "SUM(FaltasAlumnos.cant_horas)"    
-                                                    ]);
-        }      
+            $faltasGrupo = $this->FaltasGrupo->newEntity();
+            $datos  =  array(
+                'id_grupo' => $id_grupo,
+                "faltas" => $faltas,
+                'cant_horas' => $horas
+            );
+            $faltasGrupo = $this->FaltasGrupo->patchEntity($faltasGrupo,$datos);
 
-        $this->set(compact('grupo','alumnosFaltas'));
-    }*/
+          $this->FaltasGrupo->save($faltasGrupo); 
+        }
+
+         $grupoAsis = count($falta_mismo_dia);
+         //debug($grupoAsis);
+         //exit;
+        $this->set(compact('grupo','alumnosFaltas','faltas','horas','grupoAsis')); 
+    }
+
+    public function statsGrupoAsistencias(){
+          
+
+
+    }
+
+    /////////////// 44444 /////////////////
+    
+    public function faltasPorAlumno($id_alumno = null){
+
+        $alumno = $this->Alumnos->get($id_alumno);
+        $faltas = $this->FaltasAlumnos->findById_alumno($id_alumno)->order(['created' => 'DESC']);
+        $totalFaltas = $this->totalFaltasAlumno($id_alumno);
+        $totalHoras = $this->totalCantHorasAlumno($id_alumno);
+
+         $this->set(compact('alumno','faltas','totalHoras','totalFaltas'));
+    }
+
 
      public function statsAlumnosFaltasMes($id_alumno = null)
     {
            $alumno = $this->Alumnos->get($id_alumno);
         //   $id_user = $this->Auth->user('id');
            $query1 = $this->FaltasAlumnos->findById_alumno($id_alumno);
-           $query2 = $this->ProcesoAlumnos->findById_alumno($id_alumno);
-           $query3 = $this->ProcesoAlumnos->findById_alumno($id_alumno);
+           $query2 = $this->FaltasAlumnos->findById_alumno($id_alumno);
+           //$query3 = $this->ProcesoAlumnos->findById_alumno($id_alumno);
             
-      
-     
         $faltas= $query1->select(['faltasMes' => $query1->func()->sum('faltas'), 'Mes' =>'MONTH(created)'])
                   ->where(['id_alumno'  => $alumno->id])
                   ->group('MONTH(created)')
@@ -256,7 +273,51 @@ class FaltasAlumnosController extends AppController
         $horas->enableHydration(false);
         $horas = $horas->toList();
 
+       // debug($horas);
+       // exit;
         $this->set(compact('alumno','faltas','horas'));
+    }
+
+
+    public function estadisticasCentro(){
+
+    $user = $this->Auth->user();
+       
+       $subquery = $this->UsersCentro->find()
+                ->select(['UsersCentro.id_centro'])
+                ->where(['UsersCentro.id_user =' => $user['id']]);
+
+        $alums = $this->Alumnos->find("all")
+                        ->select(['Alumnos.id'])
+                        ->andWhere(['Alumnos.id_centro IN' => $subquery]);
+       $alumnoFaltas = array();     
+       $cantHoras = array(); 
+       $faltasTotales = 0;    
+       $horasTotales = 0;      
+        
+        foreach ($alums as $alum){
+            
+            $alumnoFaltas[] = $this->FaltasAlumnos->find("all")->where(['FaltasAlumnos.id_alumno' => $alum->id])->select(['faltasTotales' => 'SUM(FaltasAlumnos.faltas)']);
+            $cantHoras[] = $this->FaltasAlumnos->find("all")->where(['FaltasAlumnos.id_alumno' => $alum->id])->select(['horasTotales' => 'SUM(FaltasAlumnos.cant_horas)']);
+        }
+
+        foreach ($alumnoFaltas as  $alumnoFalta) {
+                foreach ($alumnoFalta as  $falta) {
+                 $faltasTotales += $falta->faltasTotales;
+            }           
+        
+        }  
+          foreach ($cantHoras as  $cantHora) {
+                foreach ($cantHora as  $horas) {
+                 $horasTotales += $horas->horasTotales;
+            }           
+        }   
+
+
+        $this->set(compact('faltasTotales','horasTotales'));
+
+
+
     }
 
     /**
@@ -266,17 +327,49 @@ class FaltasAlumnosController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit($id_alumno = null)
     {
-        $faltasAlumno = $this->FaltasAlumnos->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $faltasAlumno = $this->FaltasAlumnos->patchEntity($faltasAlumno, $this->request->getData());
-            if ($this->FaltasAlumnos->save($faltasAlumno)) {
-                $this->Flash->success(__('The faltas alumno has been saved.'));
+        $time = Time::now();
+        $mes = $time->month; 
+        $day = $time->day;
 
-                return $this->redirect(['action' => 'index']);
+       $query = $this->GrupoAlumnos->find("all")
+                        ->select(['GrupoAlumnos.id_grupo'])
+                        ->where(['GrupoAlumnos.id_alumno =' => $id_alumno]);
+        $id_grupo = $query->first()->id_grupo;
+
+        $faltasAlumno = $this->FaltasAlumnos->find('all')->where(['DATE(FaltasAlumnos.created) = ' => $time->format('y/m/d')])->andWhere(['FaltasAlumnos.id_alumno = ' => $id_alumno]);
+        $faltasAlumno = $faltasAlumno->first(); 
+
+        if ($this->request->is(['patch', 'post', 'put'])) {
+
+            $data = $this->request->getData();
+            $faltasAlumno = $this->FaltasAlumnos->patchEntity($faltasAlumno, $data);
+            
+            $faltasAlumno->faltas = $data['cant_horas'] > 0 ? 1 : 0;
+            $faltasAlumno->cant_horas = $data['cant_horas'];
+            
+            if ($this->FaltasAlumnos->save($faltasAlumno)) {
+
+              $falta_mismo_dia  = $this->FaltasGrupo->find('all')->where(['MONTH(created) = ' => $mes])->andWhere(['DAY(created) = ' => $day])->andWhere(['FaltasGrupo.id_grupo = ' => $id_grupo]);
+            
+             
+              $falta_mismo_dia = $falta_mismo_dia->first(); 
+              $faltas = $this->totalFaltasGrupo($id_grupo);
+              $horas = $this->totalCantHorasGrupo($id_grupo);
+                  
+             // $faltasGrupo = $this->FaltasGrupo->newEntity();
+              $datos  =  array(
+                  'id_grupo' => $id_grupo,
+                  "faltas" => $faltas,
+                  'cant_horas' => $horas
+              );
+              $falta_mismo_dia = $this->FaltasGrupo->patchEntity($falta_mismo_dia,$datos);
+
+                $this->FaltasGrupo->save($falta_mismo_dia); 
+   
+                $this->Flash->success(__('Se modifico la falta del estudiante'));
+                return $this->redirect(['action' => 'resumenDelDiaGrupo',   $id_grupo]);
             }
             $this->Flash->error(__('The faltas alumno could not be saved. Please, try again.'));
         }
@@ -306,8 +399,6 @@ class FaltasAlumnosController extends AppController
     function alumnosPerGrupo($id_grupo = null){
     
         $alumnos = array();
-        
-
         $time = Time::now();
         $mes = $time->month; 
         $day = $time->day;
@@ -321,7 +412,7 @@ class FaltasAlumnosController extends AppController
          }
 
 
-         return $alumnos;
+       return $alumnos;
     }
 
     public function totalFaltas($id = null){
@@ -338,7 +429,6 @@ class FaltasAlumnosController extends AppController
     public function totalFaltasGrupo($id_grupo = null){
     
         $alumnos = array();
-    
         $time = Time::now();
         $mes = $time->month; 
         $day = $time->day;
@@ -372,7 +462,32 @@ class FaltasAlumnosController extends AppController
 
         return $total_horas;
     }
+
+     public function totalFaltasAlumno($id_alumno = null){
     
+        $faltas = $this->FaltasAlumnos->find('all')->select(['faltas' => 'SUM(FaltasAlumnos.faltas)'])->where(['FaltasAlumnos.id_alumno =' => $id_alumno]);
+        
+        $total_faltas = $faltas->first()->faltas;
+
+        return $total_faltas;
+    }
+      public function totalCantHorasAlumno($id_alumno = null){
+    
+    
+        $total_horas = $this->FaltasAlumnos->find('all')->select(['cant_horas' => 'SUM(FaltasAlumnos.cant_horas)'])->where(['FaltasAlumnos.id_alumno =' => $id_alumno]);
+        
+        $total_horas = $total_horas->first()->cant_horas;
+
+        return $total_horas;
+    }
+
+
+
+
+    //this->viewBuilder()->setlayout('template_defualt');  
+    //$this->layout = 'empty';
+
+    // 094 477 447
 
 
 }

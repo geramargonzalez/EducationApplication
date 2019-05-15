@@ -36,8 +36,7 @@ use App\Enums\RolesEnum;
                     <div class="col-sm-10">
                         <?php  echo $this->Form->control('email',['class' => 'form-control','label' => false]); ?>
                     </div>
-                </div>
-            
+                </div>å
                 
             <?php if($user_session['role_id'] == RolesEnum::PROFESOR_ADMIN) { ?>
                 <div class="form-group row">

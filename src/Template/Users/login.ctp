@@ -3,9 +3,9 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\User $user
  */
-
+    //$this->layout ='empty'; 
+    $this->layout('empty');
 ?>
-<?= $this->layout('empty'); ?>
 
  <div class="card">
     <div class="card-block">

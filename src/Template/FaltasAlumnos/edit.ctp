@@ -1,33 +1,20 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\FaltasAlumno $faltasAlumno
- */
-?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $faltasAlumno->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $faltasAlumno->id)]
-            )
-        ?></li>
-        <li><?= $this->Html->link(__('List Faltas Alumnos'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Alumnos'), ['controller' => 'Alumnos', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Alumno'), ['controller' => 'Alumnos', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="faltasAlumnos form large-9 medium-8 columns content">
-    <?= $this->Form->create($faltasAlumno) ?>
-    <fieldset>
-        <legend><?= __('Edit Faltas Alumno') ?></legend>
-        <?php
-            echo $this->Form->control('id_alumno', ['options' => $alumnos]);
-            echo $this->Form->control('faltas');
-            echo $this->Form->control('cant_horas');
-        ?>
-    </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
-    <?= $this->Form->end() ?>
-</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card m-b-20">  
+            <div class="card-block"> 
+                <?= $this->Form->create($faltasAlumno) ?>
+                <h4 class="mt-0 header-title">Editar la falta: </h4>
+                <p class="text-muted m-b-30 font-14"></p>
+                 <div class="form-group row">
+                    <label for="example-text-input" class="col-sm-2 col-form-label">Cantidad de horas</label>
+                    <div class="col-sm-10">
+                        <?php echo $this->Form->control('cant_horas',['class' => 'form-control','label' => false]); ?>
+                    </div>
+                </div>
+                <?= $this->Form->button(__('Submit'),['class' => 'btn btn-primary btn-sm']) ?>
+               <?= $this->Form->end() ?>
+            </div>
+        </div>
+    </div> <!-- end col -->
+</div> <!-- end row -->

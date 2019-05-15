@@ -11,9 +11,9 @@
         <link rel="shortcut icon" href="assets/images/favicon.ico">
         <!--Morris Chart CSS -->
        
-
+  
+        <?= $this->Html->css('../plugins/summernote/summernote') ?>
         <?= $this->Html->css('../plugins/fullcalendar/css/fullcalendar.min') ?>
-      
         <?=$this->Html->css('../plugins/RWD-Table-Patterns/dist/css/rwd-table.min')?>
         <?= $this->Html->css('bootstrap.min') ?>
 
@@ -36,10 +36,9 @@
            <button type="button" class="button-menu-mobile button-menu-mobile-topbar open-left waves-effect">
                 <i class="ion-close"></i>
             </button>
-              <div class="topbar-left">
+            <div class="topbar-left">
                     <div class="text-center">
-                    
-                         <?= $this->Html->image('../images/logo.png'); ?>
+                        <?= $this->Html->image('../images/logo.png'); ?>
                     </div>
                 </div>
             <div class="sidebar-inner slimscrollleft">
@@ -71,7 +70,7 @@
 
             <!-- footer -->
             <footer class="footer">
-                © 2019 Gerardo Gonzalez - All Rights Reserved.
+                © 2019 Memoria Escolar - All Rights Reserved.
             </footer>
         </div>
 
@@ -97,7 +96,8 @@
     
     
 
-   
+
+  
     
 
     <!-- Required datatable js -->
@@ -124,20 +124,22 @@
     <?= $this->Html->script('../pages/datatables.init'); ?>
     <?= $this->Html->script('../plugins/tiny-editable/mindmup-editabletable'); ?>
     <?= $this->Html->script('../plugins/tiny-editable/numeric-input-example'); ?>
+
     
     <?= $this->Html->script('../plugins/jquery-ui/jquery-ui.min'); ?>
     <?= $this->Html->script('../plugins/moment/moment'); ?>
     <?= $this->Html->script('../plugins/fullcalendar/js/fullcalendar.min'); ?>
     <?= $this->Html->script('../pages/calendar-init'); ?>
 
-    
-   
+   <?= $this->Html->script('../plugins/summernote/summernote.min'); ?>
+
+
 
     <!-- App js -->
     <?= $this->Html->script('app'); ?>
    
     <script>
-        $(document).ready(function () {
+       /* $(document).ready(function () {
             if($("#observaciones").length > 0){
                 tinymce.init({
                     selector: "#observaciones",
@@ -154,7 +156,16 @@
                         {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
                     ]
                 });
-            }
+            }*/
+
+         $(document).ready(function(){
+                $('#observaciones').summernote({
+                    height: 100,                 // set editor height
+                    minHeight: null,             // set minimum height of editor
+                    maxHeight: null,             // set maximum height of editor
+                    focus: true                 // set focus to editable area after initializing summernote
+                });
+            });
 
          $("#password").password('toggle');
          $("#r_password").password('toggle');
@@ -165,7 +176,7 @@
 
        
  
-        });
+       //});
 
          $('#mainTable').editableTableWidget().numericInputExample().find('td:first').focus();
        

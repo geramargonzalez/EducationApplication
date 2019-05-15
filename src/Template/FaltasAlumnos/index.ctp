@@ -1,6 +1,6 @@
 
 <div class="row">
-    <div class="col-md-offset-2 col-md-4 col-md-offset-2">
+    <div class="col-lg-4 col-lg-offset-8">
            <?= $this->Form->create() ?>
             <div class="form-group">
                    <?= $this->Form->control('grupos', ['label' => false, 'class' => 'form-control', 'options' => $faltas]); ?>

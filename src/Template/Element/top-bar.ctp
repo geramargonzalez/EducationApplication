@@ -12,7 +12,6 @@
                 <?= $this->Html->link('<i class="mdi mdi-logout m-r-5 text-muted"></i> Logout', ['controller'=>'Users','action' => 'logout'], ['class' => 'dropdown-item','escape' => false]); ?>
             </div>
         </li>
-
     </ul>
 
     <ul class="list-inline menu-left mb-0">

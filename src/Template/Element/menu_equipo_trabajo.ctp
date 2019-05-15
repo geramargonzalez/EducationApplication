@@ -24,13 +24,15 @@
                  <li class="nav-item">
                       <div class="dropdown mo-mb-2">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Estadistica Profesores 
+                            Estadisticas 
                         </button>
                          <div class="dropdown-menu">
-                           <?= $this->Html->link(__('Ver'), ['controller' => 'ProcesoAlumnos', 'action' => 'statsAlumnosMateria'],['class' => 'dropdown-item']) ?>
+                           <?= $this->Html->link(__('Asistencia'), ['controller' => 'FaltasAlumnos', 'action' => 'estadisticasCentro'],['class' => 'dropdown-item']) ?>
+                           <?= $this->Html->link(__('Ver'), ['controller' => 'ObservacionesGenerales', 'action' => 'index'],['class' => 'dropdown-item']) ?>
                         </div>
                     </div>
                 </li>
+                
             </ul>
         </div>
     </div>

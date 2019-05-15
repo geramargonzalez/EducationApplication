@@ -134,7 +134,6 @@ class AlumnosController extends AppController
                   
             }  
         }
-        
         $turnos = $this->Turno->find('list', ['keyField' => 'id','valueField' => 'nombre']);
         $centros = $this->Centro->find('list', ['keyField' => 'id','valueField' => 'name']);
         $this->set(compact('alumno','turnos','centros'));
@@ -247,7 +246,6 @@ class AlumnosController extends AppController
             $grupo = $this->Grupo->get($data['grupos']);
             $alumno = $this->Alumnos->get($data['alumnos']);
             $alumnosGrupo = $this->GrupoAlumnos->newEntity();
-
             $datos  =  array(
                 'id_alumno' => $alumno->id,
                 'id_grupo' => $grupo->id 
@@ -351,8 +349,5 @@ class AlumnosController extends AppController
         }
         return $this->redirect(['controller'=>'Grupo', 'action' => 'view', $id_grupo]);
     }
-
-   
-
 
 }

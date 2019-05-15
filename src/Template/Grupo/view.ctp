@@ -3,6 +3,9 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Taller $taller
  */
+
+use App\Enums\RolesEnum;
+
 ?>
 <div class="row">
      <?php echo $this->element('menu_grupo'); ?>    

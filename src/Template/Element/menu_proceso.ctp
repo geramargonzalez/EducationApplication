@@ -35,7 +35,7 @@ use App\Enums\RolesEnum;
                      <div class="btn-group m-b-10">
                         <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Faltas</button>
                         <div class="dropdown-menu">
-                           <?= $this->Html->link(__('Ver'), ['controller' => 'FaltasAlumnos', 'action' => 'view', $alumno->id],['class' => 'dropdown-item']) ?>
+                           <?= $this->Html->link(__('Ver'), ['controller' => 'FaltasAlumnos', 'action' => 'faltasPorAlumno', $alumno->id],['class' => 'dropdown-item']) ?>
                            <?= $this->Html->link(__('Estadisticas'), ['controller' => 'FaltasAlumnos', 'action' => 'statsAlumnosFaltasMes', $alumno->id],['class' => 'dropdown-item']) ?>
                         </div>
                     </div>

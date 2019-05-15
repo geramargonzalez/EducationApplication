@@ -89,6 +89,7 @@ class AppController extends Controller
     {
       
              $this->viewBuilder()->layout('template_defualt');
+               //this->viewBuilder()->setlayout('template_defualt');  
         
     }
 
