@@ -31,9 +31,9 @@ use App\Enums\RolesEnum;
     <li class="has_sub">
         <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-steam"></i> <span> Equipo </span> </a>
         <ul class="list-unstyled">
-            <li><?= $this->Html->link(__('Integrantes'), ['controller' => 'Taller', 'action' => 'index']) ?></li>
+            <li><?= $this->Html->link(__('Coordinacion'), ['controller' => 'Taller', 'action' => 'index']) ?></li>
 	         <?php if($user_session['role_id'] == RolesEnum::PROFESOR_ADMIN | $user_session['role_id'] == RolesEnum::PROFESOR) { ?>
-	        <li><?= $this->Html->link(__('Agregar'), ['controller' => 'Taller', 'action' => 'add']) ?></li>
+	      
 	         <?php } ?>
         </ul>
     </li>

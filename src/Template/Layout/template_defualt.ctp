@@ -11,7 +11,6 @@
         <link rel="shortcut icon" href="assets/images/favicon.ico">
         <!--Morris Chart CSS -->
        
-  
         <?= $this->Html->css('../plugins/summernote/summernote') ?>
         <?= $this->Html->css('../plugins/fullcalendar/css/fullcalendar.min') ?>
         <?=$this->Html->css('../plugins/RWD-Table-Patterns/dist/css/rwd-table.min')?>
@@ -69,7 +68,7 @@
             <!-- content -->
 
             <!-- footer -->
-            <footer class="footer">
+        <footer class="footer">
                 © 2019 Memoria Escolar - All Rights Reserved.
             </footer>
         </div>
@@ -91,13 +90,9 @@
     <?= $this->Html->script('waves'); ?>
     <?= $this->Html->script('jquery.nicescroll'); ?>
     <?= $this->Html->script('jquery.scrollTo.min'); ?>
-    <?= $this->Html->script("password_toggle.js"); ?>
-    <?= $this->Html->script("password_validation.js"); ?>
+    <?= $this->Html->script("password_toggl"); ?>
+    <?= $this->Html->script("password_validation"); ?>
     
-    
-
-
-  
     
 
     <!-- Required datatable js -->
@@ -115,48 +110,79 @@
     <?= $this->Html->script('../plugins/datatables/buttons.print.min'); ?>
     <?= $this->Html->script('../plugins/datatables/buttons.colVis.min'); ?>
     <?= $this->Html->script('../plugins/datatables/dataTables.responsive.min'); ?>
-
-
     <!-- Responsive examples -->
     <?= $this->Html->script('../plugins/datatables/responsive.bootstrap4.min'); ?>
-
     <!-- Datatable init js -->
     <?= $this->Html->script('../pages/datatables.init'); ?>
     <?= $this->Html->script('../plugins/tiny-editable/mindmup-editabletable'); ?>
     <?= $this->Html->script('../plugins/tiny-editable/numeric-input-example'); ?>
-
-    
     <?= $this->Html->script('../plugins/jquery-ui/jquery-ui.min'); ?>
     <?= $this->Html->script('../plugins/moment/moment'); ?>
     <?= $this->Html->script('../plugins/fullcalendar/js/fullcalendar.min'); ?>
     <?= $this->Html->script('../pages/calendar-init'); ?>
-
-   <?= $this->Html->script('../plugins/summernote/summernote.min'); ?>
-
+    <?= $this->Html->script('../plugins/summernote/summernote.min'); ?>
+    <?= $this->Html->script('throttledresize'); ?>
 
 
     <!-- App js -->
     <?= $this->Html->script('app'); ?>
+
+
    
     <script>
-       /* $(document).ready(function () {
-            if($("#observaciones").length > 0){
-                tinymce.init({
-                    selector: "#observaciones",
-                    theme: "modern",
-                    height:300,
-                    toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | link image |  forecolor backcolor emoticons",
-                    style_formats: [
-                        {title: 'Bold text', inline: 'b'},
-                        {title: 'Red text', inline: 'span', styles: {color: '#ff0000'}},
-                        {title: 'Red header', block: 'h1', styles: {color: '#ff0000'}},
-                        {title: 'Example 1', inline: 'span', classes: 'example1'},
-                        {title: 'Example 2', inline: 'span', classes: 'example2'},
-                        {title: 'Table styles'},
-                        {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
-                    ]
-                });
-            }*/
+     
+
+        $(window).resize(function(){
+        
+
+            <?php 
+                  $controller = $this->request->getParam('controller'); 
+                  $action = $this->request->getParam('action'); 
+            ?>
+
+             <?php if($action == "statsAlumnoObservacion"){ ?>
+
+                    drawChartColumn();
+                    drawChartTipos();
+
+              <?php } ?>
+
+             <?php if($action == "statsAlumnos"){ ?>
+
+                drawChartByDay();
+                drawChartExpresionOral();
+                drawChartConducta();
+                drawChartRendimiento();
+               
+
+            <?php } ?>
+
+            <?php if($action == "statsAlumnosGenerales"){ ?>
+
+                drawChartExpresionOral();
+                drawChartConducta();
+                drawChartRendimiento();
+                drawChartTipos();
+
+            <?php } ?>
+
+
+             <?php if($action == "statsAlumnosFaltasMes"){ ?>
+
+                drawChartFaltas();
+                drawChartCantHoras();
+                //drawChartRendimiento();
+               // drawChartTipos();
+
+            <?php } ?>
+
+
+             
+            
+          });
+
+            //console.log(window.location.pathname);
+
 
          $(document).ready(function(){
                 $('#observaciones').summernote({

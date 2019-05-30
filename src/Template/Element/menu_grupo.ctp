@@ -11,7 +11,7 @@ use App\Enums\RolesEnum;
                     <div class="dropdown-menu">
                          <?= $this->Html->link(__('Agregar alumnos'), ['controller' => 'Alumnos', 'action' => 'alumnosFromGrupo',$grupo->id],['class' => 'dropdown-item']) ?>
                          <?php if($user_session['role_id'] == RolesEnum::PROFESOR_ADMIN | $user_session['role_id'] == RolesEnum::PROFESOR) { ?>
-     					<?= $this->Html->link(__('Estadisticas'), ['action' => 'estadisticasGrupo',$grupo->id],['class' => 'dropdown-item']) ?>
+     					<?= $this->Html->link(__('Estadisticas'), ['action' => 'estadisticasGrupo', $grupo->id],['class' => 'dropdown-item']) ?>
                          <?php } ?>
                     </div>
                 </div>
@@ -28,3 +28,4 @@ use App\Enums\RolesEnum;
     </div>
 </div> 
 
+ 

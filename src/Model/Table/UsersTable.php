@@ -107,15 +107,16 @@ class UsersTable extends Table
                 }
             ]);
 
-        $validator
+        /*$validator
             ->scalar('image')
             ->maxLength('image', 255)
             ->requirePresence('image', 'create')
-            ->allowEmptyFile('image', false);
+            ->allowEmptyFile('image', false);*/
 
          $validator
             ->integer('id_centro')
             ->allowEmptyString('id_centro', 'create');
+        
         $validator
             ->integer('id_turno')
             ->allowEmptyString('id_turno', 'create');

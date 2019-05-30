@@ -149,20 +149,45 @@ function ($) {
 
 $(document).ready(function() {
     
-       $("#pass").passwordValidation({"confirmField": "#pass_confirmation"}, function(element, valid, match, failedCases) {
+   $("#pass").passwordValidation({"confirmField": "#pass_confirmation"}, function(element, valid, match, failedCases) {
 
-            $("#errors").html("<pre>" + failedCases.join("\n") + "</pre>");
-              
-                 if(valid) $(element).css("border","2px solid green");
-                 if(!valid) $(element).css("border","2px solid red");
-                if(valid && match) $("#pass_confirmation").css("border","2px solid green");
-                if(!valid || !match) $("#pass_confirmation").css("border","2px solid red");
-        });
+        $("#errors").html("<pre>" + failedCases.join("\n") + "</pre>");
+          
+             if(valid) $(element).css("border","2px solid green");
+             if(!valid) $(element).css("border","2px solid red");
+            if(valid && match) $("#pass_confirmation").css("border","2px solid green");
+            if(!valid || !match) $("#pass_confirmation").css("border","2px solid red");
+    });
+    
+    var maxField = 10; //Input fields increment limitation
+    var addButton = $('.add_button'); //Add button selector
+    var wrapper = $('.field_wrapper'); //Input field wrapper
+    var fieldHTML = '<div class="col-sm-10"><input type="text" name="field_name[]" value="" class="form-control"/><a href="javascript:void(0);" class="remove_button"><i class="dripicons-cross"></i></a></div>'; //New input field html 
+    var x = 1; //Initial field counter is 1
+    
+    //Once add button is clicked
+    $(addButton).click(function(e){
+        //Check maximum number of input fields
+        e.preventDefault();
+        if(x < maxField){ 
+            x++; //Increment field counter
+            $(wrapper).append(fieldHTML); //Add field html
+        }
+    });
+    
+    //Once remove button is clicked
+    $(wrapper).on('click', '.remove_button', function(e){
+        e.preventDefault();
+        $(this).parent('div').remove(); //Remove field html
+        x--; //Decrement field counter
     });
 
 
 
- 
+});
+
+
+
 
 
 

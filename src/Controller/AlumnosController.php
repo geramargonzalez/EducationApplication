@@ -108,28 +108,12 @@ class AlumnosController extends AppController
             if($ok){
                 if ($this->Alumnos->save($alumno)) {
                     $ok = false;   
-                      
-                    $datos  =  array(
-                        'id_alumno' => $alumno->id,
-                        'id_user' => $user['id'],
-                        "faltas" =>  0,
-                        'cant_horas' => 0
-                      );
-                    
-                $faltaAlumnos = $this->FaltasAlumnos->patchEntity($faltaAlumnos,$datos);
-                
-                if ($this->FaltasAlumnos->save($faltaAlumnos)) {
-                    
-                    $this->Flash->success(__('The alumno has been saved.'));
+                    $this->Flash->success(__('El alumno ' . $alumno->name . " " . $alumno->surname . " pudo ser guardado."));
                     return $this->redirect(['action' => 'index']);
-                 
+               
                 } else {
                     
-                    $this->Flash->error(__('Los alumnos no pudieron ser guardados. Porfavor, intenta de nuevo.'));
-                  }
-                } else {
-                    
-                    $this->Flash->error(__('Los alumnos no pudieron ser guardados. Porfavor, intenta de nuevo.'));
+                    $this->Flash->error(__('El alumno. Porfavor, intenta de nuevo.'));
                   }
                   
             }  
@@ -228,7 +212,7 @@ class AlumnosController extends AppController
                      ->andWhere([
                     'Alumnos.id NOT IN' => $subquery
                 ]);
-
+                     
         $alumnos = $query->toList();
         $this->set(compact('alumnos','grupo'));
     }

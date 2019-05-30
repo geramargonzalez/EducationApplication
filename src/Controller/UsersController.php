@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use App\Enum\RolesEnum;
+use App\Enums\RolesEnum;
 use Cake\I18n\Time;
 use Cake\Mailer\Email;
 use Cake\Auth\DefaultPasswordHasher;
@@ -25,9 +25,7 @@ class UsersController extends AppController
         $this->loadModel('Taller');
         $this->loadModel('UsersCentro');
         $this->loadModel('Centro');
-        //$this->loadModel('UsersTurno');
         $this->loadComponent('FileUpload');
-
         $this->Auth->allow('forgotMyPassword');
     }
     /**
@@ -108,17 +106,40 @@ class UsersController extends AppController
             if ($this->Users->save($user)) {
 
               $usersCentro = $this->UsersCentro->newEntity();
+             
+
               $datos1  =  array(
                 'id_centro' => $data['centros'],
                 "id_user" =>  $user->id,
                 'id_turno' => $data['turnos']
               );
               $userCentro = $this->UsersCentro->patchEntity($usersCentro,$datos1);
+
+              $usersCentro2 = $this->UsersCentro->newEntity();
+             
               if ($this->UsersCentro->save($userCentro)) {  
-                  return $this->redirect(['controller'=>'Taller','action' => 'addProfeToTaller',$user->id]);  
-              }
+
+                if($user->role_id == RolesEnum::DIRECCION){
+                  
+                  $datos2  =  array(
+                    'id_centro' => $data['centros'],
+                    "id_user" =>  $user->id,
+                    'id_turno' => $data['turnos'] == 1 ? 2 : 1
+                  );
+               
+                 $userCentro2 = $this->UsersCentro->patchEntity($usersCentro2,$datos2);
+               
+                 if ($this->UsersCentro->save($userCentro2)) { 
+                     return $this->redirect(['controller'=>'Taller','action' => 'addProfeToTaller',$user->id]);
+                  } 
+                
+                }
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            
+             $this->Flash->error(__('The user could not be saved. Please, try again.'));
+
+            }
+              
         }
         $roles = $this->Users->Roles->find('list');
         $turnos = $this->Users->Turno->find('list', ['keyField' => 'id',
@@ -165,6 +186,7 @@ class UsersController extends AppController
     public function edit($id = null)
     {
         $user = $this->Users->get($id);
+        //  $user_session = $this->Auth->user('');
         $img = $user->image;
         if ($this->request->is(['patch', 'post', 'put'])) {
 
@@ -173,13 +195,11 @@ class UsersController extends AppController
             if (!empty($data['image'])) {
                       
                     $result = $this->FileUpload->fileUpload($data['image'], 'users');
-                   $user->image = $result['status'] == 200 ? USER_IMG_PATH . DS . $result['file_name'] : 'avatar-1.jpg';
+                    $user->image = $result['status'] == 200 ? USER_IMG_PATH . DS . $result['file_name'] : 'avatar-1.jpg';
+
                   } else {
                       $user->image = $img;
-                  }
-
-                 // debug($this->request->getData());
-                 // exit;
+                  } 
 
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));

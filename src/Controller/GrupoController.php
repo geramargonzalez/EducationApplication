@@ -92,8 +92,6 @@ class GrupoController extends AppController
                         ->andWhere([
                       'Grupo.id_turno IN' => $subquery2]);
 
-       
-
         $this->set(compact('alumnos','cantidad','grupos','grupo'));
     }  
     /**

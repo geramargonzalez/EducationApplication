@@ -34,6 +34,8 @@ class ProcesoAlumnosController extends AppController
         $this->loadModel('TipoEvaluacion');
         $this->loadModel('RendimientoAlumno');
         $this->loadModel('Taller');
+        $this->loadModel('GrupoAlumnos');
+         $this->loadModel('Grupo');
         $this->loadModel('Users');
     }
     /**
@@ -44,13 +46,13 @@ class ProcesoAlumnosController extends AppController
     public function index($id = null)
     {
           
-         $id_user = $this->Auth->user('id');
-         $qry = $this->ProcesoAlumnos
-            ->find('all')
-            ->where([
-                'ProcesoAlumnos.id_alumno' => $id,
-                'ProcesoAlumnos.id_user' => $id_user,  
-            ]);
+        $id_user = $this->Auth->user('id');
+        $qry = $this->ProcesoAlumnos
+          ->find('all')
+          ->where([
+              'ProcesoAlumnos.id_alumno' => $id,
+              'ProcesoAlumnos.id_user' => $id_user,  
+        ]);
         $avg_rendimiento = $this->procesoAvgRendimiento($id,$id_user);
         $avg_expresionOral = $this->procesoAvgExpresionOral($id,$id_user);
         $avg_conducta = $this->procesoAvgConducta($id,$id_user);
@@ -84,6 +86,11 @@ class ProcesoAlumnosController extends AppController
         $procesoAlumno = $this->ProcesoAlumnos->newEntity();
         $tipo_rendimiento = "No hubo evaluacion";
         $contador = 0;
+        $talleresGrupos = $this->GrupoAlumnos->find('all')->where(['id_alumno' => $id]);
+        $talleresGrupos = $talleresGrupos->first();
+        $grupo = $this->Grupo->get($talleresGrupos->id_grupo);
+        $controllerName = $this->request->getParam('controller');
+        $controllerAction = $this->request->getParam('action');
         
         if ($this->request->is('post')) {
             
@@ -124,9 +131,9 @@ class ProcesoAlumnosController extends AppController
             if($this->RendimientoAlumno->save($rendimientoAlumno)){
                
                if ($this->ProcesoAlumnos->save($procesoAlumno)) {
-                 
+                  
                   $this->Flash->success(__('El proceso del alumno se ha ingresado correctamente.'));
-                  return $this->redirect(['controller' => 'ProcesoAlumnos','action' => 'index', $id]);
+                     return $this->redirect(['controller' => 'ProcesoAlumnos','action' => 'index', $id]);        
                
                }else{
                 $this->Flash->error(__('El proceso del alumno no pudo salvarse. Porfavor, intente de nuevo.'));
@@ -240,7 +247,6 @@ class ProcesoAlumnosController extends AppController
       $query2 = $this->ProcesoAlumnos->findById_alumno($id_alumno);
       $query3 = $this->ProcesoAlumnos->findById_alumno($id_alumno);
 
-
       $queryTortas = $this->RendimientoAlumno->findById_alumno($id_alumno);
 
       $rendi= $query->select(['rendimiento' => $query->func()->avg('rendimiento'), 'Mes' =>'MONTH(created)'])
@@ -283,13 +289,15 @@ class ProcesoAlumnosController extends AppController
        
     }
 
-
     public function statsAlumnosDesabilitadosHabilitados(){
       // Se van a mostar los alumnos que desabilitaron y los meses donde dejaron.
     }
 
      public function statsAlumnosMateria(){
       
+
+
+
     }
 
     /**

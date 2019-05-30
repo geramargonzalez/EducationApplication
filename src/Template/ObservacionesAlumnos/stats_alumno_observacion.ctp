@@ -1,37 +1,21 @@
-<?php
- 
-?>
 
+ 
 <?php echo $this->element('menu_proceso'); ?>    
 
-<h3><?= __("Observaciones: " . $alumno->name . " " . $alumno->surname) ?></h3>
- <div class="row">
-    <div class="col-lg-6">
-        <div class="card m-b-6">
-            <div class="card-block">
 
-                <h4 class="mt-0 header-title">Columnas de observaciones</h4>
-                <p class="text-muted m-b-30 font-14">Se muestras la cantidad de observaciones que tuvo el estudiante <?= __( $alumno->name . " " . $alumno->surname) ?>.</p>
-                    
-                <div id="grafica"></div>
-              
-            </div>
-        </div>
-    </div> 
-     <div class="col-lg-6">
-        <div class="card m-b-12">
-            <div class="card-block">
-
-                <h4 class="mt-0 header-title">Diagrama de tortas de observaciones</h4>
-                <p class="text-muted m-b-30 font-14">Se muestras la cantidad de observaciones que tuvo el estudiante <?= __( $alumno->name . " " . $alumno->surname) ?>.</p>
-                    
-                <div id="grafica2"></div>
-              
-            </div>
-        </div>
-    </div> 
-
+<div class="row">
+  <div class="col-md-12 text-center">
+  <h3><?= __("Observaciones: " . $alumno->name . " " . $alumno->surname) ?></h3>
+   <p class="text-muted m-b-30 font-14">Se muestras la cantidad de observaciones que tuvo el estudiante <?= __( $alumno->name . " " . $alumno->surname) ?>.</p>
   </div>
+  <div class="col-md-6">
+    <div id="grafica"class="chart">      </div>
+  </div>
+  <div class="col-md-6">
+    <div id="grafica2"  class="chart"></div>
+  </div>
+</div>
+
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type = "text/javascript">
@@ -73,9 +57,7 @@
                   title: 'Cantidad',
                   minValue: 0,
                   maxValue: 100
-               },
-               'width':600,
-               'height':600
+               }
             };
 
             // Instantiate and draw the chart.
@@ -105,9 +87,7 @@
                   title: 'Cantidad',
                   minValue: 0,
                   maxValue: 100
-               },
-               'width':600,
-               'height':600
+               }
             };
 
             // Instantiate and draw the chart.

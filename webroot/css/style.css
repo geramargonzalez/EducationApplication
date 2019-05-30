@@ -2502,4 +2502,31 @@ ul.timeline > li:before {
 }
 
 
+.chart{
+  width: 100%; 
+  min-height: 450px;
+}
+
+.falta_grupos{
+  padding-top: 150px;
+}
+
+@media (min-width: 620px) {
+  table.evidencia {
+    table-layout: fixed ;
+    width: 100% ;
+  }
+  td.rows {
+    width: 25% ;
+  }
+}
+
+
+ul.form_ul_derivaciones li{
+ list-style:none;
+
+    padding:3;
+    margin:0;
+}
+
 

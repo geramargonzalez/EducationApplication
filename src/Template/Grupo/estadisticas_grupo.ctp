@@ -1,11 +1,11 @@
- <div class="page-content-wrapper ">
+<div class="page-content-wrapper ">
         <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card m-b-20">
                                 <div class="card-block">
                                     <h3 class="mt-0 header-title">Comprometidos</h3>
-                                    <p class="text-muted m-b-30 font-14">Estudiantes que tienen grandes psoibilidades de abandonar o repetir el año</code>.
+                                    <p class="text-muted m-b-30 font-14">Estudiantes que tienen grandes psoibilidades de abandonar o repetir el a帽o</code>.
                                     </p>
 
                                     <table class="table">
@@ -20,7 +20,7 @@
                                                foreach ($alumnoPromedio as $alumno): 
                                                 ?>
 
-                                                 <?php if($alumno->prom_general < 5 && $alumno->prom_general > 0): ?>
+                                                 <?php if($alumno->prom_general <= 4.9): ?>
                                         <tr>
                                             <td class="bg-danger"><strong><?= h($alumno->name ." " .$alumno->surname) ?></strong></td>
                                             <td class="bg-danger"><strong><?= $this->Number->format($alumno->prom_general) ?></strong></td>
@@ -45,7 +45,7 @@
                                 <div class="card-block">
 
                                     <h4 class="mt-0 header-title">Riesgo</h4>
-                                    <p class="text-muted m-b-30 font-14">Estudiantes que tienen nota de aprobación pero que corren riesgo de estar comprometidos
+                                    <p class="text-muted m-b-30 font-14">Estudiantes que tienen nota de aprobaci贸n pero que corren riesgo de estar comprometidos
                                     </p>
 
                                     <table class="table">
@@ -60,7 +60,7 @@
                                                foreach ($alumnoPromedio as $alumno): 
                                                 ?>
 
-                                                 <?php if($alumno->prom_general > 4 && $alumno->prom_general < 8): ?>
+                                                 <?php if($alumno->prom_general >= 5 && $alumno->prom_general < 7.1): ?>
                                         <tr>
                                             <td class="bg-warning"><strong><?= h($alumno->name ." " .$alumno->surname) ?></strong></td>
                                             <td class="bg-warning"><strong><?= $this->Number->format($alumno->prom_general) ?></strong></td>
@@ -100,7 +100,7 @@
                                                foreach ($alumnoPromedio as $alumno): 
                                                 ?>
 
-                                                 <?php if($alumno->prom_general > 7 && $alumno->prom_general < 13): ?>
+                                                 <?php if($alumno->prom_general >= 7.1): ?>
                                         <tr>
                                             <td class="bg-primary"><strong><?= h($alumno->name ." " .$alumno->surname) ?></strong></td>
                                             <td class="bg-primary"><strong><?= $this->Number->format($alumno->prom_general) ?></strong></td>

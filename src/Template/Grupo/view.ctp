@@ -20,21 +20,23 @@ use App\Enums\RolesEnum;
                          
                                   <table id="datatable" class="table table-bordered">
                             <thead>
-                             <tr>
-                                <th scope="col"><?= __('Nombre') ?></th>
-                                <th scope="col"><?= __('Apellido') ?></th>
-                                <th scope="col"><?= __('Edad') ?></th>
+                             <tr> 
+                                <th data-priority="1"><?= $this->Paginator->sort('Avatar') ?></th>
+                                <th scope="col"><?= __('Nombre completo') ?></th>
                                 <th scope="col" class="actions"><?= __('Actions') ?></th>
                             </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($alumnos as $alumno): ?>
                                 <tr>
-                                    <td><?= h($alumno->name) ?></td>
-                                    <td><?= h($alumno->surname) ?></td>
-                                    <td><?= h($alumno->age) ?></td>
+                                    <td><?= $alumno->image == "Null" ? $this->Html->image('../images/users/avatar-1.jpg', ['height' => 40,'class' => 'rounded-circle']) : $this->Html->image($alumno->image, ['height' => 40,'class' => 'rounded-circle'])
+                                             ?></td>
+                
+                                    <td><?= h($alumno->name . " " . $alumno->surname) ?></td>
+                                   
                                     <td class="actions">
-                                        <?= $this->Html->link(__('Proceso'), ['controller' => 'Alumnos', 'action' => 'view', $alumno->id],['class'=>'btn btn-info btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
+                                        <?= $this->Html->link(__('Calificar'), ['controller' => 'ProcesoAlumnos', 'action' => 'add', $alumno->id],['class'=>'btn btn-info btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
+                                        <?= $this->Html->link(__('Observacion'), ['controller' => 'ObservacionesAlumnos', 'action' => 'add', $alumno->id],['class'=>'btn btn-info btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
                                         <?= $this->Html->link(__('Quitar'),['controller'=>'Alumnos','action' => 'deleteByAlumno',$alumno->id, $grupo->id],['class'=>'btn btn-warning btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
                                     </td>
                                 </tr>
@@ -42,9 +44,10 @@ use App\Enums\RolesEnum;
                             </tbody>
                             <tfoot>
                                 <tr>
+                                     <td></td>
                                     <td>Cantidad de alumnos</td>
-                                    <td scope="col"></td>
-                                    <td scope="col"></td>
+                                
+                                   
                                     <td scope="col"><?= $this->Number->format($cantidad)  ?></td>
                                 </tr>
                             </tfoot>

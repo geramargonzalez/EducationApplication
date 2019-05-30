@@ -19,7 +19,7 @@
                                   <table id="datatable" class="table table-bordered">
                                     <thead>
                                     <tr>
-                                        <th><?= $this->Paginator->sort('name') ?></th>
+                                        <th><?= $this->Paginator->sort('Nombre') ?></th>
                                         <th><?= $this->Paginator->sort('Turno') ?></th>
                                         <th><?= $this->Paginator->sort('Centro') ?></th>
                                         <th><?= __('Acciones') ?></th>

@@ -70,31 +70,40 @@ class AppController extends Controller
             ]
         ]);
 
-       // $this->loadHelper('GoogleCharts.GoogleCharts');
     }
       public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
         //request->getParam()
        // $params = $this->request->getParam('controller');
-        $user_session = $this->Auth->user();
-        /*if (!$userSession && ($params['controller'] == 'Users' && $params['action'] == 'add')) {
-            $this->Auth->allow(['login']);
-       }*/
+        $controller = $this->request->getParam('controller'); 
+       // $action = $this->request->getParam('action'); 
 
+        if($controller != "Pages"){
+             $user_session = $this->Auth->user();
+        } else {
+            $user_session = "No logeado";
+        }
         $this->set(compact('user_session'));
     }
 
        public function beforeRender(Event $event)
     {
       
-             $this->viewBuilder()->layout('template_defualt');
-               //this->viewBuilder()->setlayout('template_defualt');  
+       $controller = $this->request->getParam('controller'); 
+      
+       if($controller != "Pages"){
+
+            $this->viewBuilder()->layout('template_defualt');
+        } 
+             
+        // $this->viewBuilder()->layout('template_defualt');
+        //this->viewBuilder()->setlayout('template_defualt');  
         
     }
 
     public function isAuthorized($user)
     {
-      return $this->Auth->user() ? true : false;
+       return $this->Auth->user() ? true : false;
     }
 }

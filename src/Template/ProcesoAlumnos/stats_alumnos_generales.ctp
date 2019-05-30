@@ -2,64 +2,36 @@
  
 ?>
 
-<?php echo $this->element('menu_proceso'); ?>    
+<?php echo $this->element('menu_proceso'); ?> 
 
-<h3><?= __("Rendimiento general: " . $alumno->name . " " . $alumno->surname) ?></h3>
+
+<?php  //$this->getRequestTarget(); ?>   
+
+
   <div class="row">
-    <div class="col-lg-6">
-        <div class="card m-b-20">
-            <div class="card-block">
+  <div class="col-md-12 text-center">
+   <h1 ><?= __("Rendimiento general: " . $alumno->name . " " . $alumno->surname) ?></h1>
+    <p class="text-muted m-b-30 font-14">Se muestran los histogramas generales de todos los docentes que tienen al estudiante <?= __( $alumno->name . " " . $alumno->surname) ?>.</p>
 
-                <h4 class="mt-0 header-title">Histograma de promedios Rendimiento </h4>
-                <p class="text-muted m-b-30 font-14">Se muestran los histogramas generales de todos los docentes que tienen al estudiante <?= __( $alumno->name . " " . $alumno->surname) ?>.</p>
-
-
-                <div id="grafica" height="300"></div>
-
-            </div>
-        </div>
-    </div> 
-     <div class="col-lg-6">
-        <div class="card m-b-20">
-            <div class="card-block">
-
-                <h4 class="mt-0 header-title">Histograma de promedios conducta </h4>
-                <p class="text-muted m-b-30 font-14">Se muestran los histogramas generales de todos los docentes que tienen al estudiante <?= __( $alumno->name . " " . $alumno->surname) ?>.</p>
-
-        
-
-                <div id="grafica2" height="300"></div>
-
-            </div>
-        </div>
-    </div>
   </div>
-    <div class="row">
-    <div class="col-lg-6">
-        <div class="card m-b-20">
-            <div class="card-block">
-
-                 <h4 class="mt-0 header-title">Histograma de promedios expresion oral </h4>
-                <p class="text-muted m-b-30 font-14">Se muestran los diagramas generales de todos los docentes que tienen al estudiante <?= __( $alumno->name . " " . $alumno->surname) ?>.</p>
-
-                <div id="grafica3" height="300"></div>
-
-            </div>
-        </div>
-    </div> 
-     <div class="col-lg-6">
-        <div class="card m-b-20">
-            <div class="card-block">
-
-                <h4 class="mt-0 header-title">Diagrama de tortas</h4>
-                <p class="text-muted m-b-30 font-14">La distribucion de los diferentes tipos de evaluacion dada por los profesores.</p>
-                <div id="grafica4" height="300"></div>
-
-            </div>
-        </div>
-    </div>
-    
+  <div class="col-md-6">
+    <div id="grafica"class="chart"></div>
   </div>
+  <div class="col-md-6">
+    <div id="grafica2"  class="chart"></div>
+  </div>
+</div>
+
+<div class="row">
+
+  <div class="col-md-6">
+    <div id="grafica3"class="chart"></div>
+  </div>
+  <div class="col-md-6">
+    <div id="grafica4"  class="chart"></div>
+  </div>
+</div>
+
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type = "text/javascript">
@@ -105,9 +77,8 @@
                   title: 'Promedio',
                   minValue: 0,
                   maxValue: 12
-               },   
-               'width':500,
-               'height':500   
+               }  
+               
             };
         // Inicia la gráfica
         var chart = new google.visualization.LineChart(document.getElementById('grafica'));
@@ -146,9 +117,7 @@
                   title: 'Promedio',
                   minValue: 0,
                   maxValue: 12
-               },   
-               'width':500,
-               'height':500   
+               }  
             };
         // Inicia la gráfica
         var chart = new google.visualization.LineChart(document.getElementById('grafica2'));
@@ -184,9 +153,7 @@
                   title: 'Promedio',
                   minValue: 0,
                   maxValue: 12
-               },   
-               'width':500,
-               'height':500   
+               }   
             };
         // Inicia la gráfica
         var chart = new google.visualization.LineChart(document.getElementById('grafica3'));
@@ -211,9 +178,7 @@
                
             // Set chart options
             var options = {
-               'title':'Los tipos de evaluacion',
-               'width':500,
-               'height':500
+               'title':'Los tipos de evaluacion'
             };
 
             // Instantiate and draw the chart.
@@ -221,13 +186,6 @@
             chart.draw(data, options);
          }
 
-          $(window).resize(function(){
-
-          drawChart();
-          drawChartTipos();
-          // drawChart2();
-      });
-    
  </script>
 
 
