@@ -13,7 +13,7 @@ class InformePedagogicoController extends AppController
 {
 
 
-         public function initialize()
+        public function initialize()
     {
         parent::initialize();
         $this->loadModel('Turno');
@@ -24,9 +24,10 @@ class InformePedagogicoController extends AppController
         $this->loadModel('EvidenciasResultado');
         $this->loadModel('Derivaciones');
         $this->loadModel('InformeAlumno');
-        $this->loadModel('EvidenciaResultadoAlumno'); //DerivacionAlumno
+        $this->loadModel('EvidenciaResultadoAlumno'); 
         $this->loadModel('DerivacionesAlumnos');
         $this->loadModel('ObservacionesInforme');
+        $this->loadComponent('RequestHandler');
        
     }
     /**
@@ -79,6 +80,58 @@ class InformePedagogicoController extends AppController
            
         }
 
+         public function pdfInformeAlumno($id_informe = null,$id_alumno = null){
+
+            // Buscar el ultimo informe de ese alumno
+            $alumno = $this->Alumnos->get($id_alumno);
+            $informePedagogico = $this->InformePedagogico->get($id_informe);
+            
+            
+
+            $evidencias_query = $this->EvidenciaResultadoAlumno->find()->where(['EvidenciaResultadoAlumno.id_alumno' => $alumno->id])
+                                        ->join([
+                                            'table' => 'evidencias_resultado',
+                                            'alias' => 'ev',
+                                            'type' => 'right',
+                                            "conditions" => "ev.id = EvidenciaResultadoAlumno.id_evidencia_resultado"
+                                         ])->join([
+                                            'table' => 'evidencias',
+                                            'alias' => 'evi',
+                                            'type' => 'left',
+                                            "conditions" => "evi.id = ev.id_evidencia"
+                                         ])
+                                          ->select([
+                                                 'itemDescripcion' => "ev.descripcion",
+                                                 'status' => "EvidenciaResultadoAlumno.status",
+                                                 'evidencia' => "evi.descripcion"
+                                            ]);   
+              $evidencias = $evidencias_query->toList();
+              $derivaciones_query = $this->DerivacionesAlumnos->find()->where(['DerivacionesAlumnos.id_alumno' => $alumno->id])
+                                        ->join([
+                                            'table' => 'derivaciones',
+                                            'alias' => 'de',
+                                            'type' => 'right',
+                                            "conditions" => "de.id = DerivacionesAlumnos.id_derivacion"
+                                         ])
+                                          ->select([
+                                                 'derivacion' => "de.descripcion"
+                                            ]);   
+               $derivaciones = $derivaciones_query->toList();
+               $obs_query = $this->ObservacionesInforme->find('all')->where(['ObservacionesInforme.id_alumno ='=>$alumno->id]);
+               $observaciones = $obs_query->toList();
+
+               $this->viewBuilder()->options([
+                'pdfConfig' => [
+                    'orientation' => 'portrait',
+                    'filename' => 'InformePedagogico_' . $alumno->name ."_". $alumno->surname . '.pdf'
+                ]
+            ]);
+
+
+               $this->set(compact('evidencias','derivaciones','observaciones','alumno','informePedagogico'));
+           
+        }
+
           public function escojerInforme($id_alumno = null)
         {
             $informes = $this->InformePedagogico->find('list',['keyField' => 'id','valueField' => 'titulo']);
@@ -86,8 +139,17 @@ class InformePedagogicoController extends AppController
                  $data = $this->request->getData();
                  return $this->redirect(['action' => 'informeAlumno', $data['informes'],$id_alumno]);
                 }   
-            $this->set(compact('informes'));
-           
+            $this->set(compact('informes'));   
+        }
+
+            public function escojerInformeEdiccion($id_alumno = null)
+        {
+            $informes = $this->InformePedagogico->find('list',['keyField' => 'id','valueField' => 'titulo']);
+            if ($this->request->is('post')) {
+                 $data = $this->request->getData();
+                 return $this->redirect(['action' => 'editarInformeAlumno', $data['informes'],$id_alumno]);
+                }   
+            $this->set(compact('informes'));   
         }
        
 
@@ -102,32 +164,27 @@ class InformePedagogicoController extends AppController
                 $evidenciasResultado[] = $this->EvidenciasResultado->find('all',['contain'=>['Evidencias']])->where(['EvidenciasResultado.id_evidencia ='=> $evidencia->id]);
             }
             $derivaciones = $this->Derivaciones->find('all');
+            
 
- 
             if ($this->request->is('post')) {
-
-                 $tieneInforme = $this->InformeAlumno->find("all")->where(['InformeAlumno.id_alumno =' => $alumno->id]);
-                 $tieneInforme->enableHydration(false);
-                 $tieneInforme = $tieneInforme->toList(); 
-
-               
-                  $data = $this->request->getData();
+                
+                $tieneInforme = $this->InformeAlumno->find("all")->where(['InformeAlumno.id_alumno =' => $alumno->id]);
+                $tieneInforme->enableHydration(false);
+                $tieneInforme = $tieneInforme->toList(); 
+                
+                $data = $this->request->getData();
 
                 if(count($tieneInforme) < 1) {
-               
-               
+
                     $informeAlumno = $this->InformeAlumno->newEntity();
                     $contador = 0;
-
                         $datos  =  array(
                             'id_informe' => $informePedagogico->id,
                             "id_alumno" => $alumno->id
                         );
-
                         $informeAlumno = $this->InformeAlumno->patchEntity($informeAlumno,$datos);
 
                     if ($this->InformeAlumno->save($informeAlumno)) {
-       
 
                         foreach ($data as $key => $value) {
 
@@ -168,10 +225,10 @@ class InformePedagogicoController extends AppController
 
                                       } // end evidencia final no
                                        
-                                } // evid general  
+                                } // end general  
 
                                 $rest = substr($key, 0, 10);
-                                   
+
                                 if("derivacio_" == $rest){
                                       
                                       $deri_id = substr($key, -1, 1);
@@ -191,9 +248,6 @@ class InformePedagogicoController extends AppController
                                 } // end derivaciones
 
                                 $rest = substr($key, 0, 10);
-
-                               
-                                 
                                 if("observatf_" == $rest){
                                        $observacionesInformef = $this->ObservacionesInforme->newEntity();
                                         $datos_obs  =  array(
@@ -228,32 +282,210 @@ class InformePedagogicoController extends AppController
                             } // end foreach
 
                         $this->Flash->success(__('Se creo un informe pedagogico para ' . " " . $alumno->name ." " . $alumno->surname));
-                      return $this->redirect(['action' => 'verInformeAlumno',$informePedagogico->id,$alumno->id]);
-
+                        return $this->redirect(['action' => 'verInformeAlumno', $informePedagogico->id,$alumno->id]);
 
                        } // end save informe alumno
                     
-                        
-
                     } else {
                         
                         $this->Flash->error(__('El usuario ya tiene informe pedagogico.'));
                
                      }
-
-                  
                  }     
             
             $this->set(compact('informePedagogico','evidencias','evidenciasResultado','derivaciones'));
            
         }
 
+
+        public function editarInformeAlumno($id_informe = null, $id_alumno = null)
+        {
+            $informePedagogico = $this->InformePedagogico->get($id_informe);
+               $alumno = $this->Alumnos->get($id_alumno);
+            $evidencias_query = $this->EvidenciaResultadoAlumno->find()->where(['EvidenciaResultadoAlumno.id_alumno' => $alumno->id])
+                                        ->join([
+                                            'table' => 'evidencias_resultado',
+                                            'alias' => 'ev',
+                                            'type' => 'right',
+                                            "conditions" => "ev.id = EvidenciaResultadoAlumno.id_evidencia_resultado"
+                                         ])->join([
+                                            'table' => 'evidencias',
+                                            'alias' => 'evi',
+                                            'type' => 'left',
+                                            "conditions" => "evi.id = ev.id_evidencia"
+                                         ])
+                                          ->select([
+                                                 'itemDescripcion' => "ev.descripcion",
+                                                 'id_evidencia_resultado' => "ev.id",
+                                                 'status' => "EvidenciaResultadoAlumno.status",
+                                                 'evidencia' => "evi.descripcion"
+                                            ]);   
+              $evidencias = $evidencias_query->toList();
+              $derivaciones_query = $this->DerivacionesAlumnos->find()->where(['DerivacionesAlumnos.id_alumno' => $alumno->id])
+                                        ->join([
+                                            'table' => 'derivaciones',
+                                            'alias' => 'de',
+                                            'type' => 'left',
+                                            "conditions" => "de.id = DerivacionesAlumnos.id_derivacion"
+                                         ])
+                                          ->select([
+                                                 'derivacion' => "de.descripcion"
+                                            ]);   
+               $derivaciones = $derivaciones_query->toList();
+               $obs_query = $this->ObservacionesInforme->find('all')->where(['ObservacionesInforme.id_alumno ='=>$alumno->id]);
+               $observaciones = $obs_query->toList();
+               $derivaciones_totales = $this->Derivaciones->find('all');
+            
+
+            if ($this->request->is('post')) {
+                
+                    $data = $this->request->getData();
+                    $informeAlumno = $this->InformeAlumno->find('all')->where(['InformeAlumno.id_alumno =' => $alumno->id]);
+                    $informeAlumno = $informeAlumno->first();
+
+                        foreach ($data as $key => $value) {
+
+                            $rest = substr($key, 0, 10);
+
+                                if('evidencia_' == $rest){
+                                      
+                                      $evidencia_final = substr($key, 12, 13);
+                                      $id_evidencia = substr($key, 10, -3);
+                                       //$evidenciaResultadoAlumno = $this->EvidenciaResultadoAlumno->newEntity();
+                                         $evidenciaResultadoAlumno = $this->EvidenciaResultadoAlumno->find('all')->where(['EvidenciaResultadoAlumno.id_alumno =' =>$alumno->id]);
+                                          $evidenciaResultadoAlumno = $evidenciaResultadoAlumno->first();
+                                      
+                                        if($evidencia_final == '_si'){
+
+                                            if($value == 1){
+
+                                                $datosEvi  =  array(
+                                                    'id_evidencia_resultado' => $id_evidencia,
+                                                    "id_alumno" => $alumno->id,
+                                                    'status' => true
+                                                );
+                                            }
+
+                                        } // end evidencia final si
+
+                                       if($evidencia_final == '_no'){
+
+                                         if($value == 1){
+                                              
+                                            $datosEvi  =  array(
+                                                    'id_evidencia_resultado' => $id_evidencia,
+                                                    "id_alumno" => $alumno->id,
+                                                    'status' => false
+                                                );
+                                         }
+
+                                         $evidenciaResultadoAlumno = $this->EvidenciaResultadoAlumno->patchEntity($evidenciaResultadoAlumno,$datosEvi);
+                                         $this->EvidenciaResultadoAlumno->save($evidenciaResultadoAlumno);
+
+                                      } // end evidencia final no
+                                       
+                                } // end general  
+
+                                $rest = substr($key, 0, 10);
+
+                                if("derivacio_" == $rest){
+                                      
+                                      $deri_id = substr($key, -1, 1);
+                                       // $derivacionAlumno = $this->DerivacionesAlumnos->newEntity();
+
+                                         $derivacionAlumno = $this->DerivacionesAlumnos->find('all')->where(['DerivacionesAlumnos.id_alumno =' =>$alumno->id]);
+                                          $derivacionAlumnos = $derivacionAlumno->first();
+                                          
+                                          $derivacionAlumno->enableHydration(false);
+                                          $derivacionAlumno = $derivacionAlumno->toList(); 
+
+                                     /*if(count($derivacionAlumno)){
+
+                                     
+                                     }*/
+
+                                      if($value == 1){
+
+                                          $datosDeri  =  array(
+                                                     "id_derivacion" =>  $deri_id,
+                                                    "id_alumno" => $alumno->id
+                                                );
+
+                                           $derivacionAlumno  = $this->DerivacionesAlumnos->patchEntity($derivacionAlumno,$datosDeri);
+
+                                    $this->DerivacionesAlumnos->save($derivacionAlumno);
+                                  }
+                                } // end derivaciones
+
+                                $rest = substr($key, 0, 10);
+                                if("observatf_" == $rest){
+                                       //$observacionesInformef = $this->ObservacionesInforme->newEntity();
+                                       $observacionesInformef = $this->ObservacionesInforme->find('all')->where(['ObservacionesInforme.id_alumno =' => $alumno->id])->andWhere(['titulo =' => "primer semestre"]);
+                                          $observacionesInformef = $observacionesInformef->first();
+
+                                        $datos_obs  =  array(
+                                                     'id_informe' => $informePedagogico->id,
+                                                     "id_alumno" => $alumno->id,
+                                                     "titulo" => "primer semestre",
+                                                     "descripcion" => $value
+                                                );
+                                    $observacionesInformef  = $this->ObservacionesInforme->patchEntity($observacionesInformef,$datos_obs);
+
+                                     //debug($observacionesInformef);
+                                       $this->ObservacionesInforme->save($observacionesInformef);
+
+                                } // end obser s
+
+                                if("observats_" == $rest){
+                                      
+                                    $observacionesInformes = $this->ObservacionesInforme->find('all')->where(['ObservacionesInforme.id_alumno =' =>$alumno->id])->andWhere(['titulo =' => "segundo semestre"]);
+                                          $observacionesInformes = $observacionesInformes->first();
+
+                                    $datos_obs  =  array(
+                                             'id_informe' => $informePedagogico->id,
+                                             "id_alumno" => $alumno->id,
+                                             "titulo" => "segundo semestre",
+                                             "descripcion" => $value
+                                            );
+                                        $observacionesInformes  = $this->ObservacionesInforme->patchEntity($observacionesInformes,$datos_obs);
+
+                                      $this->ObservacionesInforme->save($observacionesInformes);
+
+                                } // end obser s
+                           
+                            }// end foreach
+                    
+
+                    $this->Flash->success(__('Se edito el informe para ' . " " . $alumno->name . " " . $alumno->surname));
+                    return $this->redirect(['action' => 'verInformeAlumno', $informePedagogico->id,$alumno->id]);
+
+                        
+                     // end save informe alumno
+                 }   
+
+
+            
+            //$this->set(compact('informePedagogico','evidencias','evidenciasResultado','derivaciones'));
+            $this->set(compact('evidencias','derivaciones','derivaciones_totales','observaciones','alumno','informePedagogico'));
+           
+        }
+
+
+
         public function verInformeAlumno( $id_informe = null,$id_alumno = null){
 
             // Buscar el ultimo informe de ese alumno
+                $alumno = $this->Alumnos->get($id_alumno);
+                $tieneInforme = $this->InformeAlumno->find("all")->where(['InformeAlumno.id_alumno =' => $alumno->id]);
+                $tieneInforme->enableHydration(false);
+                $tieneInforme = $tieneInforme->toList(); 
+            
 
+            if(count($tieneInforme) < 1) {
+        
+         
             $informePedagogico = $this->InformePedagogico->get($id_informe);
-            $alumno = $this->Alumnos->get($id_alumno);
+            
             $evidencias_query = $this->EvidenciaResultadoAlumno->find()->where(['EvidenciaResultadoAlumno.id_alumno' => $alumno->id])
                                         ->join([
                                             'table' => 'evidencias_resultado',
@@ -271,9 +503,7 @@ class InformePedagogicoController extends AppController
                                                  'status' => "EvidenciaResultadoAlumno.status",
                                                  'evidencia' => "evi.descripcion"
                                             ]);   
-
               $evidencias = $evidencias_query->toList();
-
               $derivaciones_query = $this->DerivacionesAlumnos->find()->where(['DerivacionesAlumnos.id_alumno' => $alumno->id])
                                         ->join([
                                             'table' => 'derivaciones',
@@ -284,35 +514,38 @@ class InformePedagogicoController extends AppController
                                           ->select([
                                                  'derivacion' => "de.descripcion"
                                             ]);   
-
-
-            
                $derivaciones = $derivaciones_query->toList();
-
                $obs_query = $this->ObservacionesInforme->find('all')->where(['ObservacionesInforme.id_alumno ='=>$alumno->id]);
-               
                $observaciones = $obs_query->toList();
+               
+               $this->set(compact('evidencias','derivaciones','observaciones','alumno','informePedagogico'));
 
-             $this->set(compact('evidencias','derivaciones','observaciones','alumno'));
+           } else {
 
-            
-
+              $this->Flash->error(__('No existen informes para este alumno.'));
+             return $this->redirect(['controller' => 'Alumnos','action' => 'view',$id_alumno]);
+           }
         }
 
-             public function escojerInformeView($id_alumno = null)
+            public function escojerInformeView($id_alumno = null)
         {
            
-             $query= $this->InformeAlumno->find()->select(['InformeAlumno.id_informe'])->where(['InformeAlumno.id_alumno ='=>$id_alumno]);
-
-
+            $query= $this->InformeAlumno->find()->select(['InformeAlumno.id_informe'])->where(['InformeAlumno.id_alumno ='=>$id_alumno]);
             $informes = $this->InformePedagogico->find('list',['keyField' => 'id','valueField' => 'titulo'])->where(['InformePedagogico.id IN'=>$query]);
+            $query->enableHydration(false);
+            $query = $query->toList(); 
             
-            if ($this->request->is('post')) {
+                if ($this->request->is('post')) {
                  $data = $this->request->getData();
                  return $this->redirect(['action' => 'verInformeAlumno', $data['informes'],$id_alumno]);
                 }   
-            $this->set(compact('informes'));
-           
+            
+            if(count($query) > 0){
+                $this->set(compact('informes')); 
+            } else {
+                  $this->Flash->success(__('Este alumno no tiene informes.'));
+                  return $this->redirect(['controller' => 'Alumnos','action' => 'view',$id_alumno]);
+            }
         }
 
     /**
@@ -327,13 +560,10 @@ class InformePedagogicoController extends AppController
         if ($this->request->is('post')) {
             
             $data = $this->request->getData();
-
-           // debug();
-           // exit;
             $informePedagogico = $this->InformePedagogico->patchEntity($informePedagogico,$data);
             $informePedagogico->id_centro = $data['centros'];
-             $informePedagogico->id_turno = $data['turnos'];
-             $informePedagogico->status = true;
+            $informePedagogico->id_turno = $data['turnos'];
+            $informePedagogico->status = true;
             
             if ($this->InformePedagogico->save($informePedagogico)) {
 
@@ -347,9 +577,6 @@ class InformePedagogicoController extends AppController
         $centros = $this->Centro->find('list', ['keyField' => 'id','valueField' => 'name']);
         $this->set(compact('informePedagogico','turnos','centros'));
     }
-
-
-
     /** 
      * Edit method
      *
@@ -369,6 +596,45 @@ class InformePedagogicoController extends AppController
             $this->Flash->error(__('El informe pedagogico no ha sido guardado.'));
         }
         $this->set(compact('informePedagogico'));
+    } 
+
+    public function eliminarInformeAlumno($id = null)
+    {
+       // $this->request->allowMethod(['post', 'delete']);
+        
+        $alumno = $this->Alumnos->get($id);
+        
+        $informeAlumno = $this->InformeAlumno->find('all')->where(['InformeAlumno.id_alumno =' => $alumno->id]);
+                    $informeAlumno = $informeAlumno->first();
+        
+        if ($this->InformeAlumno->delete($informeAlumno)) {
+
+             $evidenciaResultadoAlumnos = $this->EvidenciaResultadoAlumno->find('all')->where(['EvidenciaResultadoAlumno.id_alumno =' =>$alumno->id]);
+
+             foreach ($evidenciaResultadoAlumnos as $evidenciaResultadoAlumno) {
+                 $this->EvidenciaResultadoAlumno->delete($evidenciaResultadoAlumno);
+             }
+
+               $observacionesInformes = $this->ObservacionesInforme->find('all')->where(['ObservacionesInforme.id_alumno =' =>$alumno->id]);
+
+             foreach ($observacionesInformes as $observacionesInforme) {
+                 $this->ObservacionesInforme->delete($observacionesInforme);
+             }
+
+            $derivacionesAlumnos = $this->DerivacionesAlumnos->find('all')->where(['DerivacionesAlumnos.id_alumno =' =>$alumno->id]);
+
+             foreach ($derivacionesAlumnos as $derivacionesAlumno) {
+                 $this->DerivacionesAlumnos->delete($derivacionesAlumno);
+             }
+
+            $this->Flash->success(__('El informe del alumno ' . " " . $alumno->name . " " . $alumno->surname . " ha sido eliminado"));
+             return $this->redirect(['controller' => 'Alumnos','action' => 'view',$alumno->id]);
+    
+        } else {
+            $this->Flash->error(__('El informe no pudo guardarse.'));
+        }
+
+       
     }
 
     /**

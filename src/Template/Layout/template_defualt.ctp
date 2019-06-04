@@ -4,18 +4,15 @@
         <meta charset="utf-8" />
        
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-        <title>Crece - Aplicacion a seguir el proceso de tus alumnos</title>
+        <title>Memoria Escolar</title>
         <meta content="Admin Dashboard" name="description" />
-        <meta content="ThemeDesign" name="author" />
-        ]
+        <meta content="ThemeDesign" name="author"/>
         <link rel="shortcut icon" href="assets/images/favicon.ico">
-        <!--Morris Chart CSS -->
        
         <?= $this->Html->css('../plugins/summernote/summernote') ?>
         <?= $this->Html->css('../plugins/fullcalendar/css/fullcalendar.min') ?>
-        <?=$this->Html->css('../plugins/RWD-Table-Patterns/dist/css/rwd-table.min')?>
+        <?= $this->Html->css('../plugins/RWD-Table-Patterns/dist/css/rwd-table.min')?>
         <?= $this->Html->css('bootstrap.min') ?>
-
         <?= $this->Html->css('icons') ?>
         <?= $this->Html->css('style') ?>
 
@@ -130,8 +127,7 @@
 
    
     <script>
-     
-
+    
         $(window).resize(function(){
         
 
@@ -171,18 +167,9 @@
 
                 drawChartFaltas();
                 drawChartCantHoras();
-                //drawChartRendimiento();
-               // drawChartTipos();
-
+         
             <?php } ?>
-
-
-             
-            
           });
-
-            //console.log(window.location.pathname);
-
 
          $(document).ready(function(){
                 $('#observaciones').summernote({

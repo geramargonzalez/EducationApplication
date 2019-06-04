@@ -4,7 +4,7 @@
                         <div class="col-lg-12">
                             <div class="card m-b-20">
                                 <div class="card-block">
-                                    <h3 class="mt-0 header-title">Comprometidos</h3>
+                                    <h3 class="mt-0 header-title">En peligro de abandono</h3>
                                     <p class="text-muted m-b-30 font-14">Estudiantes que tienen grandes psoibilidades de abandonar o repetir el a帽o</code>.
                                     </p>
 
@@ -20,12 +20,12 @@
                                                foreach ($alumnoPromedio as $alumno): 
                                                 ?>
 
-                                                 <?php if($alumno->prom_general <= 4.9): ?>
-                                        <tr>
-                                            <td class="bg-danger"><strong><?= h($alumno->name ." " .$alumno->surname) ?></strong></td>
-                                            <td class="bg-danger"><strong><?= $this->Number->format($alumno->prom_general) ?></strong></td>
-                                           
-                                        </tr>
+                                              <?php if($alumno->prom_general <= 4.9): ?>
+                                                <tr>
+                                                    <td class="bg-danger"><strong><?= h($alumno->name ." " .$alumno->surname) ?></strong></td>
+                                                    <td class="bg-danger"><strong><?= $this->Number->format($alumno->prom_general) ?></strong></td>
+                                                   
+                                                </tr>
                                              <?php endif; ?>
                                              <?php endforeach; ?>
                                             <?php endforeach; ?>
@@ -44,7 +44,7 @@
                             <div class="card m-b-20">
                                 <div class="card-block">
 
-                                    <h4 class="mt-0 header-title">Riesgo</h4>
+                                    <h4 class="mt-0 header-title">Suficientes pero no estables</h4>
                                     <p class="text-muted m-b-30 font-14">Estudiantes que tienen nota de aprobaci贸n pero que corren riesgo de estar comprometidos
                                     </p>
 
@@ -84,7 +84,7 @@
                             <div class="card m-b-20">
                                 <div class="card-block">
 
-                                    <h4 class="mt-0 header-title">Estables</h4>
+                                    <h4 class="mt-0 header-title">Estables sin riesgo</h4>
                                     <p class="text-muted m-b-30 font-14">Estudiantes que vienen trabajando de forma satisfactoria.
                                     </p>
 
@@ -120,5 +120,4 @@
 
                     </div>
         </div>
-
 </div>

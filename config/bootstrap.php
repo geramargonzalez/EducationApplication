@@ -186,12 +186,8 @@ Type::build('timestamp')
     ->useImmutable();
 
 Configure::load('custom', 'default');
-
-//Plugin::load('GoogleCharts');
-
-//$this->addPlugin('GoogleCharts');
-
-//$this->addPlugin('BootstrapUI');
+$this->addPlugin('CakePdf', ['bootstrap' => true]);
+Configure::load('CakePdf', 'default');
 
 /*
  * Custom Inflector rules, can be set to correctly pluralize or singularize

@@ -2,12 +2,12 @@
 use App\Enums\RolesEnum;
 ?>
  
-  <div class="col-lg-12">
+  <div class="col-lg-12 ">
         <div class="card m-b-20">
-            <div class="card-block">
-                <h4 class="mt-0 header-title">Menu de proceso del estudiante</h4>
-                <p class="text-muted m-b-30 font-14">Administre todo lo que tenga que ver con el alumno</p>
-                <div class="">
+            <div class="card-block ">
+                <h1  align="center" >Seguimiento del proceso del estudiante <?= h($alumno->name . " " . $alumno->surname) ?></h1>
+                <p class="text-muted m-b-30 font-14" align="center">Administre todo lo que tenga que ver con el alumno</p>
+                <div class="" align="center">
                     <?php if($user_session['role_id'] == RolesEnum::PROFESOR || $user_session['role_id'] == RolesEnum::PROFESOR_ADMIN) { ?>
                         <div class="btn-group m-b-10">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Proceso</button>
@@ -46,6 +46,7 @@ use App\Enums\RolesEnum;
                         <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Informe Pedagogico</button>
                         <div class="dropdown-menu">
                            <?= $this->Html->link(__('Nuevo'), ['controller' => 'InformePedagogico', 'action' => 'escojerInforme', $alumno->id],['class' => 'dropdown-item']) ?>
+                          
                            <?= $this->Html->link(__('Ver'), ['controller' => 'InformePedagogico', 'action' => 'escojerInformeView', $alumno->id],['class' => 'dropdown-item']) ?>
                         </div>
                     </div>

@@ -48,7 +48,6 @@ class AppController extends Controller
             'enableBeforeRedirect' => false,
         ]);
         $this->loadComponent('Flash');
-
         $this->loadComponent('Auth', [
             'authorize' => Configure::read('Authorize.default'),
             'loginRedirect' => [
@@ -91,12 +90,9 @@ class AppController extends Controller
     {
       
        $controller = $this->request->getParam('controller'); 
-      
        if($controller != "Pages"){
-
             $this->viewBuilder()->layout('template_defualt');
-        } 
-             
+        }    
         // $this->viewBuilder()->layout('template_defualt');
         //this->viewBuilder()->setlayout('template_defualt');  
         

@@ -3,38 +3,26 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\InformePedagogico $informePedagogico
  */
+ //$this->layout ='Pdf/default';
+ $this->layout('pdf_template');  
 ?>
 <div class="page-content-wrapper ">
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="card m-b-20">
-                    <div class="row">
-                        <div class="col-12">
-                            
-                        </div>
-                        <div class="col-12" align='right'>
-                            <?= $this->HTML->link('PDF', ['action' => 'pdfInformeAlumno',$informePedagogico->id, $alumno->id, '_ext' => 'pdf'],['class'=>'btn btn-success']);?>
-                            <?= $this->HTML->link('Editar', ['action' => 'editarInformeAlumno',$informePedagogico->id, $alumno->id],['class'=>'btn btn-primary']);?> 
-
-                            <?= $this->HTML->link('Eliminar', ['action' => 'eliminarInformeAlumno',$informePedagogico->id, $alumno->id],['class'=>'btn btn-danger']);?>    
-                        </div>
-                    </div>
                     <div class="card-block">
-                        <h3 align="center"><?= __('Informe Pedagogico de : ' . $alumno->name . " " . $alumno->surname) ?></h3>
+                        <h3 align="center"><?= __('Informe Pedagogico de: ' . $alumno->name . " " . $alumno->surname) ?></h3>
                         <p class="text-muted m-b-30 font-14"><?= __('') ?></p>
                         <div class="row">
                              <div class="col-6">
                              </div>
-                              <div class="col-6">
-                                <table class="table table-striped table-bordered evidencia">          
-                                 <tr>
-                                    <th data-priority="1" class="rows"><?= h('EVIDENCIA ') ?></th>
-                                    <th data-priority="1" class="rows"><?= h(' SI ') ?></th>
-                                    <th data-priority="1" class="rows"><?= h(' NO') ?></th>
-                                </tr>
-                             </table>
-
+                              <div class="col-6 row">
+                               
+                                    <div class="col-4"><?= h('EVIDENCIA ') ?></div>
+                                    <div class="col-4"><?= h(' SI ') ?></th>
+                                    <div class="col-4"><?= h(' NO') ?></th>
+                               
                              </div>   
                                     <?php 
                                 
@@ -60,7 +48,6 @@
                                         </div>
 
                                         <div class="col-6">
-                                            
                                              <table class="table table-striped table-bordered evidencia">
                                                <tr>
                                                     <td data-priority="1" class="rows"><?= h($evidencias[$i]->itemDescripcion) ?></td>
@@ -79,22 +66,16 @@
                                                       <?php  }  ?>
                                                 </tr>                               
                                             </table>
-                             
-
                                         </div>
-
-                                       
-
                                          <?php if($i == count($evidencias)-1) { ?>
                                              <div class="col-12">
                                                <p>......................................................................................................................................................................................</p>
                                             </div>
                                              <?php  } ?>
-                                        
                                         <?php  } ?>
-                                       
-                                </div>
-                                     <div class="row">
+                                 </div>
+
+                                    <div class="row">
                                          <div class="col-12">
 
                                             <h5>Derivaciones Realizadas</h5>
@@ -104,12 +85,8 @@
                                                     <li><?= h($derivacion->derivacion) ?></li>
                                                 </ul>
 
-                                             <?php endforeach; ?>
-
-                                                        
+                                             <?php endforeach; ?>       
                                         </div>
-                                         
-                                        
                                     </div>
 
                                     <div class="row">
@@ -120,26 +97,22 @@
 
                                  <div class="row">
                                     <?php foreach ($observaciones as $observacion ) :?>
-                                      <?php if($observacion->titulo =="primer semestre") { ?>
+                                      <?php if($observacion->titulo == "primer semestre") { ?>
                                          <div class="col-12">
-
                                             <h5>Observaciones primer semestre</h5>
                                             <p><?= h($observacion->descripcion) ?></p>
                                         </div>
 
                                      <?php } ?>
-                                 
-                                    <?php if($observacion->titulo =="segundo semestre") { ?>
+                                    <?php if($observacion->titulo == "segundo semestre") { ?>
                                         <div class="col-12">
                                             <h5>Observaciones segundo semestre</h5>
                                              <p><?= h($observacion->descripcion) ?></p>
                                             
                                         </div>
                                     <?php } ?>
-
-                                     <?php endforeach  ?>
-  
-                            </div>
+                                    <?php endforeach  ?>
+                          </div>
                     </div>
                 </div>
             </div> <!-- end col -->

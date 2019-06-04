@@ -1,12 +1,12 @@
 <div class="row">
    
-   <div class="col-md-12 falta_grupos">
+   <div class="col-md-12 falta_grupos" align="center">
            <h1>Informes</h1>
            <p>Escoja correctamente el informe que se ajusta a su evaluación</p>
     </div>
    
 </div>
-<div class="row">
+<div class="row" >
      <div class="col-md-4">
           
     </div>
