@@ -10,11 +10,11 @@
  <div class="card">
     <div class="card-block">
         <?= $this->Form->create() ?>
-        <h3 class="text-center mt-0 m-b-15">
-             <?= $this->Html->image('../images/logo.png'); ?>
-        </h3>
+        <h2 align="center">
+             <?= $this->Html->image('../images/logo2.png'); ?>
+        </h2>
 
-        <h4 class="text-muted text-center font-18"><b>Ingrese al sistema</b></h4>
+        <h3 align="center"><b>Ingrese al sistema</b></h3>
 
         <div class="p-3">
             <form class="form-horizontal m-t-20" action="index.html">

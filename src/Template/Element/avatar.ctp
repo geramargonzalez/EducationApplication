@@ -8,7 +8,7 @@
                                              ?>
 	</div>
 	<div class="user-info">
-	<h4 class="font-16"><?= $user_session['name'] . " " .  $user_session['surname'] ?></h4>
-	<span class="text-muted user-status"><i class="fa fa-dot-circle-o text-success"></i> Online</span>
+		<h4 class="font-16"><?= $user_session['name'] . " " .  $user_session['surname'] ?></h4>
+		<span class="text-muted user-status"><i class="fa fa-dot-circle-o text-success"></i> Online</span>
 	</div>
 </div>

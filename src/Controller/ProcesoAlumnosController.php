@@ -82,15 +82,15 @@ class ProcesoAlumnosController extends AppController
     public function add($id = null)
     {
         
-        $id_user = $this->Auth->user('id');
-        $procesoAlumno = $this->ProcesoAlumnos->newEntity();
-        $tipo_rendimiento = "No hubo evaluacion";
-        $contador = 0;
-        $talleresGrupos = $this->GrupoAlumnos->find('all')->where(['id_alumno' => $id]);
-        $talleresGrupos = $talleresGrupos->first();
-        $grupo = $this->Grupo->get($talleresGrupos->id_grupo);
-        $controllerName = $this->request->getParam('controller');
-        $controllerAction = $this->request->getParam('action');
+          $id_user = $this->Auth->user('id');
+          $procesoAlumno = $this->ProcesoAlumnos->newEntity();
+          $tipo_rendimiento = "No hubo evaluacion";
+          $contador = 0;
+        //$talleresGrupos = $this->GrupoAlumnos->find('all')->where(['id_alumno' => $id]);
+        //$talleresGrupos = $talleresGrupos->first();
+       // $grupo = $this->Grupo->get($talleresGrupos->id_grupo);
+       // $controllerName = $this->request->getParam('controller');
+        //$controllerAction = $this->request->getParam('action');
         
         if ($this->request->is('post')) {
             
@@ -127,7 +127,7 @@ class ProcesoAlumnosController extends AppController
                 );
 
             $rendimientoAlumno = $this->RendimientoAlumno->patchEntity($rendimientoAlumno,$datos);
-
+            
             if($this->RendimientoAlumno->save($rendimientoAlumno)){
                
                if ($this->ProcesoAlumnos->save($procesoAlumno)) {

@@ -17,6 +17,7 @@ class DesercionAlumnosController extends AppController
     {
         parent::initialize();
         $this->loadModel('Alumnos'); 
+         $this->loadModel('UsersCentro'); 
          $this->loadModel('GrupoAlumnos');  
     }
     /**
@@ -76,15 +77,40 @@ class DesercionAlumnosController extends AppController
             }
             $this->Flash->error(__('The desercion alumno could not be saved. Please, try again.'));
         }
-        $subquery = $this->GrupoAlumnos->find()
+
+        $users_centro = $this->UsersCentro->find()
+                ->select(['UsersCentro.id_centro'])
+                ->where(['UsersCentro.id_user =' => $user['id']]);
+
+        $users_turno = $this->UsersCentro->find()
+                                       ->select(['UsersCentro.id_turno'])
+                                       ->where(['UsersCentro.id_user =' => $user['id']]);  
+
+
+        $query_grupo = $this->GrupoAlumnos->find()
                 ->select(['GrupoAlumnos.id_alumno']);
-        
+
         $alumnos = $this->Alumnos->find('list',['keyField' => 'id',
+                                               'valueField' => 'full_name'])
+                    ->where(['status =' => true])
+                    ->andWhere([
+                            'Alumnos.id_centro  IN' =>  $users_centro])
+                              ->andWhere([
+                            'Alumnos.id_turno IN' =>  $users_turno])
+                    ->andWhere([
+                    'Alumnos.id NOT IN' => $query_grupo
+                ]);
+        
+        
+       
+        
+        
+      /*  $alumnos = $this->Alumnos->find('list',['keyField' => 'id',
                                                'valueField' => 'full_name'])
                     ->where(['status =' => true, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']])
                      ->andWhere([
                     'Alumnos.id NOT IN' => $subquery
-                ]);
+                ]);*/
 
         $this->set(compact('desercionAlumno','alumnos'));
     }
@@ -110,8 +136,30 @@ class DesercionAlumnosController extends AppController
             }
             $this->Flash->error(__('El alumno no ha podido ser habilitado con exito.'));
         }
-        $alumnos = $this->Alumnos->find("list",['keyField' => 'id',
-                    'valueField' => 'full_name'])->where(['status =' => false, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']]);
+       
+
+        $users_centro = $this->UsersCentro->find()
+                ->select(['UsersCentro.id_centro'])
+                ->where(['UsersCentro.id_user =' => $user['id']]);
+
+        $users_turno = $this->UsersCentro->find()
+                                       ->select(['UsersCentro.id_turno'])
+                                       ->where(['UsersCentro.id_user =' => $user['id']]);  
+
+
+        $query_grupo = $this->GrupoAlumnos->find()
+                ->select(['GrupoAlumnos.id_alumno']);
+
+        $alumnos = $this->Alumnos->find('list',['keyField' => 'id',
+                                               'valueField' => 'full_name'])
+                    ->where(['status =' => false])
+                    ->andWhere([
+                            'Alumnos.id_centro  IN' =>  $users_centro])
+                              ->andWhere([
+                            'Alumnos.id_turno IN' =>  $users_turno])
+                    ->andWhere([
+                    'Alumnos.id NOT IN' => $query_grupo
+                ]);
         
         $this->set(compact('desercionAlumno','alumnos'));
     }

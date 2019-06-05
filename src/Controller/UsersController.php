@@ -40,8 +40,6 @@ class UsersController extends AppController
             'contain' => ['Roles']
         ]),['limit' => 15]);
 
-       
-
         $this->set(compact('users','user_session'));
     }
     /**
@@ -173,7 +171,6 @@ class UsersController extends AppController
                     'valueField' => 'nombre']);
         $centros = $this->Users->Centro->find('list', ['keyField' => 'id',
                     'valueField' => 'name']);
-
         $this->set(compact('user_session','roles','turnos','centros'));
     }
     /**
@@ -186,6 +183,7 @@ class UsersController extends AppController
     public function edit($id = null)
     {
         $user = $this->Users->get($id);
+        $user_session = $this->Auth->user();
         //  $user_session = $this->Auth->user('');
         $img = $user->image;
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -200,8 +198,10 @@ class UsersController extends AppController
                   } else {
                       $user->image = $img;
                   } 
-
             if ($this->Users->save($user)) {
+                if($user_session['image'] != $user->image ){
+                  $user_session['image'] = $user->image;
+                }
                 $this->Flash->success(__('The user has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
@@ -295,19 +295,14 @@ class UsersController extends AppController
                 }
             
             } else{
-            
               $this->Flash->error(__('No ha ingresado correctamente su contraseña. Porfavor, intentelo de nuevo.'));
               return $this->redirect(['action' => 'profile',$user->id]);
-            
             } 
-        
         }
 
         $this->set(compact('user'));
     }
     
-
-
      public function login()
     {
         if ($this->Auth->user()) {

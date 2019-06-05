@@ -1,11 +1,11 @@
 
 
 <body id="page-top">
-
+ 
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
     <div class="container">
-      <a class="navbar-brand js-scroll-trigger" href="#page-top">Inicio</a>
+      <a class="navbar-brand js-scroll-trigger" href="#page-top"> <?= $this->Html->image('../images/logo2.png',['height' => 130,'width' => 130]); ?></a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         Memoria Escolar
         <i class="fas fa-bars"></i>
@@ -16,7 +16,7 @@
             <a class="nav-link js-scroll-trigger" href="#services">Servicios</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#portfolio">Centros</a>
+            <a class="nav-link js-scroll-trigger" href="#portfolio">Sistema</a>
           </li>
           <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="#about">Acerca</a>
@@ -61,7 +61,7 @@
             <i class="fas fa-circle fa-stack-2x text-primary"></i>
             <i class="fas fa-shopping-cart fa-stack-1x fa-inverse"></i>
           </span>
-          <h4 class="service-heading">E-Commerce</h4>
+          <h4 class="service-heading">Sistema de Asistencias</h4>
           <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
         </div>
         <div class="col-md-4">
@@ -69,7 +69,7 @@
             <i class="fas fa-circle fa-stack-2x text-primary"></i>
             <i class="fas fa-laptop fa-stack-1x fa-inverse"></i>
           </span>
-          <h4 class="service-heading">Responsive Design</h4>
+          <h4 class="service-heading">Proceso de estudiantes</h4>
           <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
         </div>
         <div class="col-md-4">
@@ -77,7 +77,7 @@
             <i class="fas fa-circle fa-stack-2x text-primary"></i>
             <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
           </span>
-          <h4 class="service-heading">Web Security</h4>
+          <h4 class="service-heading">Generacion de informes pedagogicos</h4>
           <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
         </div>
       </div>
@@ -89,7 +89,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12 text-center">
-          <h2 class="section-heading text-uppercase">Portfolio</h2>
+          <h2 class="section-heading text-uppercase">Nuestro Sistema</h2>
           <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
         </div>
       </div>
@@ -276,18 +276,18 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12 text-center">
-          <h2 class="section-heading text-uppercase">Our Amazing Team</h2>
+          <h2 class="section-heading text-uppercase">Equipo</h2>
           <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
           <div class="team-member">
            
               <?= $this->Html->image('../images/team/1.jpg', ['class' => 'mx-auto rounded-circle']);?>
 
-            <h4>Kay Garland</h4>
-            <p class="text-muted">Lead Designer</p>
+            <h4>Gerardo Gonzalez</h4>
+            <p class="text-muted">Creador y Desarrollador</p>
             <ul class="list-inline social-buttons">
               <li class="list-inline-item">
                 <a href="#">
@@ -307,38 +307,12 @@
             </ul>
           </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-6">
           <div class="team-member">
            
               <?= $this->Html->image('../images/team/2.jpg', ['class' => 'mx-auto rounded-circle']);?>
-            <h4>Larry Parker</h4>
-            <p class="text-muted">Lead Marketer</p>
-            <ul class="list-inline social-buttons">
-              <li class="list-inline-item">
-                <a href="#">
-                  <i class="fab fa-twitter"></i>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#">
-                  <i class="fab fa-facebook-f"></i>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#">
-                  <i class="fab fa-linkedin-in"></i>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="team-member">
-           
-             <?= $this->Html->image('../images/team/3.jpg', ['class' => 'mx-auto rounded-circle']);?>
-
-            <h4>Diana Pertersen</h4>
-            <p class="text-muted">Lead Developer</p>
+            <h4>Luis Brum</h4>
+            <p class="text-muted">Creador y Teorico</p>
             <ul class="list-inline social-buttons">
               <li class="list-inline-item">
                 <a href="#">

@@ -86,15 +86,22 @@ class ObservacionesAlumnosController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit($id = null,$id_alumno = null)
     {
+        $alumno = $this->Alumnos->get($id_alumno);
+        $id_user = $this->Auth->user('id');
         $observacionesAlumno = $this->ObservacionesAlumnos->get($id);
+        
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $observacionesAlumno = $this->ObservacionesAlumnos->patchEntity($observacionesAlumno, $this->request->getData());
-             $observacionesAlumno->etiqueta = $data['etiqueta'];
+            $data = $this->request->getData();
+            $observacionesAlumno = $this->ObservacionesAlumnos->patchEntity($observacionesAlumno,$data);
+            $observacionesAlumno->id_user = $id_user;
+            $observacionesAlumno->id_alumno = $id_alumno;
+            $observacionesAlumno->etiqueta = $data['tags'];
+           
             if ($this->ObservacionesAlumnos->save($observacionesAlumno)) {
                 $this->Flash->success(__('The observaciones alumno has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'index',$id_alumno]);
             }
             $this->Flash->error(__('La observacion no pudo guardarse. Verifique sus datos.'));
         }
@@ -102,7 +109,7 @@ class ObservacionesAlumnosController extends AppController
                     'keyField' => 'name',
                     'valueField' => 'name',
             ]);
-        $this->set(compact('observacionesAlumno'));
+        $this->set(compact('observacionesAlumno','alumno','tags'));
     }
     /**
      * Delete method
@@ -113,7 +120,7 @@ class ObservacionesAlumnosController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        //$this->request->allowMethod(['post', 'delete']);
         $observacionesAlumno = $this->ObservacionesAlumnos->get($id);
         if ($this->ObservacionesAlumnos->delete($observacionesAlumno)) {
             $this->Flash->success(__('The observaciones alumno has been deleted.'));
@@ -126,24 +133,14 @@ class ObservacionesAlumnosController extends AppController
 
       public function statsAlumnoObservacion($id_alumno = null)
     {
-
-       // Estdisticas hechas por el profesor logeado
-       $alumno = $this->Alumnos->get($id_alumno);
-      // $id_user = $this->Auth->user('id');
-       
-       $query = $this->ObservacionesAlumnos->findById_alumno($id_alumno);
-
-     
+        // Estdisticas hechas por el profesor logeado
+        $alumno = $this->Alumnos->get($id_alumno);
+        $query = $this->ObservacionesAlumnos->findById_alumno($id_alumno);
         $obs = $query->select(['cantidad' => $query->func()->count('etiqueta'), 'etiqueta' =>'etiqueta'])
                   ->where(['id_alumno'  => $alumno->id])
                   ->group('etiqueta');
-                 
-
         $obs->enableHydration(false);
         $observaciones = $obs->toList(); 
-
-
-
         $this->set(compact('alumno','observaciones'));
     }
 }

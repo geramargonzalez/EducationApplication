@@ -17,7 +17,7 @@
                             <?= $this->HTML->link('PDF', ['action' => 'pdfInformeAlumno',$informePedagogico->id, $alumno->id, '_ext' => 'pdf'],['class'=>'btn btn-success']);?>
                             <?= $this->HTML->link('Editar', ['action' => 'editarInformeAlumno',$informePedagogico->id, $alumno->id],['class'=>'btn btn-primary']);?> 
 
-                            <?= $this->HTML->link('Eliminar', ['action' => 'eliminarInformeAlumno',$informePedagogico->id, $alumno->id],['class'=>'btn btn-danger']);?>    
+                            <?= $this->HTML->link('Eliminar', ['action' => 'eliminarInformeAlumno', $alumno->id],['class'=>'btn btn-danger']);?>    
                         </div>
                     </div>
                     <div class="card-block">

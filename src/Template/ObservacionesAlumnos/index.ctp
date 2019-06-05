@@ -10,7 +10,7 @@
 
 <div class="row">
 <div class="col-md-12">
-     <h3><?= __('Linea de tiempo de ' . $alumno->name . " " . $alumno->surname ) ?></h3>
+     <h3 align="center"><?= __('Linea de tiempo') ?></h3>
     <section id="cd-timeline" class="cd-container">
         <?php foreach ($observacionesAlumnos as $observacionesAlumno): ?>
             <div class="cd-timeline-block">
@@ -36,7 +36,7 @@
 
                       <p><?= $this->Html->link(__('Ver detalle'),['action' => 'view', $observacionesAlumno->id, $alumno->id],['class'=>'btn btn-primary btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
                      <?php if($user_session['id'] == $observacionesAlumno->id_user){ ?>    
-                        <?= $this->Html->link(__('Editar'),['action' => 'edit', $observacionesAlumno->id],['class'=>'btn btn-warning btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
+                        <?= $this->Html->link(__('Editar'),['action' => 'edit', $observacionesAlumno->id, $alumno->id],['class'=>'btn btn-warning btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
                         <?= $this->Html->link(__('Delete'),['action' => 'delete', $observacionesAlumno->id],['class'=>'btn btn-info btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
                          <?php } ?>    
                     </p>

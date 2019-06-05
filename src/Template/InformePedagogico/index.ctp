@@ -32,6 +32,7 @@
                     
                                                 <?= $this->Html->link(__('Ver'), ['action' => 'view', $informePedagogico->id],['class'=>'btn btn-warning btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
                                                 <?= $this->Html->link(__('Editar'), ['action' => 'edit', $informePedagogico->id],['class'=>'btn btn-info btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
+                                                <?= $this->Html->link(__('Eliminar'), ['action' => 'delete', $informePedagogico->id],['class'=>'btn btn-danger btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
                                             </td>
                                         </tr>
                                         <?php endforeach; ?>

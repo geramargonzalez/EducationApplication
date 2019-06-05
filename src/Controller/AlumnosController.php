@@ -106,6 +106,7 @@ class AlumnosController extends AppController
             $faltaAlumnos = $this->FaltasAlumnos->newEntity();
 
             if($ok){
+               
                 if ($this->Alumnos->save($alumno)) {
                     $ok = false;   
                     $this->Flash->success(__('El alumno ' . $alumno->name . " " . $alumno->surname . " pudo ser guardado."));
@@ -123,7 +124,7 @@ class AlumnosController extends AppController
         $this->set(compact('alumno','turnos','centros'));
     }
 
-     public function alumnosToGrupo($id = null,$id_taller = null)
+     public function alumnosToGrupo($id = null, $id_taller = null)
     {
         $user = $this->Auth->user();
         $grupo = $this->Grupo->get($id);
@@ -150,19 +151,46 @@ class AlumnosController extends AppController
                 }
             }
             if($alum_reg > 0){
+                
                  $this->Flash->success(__('Los alumnos han sido registrados.'));
                  return $this->redirect(['controller' =>'Taller', 'action' => 'view',$id_taller]);
+            
             } else{
                  $this->Flash->error(__('Se produjo un error.'));
             }
         }
-        $subquery = $this->GrupoAlumnos->find()->select(['GrupoAlumnos.id_alumno']);
+       /* $subquery = $this->GrupoAlumnos->find()->select(['GrupoAlumnos.id_alumno']);
 
         $query = $this->Alumnos->find()
                     ->where(['status =' => true, 'id_turno =' => $user['id_turno'],
                         'id_centro =' => $user['id_centro']])
                      ->andWhere([
                     'Alumnos.id NOT IN' => $subquery
+                ]);*/
+
+        $subquery = $this->UsersCentro->find()
+                ->select(['UsersCentro.id_centro'])
+                ->where(['UsersCentro.id_user =' => $user['id']]);
+
+        $subquery2 = $this->UsersCentro->find()
+                                       ->select(['UsersCentro.id_turno'])
+                                       ->where(['UsersCentro.id_user =' => $user['id']]);
+
+        $query_grupo = $this->GrupoAlumnos->find()
+                ->select(['GrupoAlumnos.id_alumno']);
+
+        $query = $this->Alumnos->find()
+                    ->where(['status =' => true])
+                    ->andWhere([
+                            'Alumnos.id_centro  IN' => $subquery])
+                    ->andWhere([
+                            'Alumnos.id_turno IN' => $subquery2])
+                    ->andWhere([
+                            'Alumnos.id_turno =' => $grupo->id_turno])
+                     ->andWhere([
+                            'Alumnos.id_centro =' => $grupo->id_centro])
+                    ->andWhere([
+                    'Alumnos.id NOT IN' => $query_grupo
                 ]);
         $alumnos = $query->toList();
         $this->set(compact('alumnos','grupo'));
@@ -204,13 +232,29 @@ class AlumnosController extends AppController
             }
         }
 
-        $subquery = $this->GrupoAlumnos->find()
+        $subquery = $this->UsersCentro->find()
+                ->select(['UsersCentro.id_centro'])
+                ->where(['UsersCentro.id_user =' => $user['id']]);
+
+        $subquery2 = $this->UsersCentro->find()
+                                       ->select(['UsersCentro.id_turno'])
+                                       ->where(['UsersCentro.id_user =' => $user['id']]);
+
+        $query_grupo = $this->GrupoAlumnos->find()
                 ->select(['GrupoAlumnos.id_alumno']);
 
         $query = $this->Alumnos->find()
-                    ->where(['status =' => true, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']])
+                    ->where(['status =' => true])
+                    ->andWhere([
+                            'Alumnos.id_centro  IN' => $subquery])
+                    ->andWhere([
+                            'Alumnos.id_turno IN' => $subquery2])
+                    ->andWhere([
+                            'Alumnos.id_turno =' => $grupo->id_turno])
                      ->andWhere([
-                    'Alumnos.id NOT IN' => $subquery
+                            'Alumnos.id_centro =' => $grupo->id_centro])
+                    ->andWhere([
+                    'Alumnos.id NOT IN' => $query_grupo
                 ]);
                      
         $alumnos = $query->toList();
@@ -229,33 +273,61 @@ class AlumnosController extends AppController
             
             $grupo = $this->Grupo->get($data['grupos']);
             $alumno = $this->Alumnos->get($data['alumnos']);
-            $alumnosGrupo = $this->GrupoAlumnos->newEntity();
-            $datos  =  array(
-                'id_alumno' => $alumno->id,
-                'id_grupo' => $grupo->id 
-              );
+
+            if($alumno->id_centro == $grupo->id_centro && $alumno->id_turno == $grupo->id_turno){
+
+                $alumnosGrupo = $this->GrupoAlumnos->newEntity();
+                $datos  =  array(
+                    'id_alumno' => $alumno->id,
+                    'id_grupo' => $grupo->id 
+                  );
+                
+                $alumnosGrupo = $this->GrupoAlumnos->patchEntity($alumnosGrupo,$datos);
+                
+                if ($this->GrupoAlumnos->save($alumnosGrupo)) {
+                     $this->Flash->success(__('El alumno se a ingresado en la materia.'));
+                     return $this->redirect(['action' => 'index']);
+                }    
+                $this->Flash->error(__('Se produjo un error. Verifique sus datos.'));
+
+            } else {
+
+                 $this->Flash->error(__('Ese grupo no pertenece al mismo centro y turno de ese alumno.'));
+
+            }
+
             
-            $alumnosGrupo = $this->GrupoAlumnos->patchEntity($alumnosGrupo,$datos);
-            
-            if ($this->GrupoAlumnos->save($alumnosGrupo)) {
-                 $this->Flash->success(__('El alumno se a ingresado en la materia.'));
-                 return $this->redirect(['action' => 'index']);
-            }    
-            $this->Flash->error(__('Se produjo un error. Verifique sus datos.'));
         }
 
         $grupos = $this->Grupo->find('list')->where(['id_turno' => $user['id_turno'], 'id_centro' => $user['id_centro']]);
        
-        $subquery = $this->GrupoAlumnos->find()
+       
+        $subquery = $this->UsersCentro->find()
+                ->select(['UsersCentro.id_centro'])
+                ->where(['UsersCentro.id_user =' => $user['id']]);
+
+        $subquery2 = $this->UsersCentro->find()
+                                       ->select(['UsersCentro.id_turno'])
+                                       ->where(['UsersCentro.id_user =' => $user['id']]);
+
+
+        $grupos = $this->Grupo->find('list')->where(['Grupo.id_turno IN' =>  $subquery2])
+                                            ->andWhere(['Grupo.id_centro IN' => $subquery]);                            
+
+        $query_grupo = $this->GrupoAlumnos->find()
                 ->select(['GrupoAlumnos.id_alumno']);
 
         $alumnos = $this->Alumnos->find('list',['keyField' => 'id',
                                                'valueField' => 'full_name'])
-                    ->where(['status =' => true, 'id_turno =' => $user['id_turno'],'id_centro =' => $user['id_centro']])
-                     ->andWhere([
-                    'Alumnos.id NOT IN' => $subquery
+                    ->where(['status =' => true])
+                    ->andWhere([
+                            'Alumnos.id_centro  IN' => $subquery])
+                              ->andWhere([
+                            'Alumnos.id_turno IN' => $subquery2])
+                    ->andWhere([
+                    'Alumnos.id NOT IN' => $query_grupo
                 ]);
-
+       
         $this->set(compact('alumnos','grupos'));
     }
     /**
@@ -275,7 +347,8 @@ class AlumnosController extends AppController
              
             $data = $this->request->getData();
             $alumno = $this->Alumnos->patchEntity($alumno, $data);
-            $alumno->id_centro = 1;
+            $alumno->id_centro = $data['centros'];
+            $alumno->id_turno = $data['turnos'];
 
              if (!empty($data['image'])) {
                    $result = $this->FileUpload->fileUpload($data['image'], 'alumnos');

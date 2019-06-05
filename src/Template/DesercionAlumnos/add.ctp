@@ -10,7 +10,7 @@
             <div class="card-block"> 
                   <?= $this->Form->create($desercionAlumno) ?>
                 <h4 class="mt-0 header-title">Deshabilitar estudiante</h4>
-                <p class="text-muted m-b-30 font-14">lorep ipsum lorep ipsum lorep ipsum</p>               
+                <p class="text-muted m-b-30 font-14">Antes de deshabilitar un alumno debe quitarlo del grupo al que pertenece.</p>               
                 <div class="form-group row">
                     <label for="example-text-input" class="col-sm-2 col-form-label">¿Cúal es el motivo de la deserción?</label>
                     <div class="col-sm-10">
