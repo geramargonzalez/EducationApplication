@@ -8,15 +8,13 @@
         <meta content="Admin Dashboard" name="description" />
         <meta content="ThemeDesign" name="author"/>
         <link rel="shortcut icon" href="assets/images/favicon.ico">
-       
+        
         <?= $this->Html->css('../plugins/summernote/summernote') ?>
         <?= $this->Html->css('../plugins/fullcalendar/css/fullcalendar.min') ?>
         <?= $this->Html->css('../plugins/RWD-Table-Patterns/dist/css/rwd-table.min')?>
         <?= $this->Html->css('bootstrap.min') ?>
         <?= $this->Html->css('icons') ?>
         <?= $this->Html->css('style') ?>
-
-
     </head>
 
 <body class="fixed-left widescreen">
@@ -34,7 +32,7 @@
             </button>
             <div class="topbar-left">
                     <div class="text-center">
-                        <?= $this->Html->image('../images/logo.png'); ?>
+                        <?= $this->Html->image('../images/logo2.png'); ?>
                     </div>
                 </div>
             <div class="sidebar-inner slimscrollleft">
@@ -127,19 +125,19 @@
 
    
     <script>
-    
-        $(window).resize(function(){
-        
 
-            <?php 
-                  $controller = $this->request->getParam('controller'); 
-                  $action = $this->request->getParam('action'); 
+        <?php 
+              $controller = $this->request->getParam('controller'); 
+              $action = $this->request->getParam('action'); 
             ?>
 
+    
+        $(window).resize(function(){
+            
              <?php if($action == "statsAlumnoObservacion"){ ?>
 
-                    drawChartColumn();
-                    drawChartTipos();
+                   drawChartColumn();
+                   drawChartTipos();
 
               <?php } ?>
 
@@ -150,7 +148,6 @@
                 drawChartConducta();
                 drawChartRendimiento();
                
-
             <?php } ?>
 
             <?php if($action == "statsAlumnosGenerales"){ ?>
@@ -186,10 +183,6 @@
          $("#pass").password('toggle');
          $("#pass_confirmation").password('toggle');
 
-
-       
- 
-       //});
 
          $('#mainTable').editableTableWidget().numericInputExample().find('td:first').focus();
        

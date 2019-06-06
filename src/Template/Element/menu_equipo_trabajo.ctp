@@ -8,7 +8,6 @@
               <h1  align="center" >Perfil equipo de trabajo</h1>
               <p class="text-muted m-b-30 font-14" align="center">Opciones para los equipos</p>
               <div class="" align="center">
-               
                         <div class="btn-group m-b-10">
                           <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               Actas 
@@ -38,9 +37,19 @@
                         
                       </div>
                   </div>
+                    <?php if($user_session['role_id'] == RolesEnum::PROFESOR_ADMIN || $user_session['role_id'] == RolesEnum::PROFESOR) { ?>
+                        <div class="btn-group m-b-10">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Evaluaciones
+                            </button>
+                           <div class="dropdown-menu">
+                              <?= $this->Html->link(__('Todas'), ['controller' => 'TipoEvaluacion','action' => 'index'],['class' => 'dropdown-item']) ?>
+                               <?= $this->Html->link(__('Agregar'), ['controller' => 'TipoEvaluacion','action' => 'add'],['class' => 'dropdown-item']) ?>
+                           </div>
+                       </div>
+                  <?php } ?>
                   </div>
               </div>
-
           </div>
       </div>
   </div> 

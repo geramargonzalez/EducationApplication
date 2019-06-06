@@ -25,9 +25,6 @@ use App\Enums\RolesEnum;
            <li><?= $this->Html->link(__('Todos'), ['controller' => 'Grupo', 'action' => 'index']) ?></li>
             <li><?= $this->Html->link(__('Crear'), ['controller' => 'Grupo', 'action' => 'add']) ?></li>
              <li><?= $this->Html->link(__('Agregar estudiante'), ['controller' => 'Alumnos', 'action' => 'alumnoToGrupo']) ?></li>
-            
-            
-           
       </ul>   
     </li>
     <li class="has_sub">
@@ -48,15 +45,7 @@ use App\Enums\RolesEnum;
         </ul>
     </li>
     <?php } ?>
-    <?php if($user_session['role_id'] == RolesEnum::PROFESOR_ADMIN || $user_session['role_id'] == RolesEnum::PROFESOR) { ?>
-        <li class="has_sub">
-            <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-book-open-variant"></i><span> Evaluaciones </span></a>
-            <ul class="list-unstyled">
-                <li><?= $this->Html->link(__('Todas'), ['controller' => 'TipoEvaluacion','action' => 'index']) ?></li>
-    	        <li><?= $this->Html->link(__('Agregar'), ['controller' => 'TipoEvaluacion','action' => 'add']) ?></li>
-            </ul>
-        </li>
-    <?php } ?>
+  
     <li class="has_sub">
         <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-home-modern"></i><span> Centro </span></a>
         <ul class="list-unstyled">

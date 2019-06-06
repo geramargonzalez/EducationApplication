@@ -1,26 +1,22 @@
+
+<?php echo $this->element('menu_proceso'); ?>    
+
+
 <div class="row">
   <div class="col-md-12 text-center">
-   <h1 > <?= __("Cantidad de faltas por mes del estudiante del" . " " . $alumno->name . " " . $alumno->surname) ?></h1>
-    
+   <h3> <?= __("Estadisticas sobre la asistencia del estudiante " . " " . $alumno->name . " " . $alumno->surname) ?></h3>
   </div>
+</div>
+<div class="row">
+ 
   <div class="col-md-6">
-    <div id="grafica"class="chart">      </div>
+    <div id="grafica"class="chart"></div>
   </div>
   <div class="col-md-6">
     <div id="grafica2"  class="chart"></div>
   </div>
 </div>
-
-<div class="row">
-
-  <div class="col-md-6">
-    <div id="grafica3"class="chart"></div>
-  </div>
-  <div class="col-md-6">
-    <div id="grafica4"  class="chart"></div>
-  </div>
-</div>
-  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type = "text/javascript">
       //var google;
@@ -63,9 +59,7 @@
                   title: 'Cantidad',
                   minValue: 0,
                   maxValue: 100
-               },   
-               'width':600,
-               'height':600   
+               } 
             };
         // Inicia la gráfica
         var chart = new google.visualization.LineChart(document.getElementById('grafica'));
@@ -89,7 +83,6 @@
               ?>
               ]);
           
-          
          var options = {'title' : 'Cantidad horas por mes',
                colors: ['green'],
                lineWidth: 3,
@@ -103,17 +96,13 @@
                   title: 'Promedio',
                   minValue: 0,
                   maxValue: 100
-               },   
-               'width':600,
-               'height':600   
+               }
             };
         // Inicia la gráfica
         var chart = new google.visualization.LineChart(document.getElementById('grafica2'));
         chart.draw(data, options);
       }
-
-
-    
+      
  </script>
 
 

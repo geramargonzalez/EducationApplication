@@ -78,7 +78,6 @@ class ObservacionesAlumnosController extends AppController
             ]);
         $this->set(compact('observacionesAlumno','alumno','tags'));
     }
-
     /**
      * Edit method
      *
@@ -130,10 +129,8 @@ class ObservacionesAlumnosController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-
       public function statsAlumnoObservacion($id_alumno = null)
     {
-        // Estdisticas hechas por el profesor logeado
         $alumno = $this->Alumnos->get($id_alumno);
         $query = $this->ObservacionesAlumnos->findById_alumno($id_alumno);
         $obs = $query->select(['cantidad' => $query->func()->count('etiqueta'), 'etiqueta' =>'etiqueta'])

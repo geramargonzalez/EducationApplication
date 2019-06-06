@@ -53,8 +53,6 @@
                 
               ?>
               ]);
-          
-          
          var options = {'title' : 'Promedio mensual rendimiento',
                colors: ['red'],
                lineWidth: 3,
@@ -177,8 +175,6 @@
                 
               ?>
               ]);
-          
-          
          var options = {'title' : ' Registro diario ',
                colors: ['red','green','blue'],
                tooltip: {isHtml: true},

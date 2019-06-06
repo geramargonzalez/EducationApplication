@@ -86,8 +86,6 @@ class InformePedagogicoController extends AppController
             $alumno = $this->Alumnos->get($id_alumno);
             $informePedagogico = $this->InformePedagogico->get($id_informe);
             
-            
-
             $evidencias_query = $this->EvidenciaResultadoAlumno->find()->where(['EvidenciaResultadoAlumno.id_alumno' => $alumno->id])
                                         ->join([
                                             'table' => 'evidencias_resultado',
@@ -135,10 +133,16 @@ class InformePedagogicoController extends AppController
           public function escojerInforme($id_alumno = null)
         {
             $informes = $this->InformePedagogico->find('list',['keyField' => 'id','valueField' => 'titulo']);
+            $tieneInforme = $this->InformePedagogico->find("all")->where(['InformeAlumno.id_alumno =' => $alumno->id]);
+            
             if ($this->request->is('post')) {
                  $data = $this->request->getData();
                  return $this->redirect(['action' => 'informeAlumno', $data['informes'],$id_alumno]);
-                }   
+                } 
+
+            if(count($informes) < 1){
+                  return $this->redirect(['controller' => 'Alumnos','action' => 'view',$id_alumno]);
+            } 
             $this->set(compact('informes'));   
         }
 
@@ -164,7 +168,6 @@ class InformePedagogicoController extends AppController
                 $evidenciasResultado[] = $this->EvidenciasResultado->find('all',['contain'=>['Evidencias']])->where(['EvidenciasResultado.id_evidencia ='=> $evidencia->id]);
             }
             $derivaciones = $this->Derivaciones->find('all');
-            
 
             if ($this->request->is('post')) {
                 
@@ -263,7 +266,6 @@ class InformePedagogicoController extends AppController
                                       $this->ObservacionesInforme->save($observacionesInformes);
 
                                 } // end obser s
-                           
                             } // end foreach
 
                         $this->Flash->success(__('Se creo un informe pedagogico para ' . " " . $alumno->name ." " . $alumno->surname));
@@ -272,14 +274,11 @@ class InformePedagogicoController extends AppController
                        } // end save informe alumno
                     
                     } else {
-                        
                         $this->Flash->error(__('El usuario ya tiene informe pedagogico.'));
-               
                      }
                  }     
             
             $this->set(compact('informePedagogico','evidencias','evidenciasResultado','derivaciones'));
-           
         }
 
 
@@ -328,6 +327,9 @@ class InformePedagogicoController extends AppController
                     $informeAlumno = $this->InformeAlumno->find('all')->where(['InformeAlumno.id_alumno =' => $alumno->id]);
                     $informeAlumno = $informeAlumno->first();
 
+                    debug($data);
+                    exit;
+
                         foreach ($data as $key => $value) {
 
                             $rest = substr($key, 0, 10);
@@ -352,56 +354,37 @@ class InformePedagogicoController extends AppController
                                             }
 
                                         } // end evidencia final si
-
                                        if($evidencia_final == '_no'){
-
                                          if($value == 1){
-                                              
                                             $datosEvi  =  array(
                                                     'id_evidencia_resultado' => $id_evidencia,
                                                     "id_alumno" => $alumno->id,
                                                     'status' => false
                                                 );
                                          }
-
                                          $evidenciaResultadoAlumno = $this->EvidenciaResultadoAlumno->patchEntity($evidenciaResultadoAlumno,$datosEvi);
                                          $this->EvidenciaResultadoAlumno->save($evidenciaResultadoAlumno);
-
-                                      } // end evidencia final no
-                                       
+                                      } // end evidencia final no   
                                 } // end general  
-
                                 $rest = substr($key, 0, 10);
-
                                 if("derivacio_" == $rest){
                                       
                                       $deri_id = substr($key, -1, 1);
                                        // $derivacionAlumno = $this->DerivacionesAlumnos->newEntity();
-
                                          $derivacionAlumno = $this->DerivacionesAlumnos->find('all')->where(['DerivacionesAlumnos.id_alumno =' =>$alumno->id]);
                                           $derivacionAlumnos = $derivacionAlumno->first();
-                                          
                                           $derivacionAlumno->enableHydration(false);
                                           $derivacionAlumno = $derivacionAlumno->toList(); 
-
-                                     /*if(count($derivacionAlumno)){
-
-                                     
-                                     }*/
-
-                                      if($value == 1){
-
+                                        if($value == 1){
                                           $datosDeri  =  array(
                                                      "id_derivacion" =>  $deri_id,
                                                     "id_alumno" => $alumno->id
                                                 );
-
                                            $derivacionAlumno  = $this->DerivacionesAlumnos->patchEntity($derivacionAlumno,$datosDeri);
 
                                     $this->DerivacionesAlumnos->save($derivacionAlumno);
                                   }
                                 } // end derivaciones
-
                                 $rest = substr($key, 0, 10);
                                 if("observatf_" == $rest){
                                        //$observacionesInformef = $this->ObservacionesInforme->newEntity();
@@ -418,7 +401,6 @@ class InformePedagogicoController extends AppController
 
                                      //debug($observacionesInformef);
                                        $this->ObservacionesInforme->save($observacionesInformef);
-
                                 } // end obser s
 
                                 if("observats_" == $rest){
@@ -611,8 +593,6 @@ class InformePedagogicoController extends AppController
         } else {
             $this->Flash->error(__('El informe no pudo guardarse.'));
         }
-
-       
     }
 
     /**

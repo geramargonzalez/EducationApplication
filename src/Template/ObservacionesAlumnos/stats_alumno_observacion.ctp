@@ -2,21 +2,20 @@
  
 <?php echo $this->element('menu_proceso'); ?>    
 
-
 <div class="row">
   <div class="col-md-12 text-center">
   <h3><?= __("Observaciones: " . $alumno->name . " " . $alumno->surname) ?></h3>
    <p class="text-muted m-b-30 font-14">Se muestras la cantidad de observaciones que tuvo el estudiante <?= __( $alumno->name . " " . $alumno->surname) ?>.</p>
   </div>
   <div class="col-md-6">
-    <div id="grafica"class="chart">      </div>
+    <div id="grafica"class="chart"></div>
   </div>
   <div class="col-md-6">
     <div id="grafica2"  class="chart"></div>
   </div>
-</div>
+</div> 
 
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type = "text/javascript">
       //var google;
@@ -95,9 +94,6 @@
             chart.draw(data, options);
          }
 
-    
-     
-    
  </script>
 
 

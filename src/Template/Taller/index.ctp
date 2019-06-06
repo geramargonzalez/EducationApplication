@@ -16,7 +16,6 @@
                              <h3></h3>
                             <h4 class="mt-0 header-title"><?= __('Equipo de Trabajo') ?></h4>
                             <p class="text-muted m-b-30 font-14">Materias que componen el equipo de trabajo</p>
-
                             <div class="table-rep-plugin">
                                 <div class="table-responsive b-0" data-pattern="priority-columns">
                                    <table id="datatable" class="table table-bordered">
@@ -42,9 +41,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-
                             </div>
-
                         </div>
                     </div>
                 </div> <!-- end col -->
