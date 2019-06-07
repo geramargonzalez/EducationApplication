@@ -26,7 +26,7 @@
 
                                         	<?php 
                                         	
-                                        	if($i > 0) { 
+                                        	if($i > 0) {  
                                         	 
 	                                        	 if($evidenciasResul[$i]->evidencia->descripcion != $evidenciasResul[$i-1]->evidencia->descripcion) { ?>
 	                
@@ -57,10 +57,7 @@
                                         	 <?php  } ?>
                                         <?php  } ?>
                                            
-                                        <?php endforeach; ?>
-
-
-                                  
+                                        <?php endforeach; ?>        
                         </div>
                          <div class="row">
                          	 <div class="col-12">
@@ -86,11 +83,7 @@
                             <div class="col-12">
 
                             	
-                            </div>
-                           
-                           
-                                        
-                                
+                            </div>       
                         </div>
 
                          <div class="row">

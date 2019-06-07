@@ -26,7 +26,7 @@
                                  <tr>
                                     <th data-priority="1" class="rows"><?= h('EVIDENCIA ') ?></th>
                                     <th data-priority="1" class="rows"><?= h(' SI ') ?></th>
-                                    <th data-priority="1" class="rows"><?= h(' NO') ?></th>
+                                  
                                 </tr>
                              </table>
 
@@ -59,40 +59,38 @@
                                              <table class="table table-striped table-bordered evidencia">
                                                <tr>
                                                     <td data-priority="1" class="rows"><?= h($evidencias[$i]->itemDescripcion) ?></td>
-                                                   
+                                                    
                                                         
                                                         <?php  if($evidencias[$i]->id_evidencia_resultado >= 10){ ?>
                                                         
                                                                <?php  if($evidencias[$i]->status){ ?>
                                                             
-                                                                <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_" . $evidencias[$i]->id_evidencia_resultado . "_si", ['type'=>'checkbox','label'=>false, 'checked' =>$evidencias[$i]->status ]); ?></td>
-                                                                <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_" . $evidencias[$i]->id_evidencia_resultado . "_no", ['type'=>'checkbox','label'=>false,'checked' =>false]); ?></td>
+                                                                <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_" . $evidencias[$i]->id_resultado_alumno . "_si", ['type'=>'checkbox','label'=>false, 'checked' =>$evidencias[$i]->status ]); ?></td>
+                                                                
 
                                                              <?php  } else { ?>
 
-                                                                 <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_" . $evidencias[$i]->id_evidencia_resultado . "_si", ['type'=>'checkbox','label'=>false, 'checked' =>$evidencias[$i]->status ]); ?></td>
-                                                                <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_" . $evidencias[$i]->id_evidencia_resultado . "_no", ['type'=>'checkbox','label'=>false,'checked' =>true]); ?></td>
+                                                                 <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_" . $evidencias[$i]->id_resultado_alumno . "_si", ['type'=>'checkbox','label'=>false, 'checked' =>$evidencias[$i]->status ]); ?></td>
+                                                                
 
                                                                   <?php  } ?>
                                                               
                                                               <?php  }  else { ?>
                                                                 
-                                                                
+                                                                 
                                                                <?php  if($evidencias[$i]->status){ ?>
                                                             
-                                                                <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_" . $evidencias[$i]->id_evidencia_resultado . "_si", ['type'=>'checkbox','label'=>false, 'checked' =>$evidencias[$i]->status ]); ?></td>
-                                                                <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_" . $evidencias[$i]->id_evidencia_resultado . "_no", ['type'=>'checkbox','label'=>false,'checked' =>false]); ?></td>
+                                                                <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_0" . $evidencias[$i]->id_resultado_alumno . "_si", ['type'=>'checkbox','label'=>false, 'checked' =>$evidencias[$i]->status ]); ?></td>
+                                                                
 
                                                              <?php  } else { ?>
 
-                                                                 <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_" . $evidencias[$i]->id_evidencia_resultado . "_si", ['type'=>'checkbox','label'=>false, 'checked' =>$evidencias[$i]->status ]); ?></td>
-                                                                <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_" . $evidencias[$i]->id_evidencia_resultado . "_no", ['type'=>'checkbox','label'=>false,'checked' =>true]); ?></td>
+                                                                 <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_0" . $evidencias[$i]->id_resultado_alumno . "_si", ['type'=>'checkbox','label'=>false, 'checked' =>$evidencias[$i]->status ]); ?></td>
+                                                               
 
                                                                   <?php  } ?>
                                                                 
                                                               <?php  }  ?>
-
-                                                  
                                                 </tr>                               
                                             </table>
                                         </div>

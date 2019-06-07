@@ -47,19 +47,16 @@
             </div>
         </div>
     </div> <!-- end col -->
-
+ 
 
 
     <div class="col-12">
 
         <div class="card m-b-20">
                 <div class="card-block">
-
-                    <h4 class="mt-0 header-title">Conducta</h4>
-                    <p class="text-muted m-b-30 font-14">
-                        La siguiente tabla sirve como guia 
-                    </p>
-
+                 <div class="table-responsive b-0" data-pattern="priority-columns">
+                    <h4 align="center">Conducta</h4>
+                    <p  align="center">La siguiente tabla sirve como guia </p>
                     <table class="table table-hover">
                         <thead>
                         <tr>
@@ -104,18 +101,18 @@
                         
                         </tbody>
                     </table>
-
+                   </div>
                 </div>
-                </div>
+            </div>
 
         <div class="card m-b-20">
                         <div class="card-block">
 
-                            <h4 class="mt-0 header-title">Rendimiento</h4>
-                            <p class="text-muted m-b-30 font-14">
+                            <h4 align="center">Rendimiento</h4>
+                            <p align="center">
                                  La siguiente tabla sirve como guia 
                             </p>
-
+                             <div class="table-responsive b-0" data-pattern="priority-columns">
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
@@ -153,18 +150,18 @@
                                 
                                 </tbody>
                             </table>
-
+                          </div>
                         </div>
          </div>
 
              <div class="card m-b-20">
                         <div class="card-block">
 
-                            <h4 class="mt-0 header-title">Expresion Oral</h4>
-                            <p class="text-muted m-b-30 font-14">
+                            <h4 align="center">Expresion Oral</h4>
+                            <p align="center">
                                  La siguiente tabla sirve como guia 
                             </p>
-
+                             <div class="table-responsive b-0" data-pattern="priority-columns">
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
@@ -205,7 +202,7 @@
                                 
                                 </tbody>
                             </table>
-
+                          </div>
                         </div>
                 </div>
 

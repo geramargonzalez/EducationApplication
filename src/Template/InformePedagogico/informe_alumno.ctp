@@ -64,8 +64,8 @@
                                                     <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_" .$evidenciasResul[$i]->id . "_si", ['type'=>'checkbox','label'=>false]); ?></td>
                                                     <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_" . $evidenciasResul[$i]->id . "_no", ['type'=>'checkbox','label'=>false]); ?></td>
                                                       <?php  }  else { ?>
-                                                        <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_" . "0" .$evidenciasResul[$i]->id . "_si", ['type'=>'checkbox','label'=>false]); ?></td>
-                                                    <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_" . "0" . $evidenciasResul[$i]->id . "_no", ['type'=>'checkbox','label'=>false]); ?></td>
+                                                        <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_0" .$evidenciasResul[$i]->id . "_si", ['type'=>'checkbox','label'=>false]); ?></td>
+                                                    <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_0" . $evidenciasResul[$i]->id . "_no", ['type'=>'checkbox','label'=>false]); ?></td>
 
                                                       <?php  }  ?>
                                                 </tr>                               
@@ -117,13 +117,13 @@
                              <div class="col-12">
                             <div class="m-t-20">
                                     <h6 class="text-muted"><b>Observaciones primer semestre</b></h6>
-                                   <?php echo $this->Form->control('observatf_',['class' =>"form-control",'type' => 'textarea','maxlength'=>"255",'label' => false]); ?>
+                                   <?php echo $this->Form->control('observatf_',['class' =>"form-control",'type' => 'textarea','maxlength'=>"255",'label' => false,'value' => 'Ninguna']); ?>
                                 </div>
                             </div>
                             <div class="col-12">
                             <div class="m-t-20">
                            <h6 class="text-muted"><b>Observaciones segundo semestre</b></h6>
-                           <?php echo $this->Form->control('observats_',['class' =>"form-control",'type' => 'textarea','maxlength'=>"255",'label' => false]); ?>
+                           <?php echo $this->Form->control('observats_',['class' =>"form-control",'type' => 'textarea','maxlength'=>"255",'label' => false,'value' => 'Ninguna']); ?>
 
                             </div>
                             	

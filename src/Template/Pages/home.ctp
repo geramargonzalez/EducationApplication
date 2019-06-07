@@ -34,7 +34,6 @@
       </div>
     </div>
   </nav>
-
   <!-- Header -->
   <header class="masthead">
     <div class="container">
@@ -52,7 +51,7 @@
       <div class="row">
         <div class="col-lg-12 text-center">
           <h2 class="section-heading text-uppercase">Servicios</h2>
-          <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+          <h3 class="section-subheading text-muted">Algunos de los servicios de nuestro sistema</h3>
         </div>
       </div>
       <div class="row text-center">
@@ -62,14 +61,14 @@
             <i class="fas fa-shopping-cart fa-stack-1x fa-inverse"></i>
           </span>
           <h4 class="service-heading">Sistema de Asistencias</h4>
-          <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+          <p class="text-muted">Efectivo sistema de asistencias con estadisticas, que te ayudaran a seguir y controlar el proceso electivo de tus estudiantes.</p>
         </div>
         <div class="col-md-4">
           <span class="fa-stack fa-4x">
             <i class="fas fa-circle fa-stack-2x text-primary"></i>
             <i class="fas fa-laptop fa-stack-1x fa-inverse"></i>
           </span>
-          <h4 class="service-heading">Proceso de estudiantes</h4>
+          <h4 class="service-heading">Sistema de evaluación individual y grupal</h4>
           <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
         </div>
         <div class="col-md-4">
@@ -77,7 +76,7 @@
             <i class="fas fa-circle fa-stack-2x text-primary"></i>
             <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
           </span>
-          <h4 class="service-heading">Generacion de informes pedagogicos</h4>
+          <h4 class="service-heading">Sistema de generación de informes</h4>
           <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
         </div>
       </div>
@@ -90,24 +89,25 @@
       <div class="row">
         <div class="col-lg-12 text-center">
           <h2 class="section-heading text-uppercase">Nuestro Sistema</h2>
-          <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+          <h3 class="section-subheading text-muted">Genera un seguimiento efectivo a tus estudiantes.</h3>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-4 col-sm-6 portfolio-item">
-          <a class="portfolio-link" data-toggle="modal" href="#portfolioModal1">
+           <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal" href="#portfolioModal3">
             <div class="portfolio-hover">
               <div class="portfolio-hover-content">
                 <i class="fas fa-plus fa-3x"></i>
               </div>
             </div>
-            <?= $this->Html->image('../images/portfolio/01-thumbnail.jpg', ['class' => 'img-fluid']);?>
+               <?= $this->Html->image('../images/portfolio/03-thumbnail.jpg', ['class' => 'img-fluid']);?>
           </a>
           <div class="portfolio-caption">
-            <h4>Threads</h4>
-            <p class="text-muted">Illustration</p>
+            <h4>Equipos de trabajo</h4>
+            <p class="text-muted">Sistema de gestion de equipos de trabajo de los docentes de un centro</p>
           </div>
         </div>
+       
         <div class="col-md-4 col-sm-6 portfolio-item">
           <a class="portfolio-link" data-toggle="modal" href="#portfolioModal2">
             <div class="portfolio-hover">
@@ -118,68 +118,22 @@
              <?= $this->Html->image('../images/portfolio/02-thumbnail.jpg', ['class' => 'img-fluid']);?>
           </a>
           <div class="portfolio-caption">
-            <h4>Explore</h4>
-            <p class="text-muted">Graphic Design</p>
+            <h4>Observaciones Inteligentes</h4>
+            <p class="text-muted">Linea de tiempo de todas las observaciones hechas por los docentes sobre un estudiante</p>
           </div>
         </div>
-        <div class="col-md-4 col-sm-6 portfolio-item">
-          <a class="portfolio-link" data-toggle="modal" href="#portfolioModal3">
+         <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal" href="#portfolioModal1">
             <div class="portfolio-hover">
               <div class="portfolio-hover-content">
                 <i class="fas fa-plus fa-3x"></i>
               </div>
             </div>
-               <?= $this->Html->image('../images/portfolio/03-thumbnail.jpg', ['class' => 'img-fluid']);?>
+            <?= $this->Html->image('../images/portfolio/01-thumbnail.jpg', ['class' => 'img-fluid']);?>
           </a>
           <div class="portfolio-caption">
-            <h4>Finish</h4>
-            <p class="text-muted">Identity</p>
-          </div>
-        </div>
-        <div class="col-md-4 col-sm-6 portfolio-item">
-          <a class="portfolio-link" data-toggle="modal" href="#portfolioModal4">
-            <div class="portfolio-hover">
-              <div class="portfolio-hover-content">
-                <i class="fas fa-plus fa-3x"></i>
-              </div>
-            </div>
-           
-             <?= $this->Html->image('../images/portfolio/04-thumbnail.jpg', ['class' => 'img-fluid']);?>
-
-          </a>
-          <div class="portfolio-caption">
-            <h4>Lines</h4>
-            <p class="text-muted">Branding</p>
-          </div>
-        </div>
-        <div class="col-md-4 col-sm-6 portfolio-item">
-          <a class="portfolio-link" data-toggle="modal" href="#portfolioModal5">
-            <div class="portfolio-hover">
-              <div class="portfolio-hover-content">
-                <i class="fas fa-plus fa-3x"></i>
-              </div>
-            </div>
-            <im
-             <?= $this->Html->image('../images/portfolio/05-thumbnail.jpg', ['class' => 'img-fluid']);?>
-          </a>
-          <div class="portfolio-caption">
-            <h4>Southwest</h4>
-            <p class="text-muted">Website Design</p>
-          </div>
-        </div>
-        <div class="col-md-4 col-sm-6 portfolio-item">
-          <a class="portfolio-link" data-toggle="modal" href="#portfolioModal6">
-            <div class="portfolio-hover">
-              <div class="portfolio-hover-content">
-                <i class="fas fa-plus fa-3x"></i>
-              </div>
-            </div>
-           
-             <?= $this->Html->image('../images/portfolio/06-thumbnail.jpg', ['class' => 'img-fluid']);?>
-          </a>
-          <div class="portfolio-caption">
-            <h4>Window</h4>
-            <p class="text-muted">Photography</p>
+            <h4>Estadisticas</h4>
+            <p class="text-muted">Estadisticas General y e indivuales sobre los alumnos, Grupos y Centros.</p>
           </div>
         </div>
       </div>
@@ -191,7 +145,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12 text-center">
-          <h2 class="section-heading text-uppercase">About</h2>
+          <h2 class="section-heading text-uppercase">Acerca</h2>
           <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
         </div>
       </div>
@@ -379,8 +333,8 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12 text-center">
-          <h2 class="section-heading text-uppercase">Contact Us</h2>
-          <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+          <h2 class="section-heading text-uppercase">Contacto</h2>
+          <h3 class="section-subheading text-muted"></h3>
         </div>
       </div>
       <div class="row">

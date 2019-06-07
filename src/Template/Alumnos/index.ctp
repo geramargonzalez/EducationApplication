@@ -11,16 +11,16 @@
                 <div class="card m-b-20">
                     <div class="card-block">
                          <h3></h3>
-                        <h4 class="mt-0 header-title"><?= __('Alumnos') ?></h4>
-                        <p class="text-muted m-b-30 font-14">Se muestran todos los estudiantes que pertenecen a todos los centros en donde trabajas.</p>
+                        <h1 align="center"><?= __('Alumnos') ?></h1>
+                        <p class="text-muted m-b-30 font-14" align="center">Se muestran todos los estudiantes que pertenecen a todos los centros en donde trabajas.</p>
                         <div class="table-rep-plugin">
                             <div class="table-responsive b-0" data-pattern="priority-columns">
                                 <table id="datatable-buttons" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                     <thead>
                                     <tr>
                                         <th data-priority="1"><?= $this->Paginator->sort('Avatar') ?></th>
-                                        <th data-priority="1"><?= $this->Paginator->sort('Nombre') ?></th>
-                                        <th data-priority="1" class="actions"><?= __('Acciones') ?></th>
+                                        <th data-priority="1"><?= $this->Paginator->sort('Nombre Completo') ?></th>
+                                        <th data-priority="1" class="actions"><?= __('Evaluar') ?></th>
                                     </tr>
                                     </thead>
                                     <tbody>
