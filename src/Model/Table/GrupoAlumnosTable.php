@@ -39,6 +39,11 @@ class GrupoAlumnosTable extends Table
             'joinType' => 'INNER'
         ]);
 
+         $this->belongsTo('Grupo', [
+            'foreignKey' => 'id_grupo',
+            'joinType' => 'INNER'
+        ]);
+
         
     }
 

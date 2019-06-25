@@ -24,7 +24,7 @@
                                                 <tr>
                                                     <td class="bg-danger"><strong><?= h($alumno->name ." " .$alumno->surname) ?></strong></td>
                                                     <td class="bg-danger"><strong><?= $this->Number->format($alumno->prom_general) ?></strong></td>
-                                                   
+                                                    <td class="bg-danger"><?= $this->Html->link(__('Informe'), ['controller' => 'InformePedagogico', 'action' => 'escojerInforme', $alumno->id],['class'=>'btn btn-warning btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?></td>
                                                 </tr>
                                              <?php endif; ?>
                                              <?php endforeach; ?>

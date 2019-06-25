@@ -24,7 +24,7 @@
                                  <tr>
                                     <th data-priority="1" class="rows"><?= h('EVIDENCIA ') ?></th>
                                     <th data-priority="1" class="rows"><?= h(' SI ') ?></th>
-                                    <th data-priority="1" class="rows"><?= h(' NO') ?></th>
+                                    
                                 </tr>
                              </table>
 
@@ -62,15 +62,14 @@
                                                     <td data-priority="1" class="rows"><?= h($evidenciasResul[$i]->descripcion) ?></td>
                                                     <?php  if($evidenciasResul[$i]->id >= 10){ ?>
                                                     <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_" .$evidenciasResul[$i]->id . "_si", ['type'=>'checkbox','label'=>false]); ?></td>
-                                                    <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_" . $evidenciasResul[$i]->id . "_no", ['type'=>'checkbox','label'=>false]); ?></td>
+                                                    
                                                       <?php  }  else { ?>
                                                         <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_0" .$evidenciasResul[$i]->id . "_si", ['type'=>'checkbox','label'=>false]); ?></td>
-                                                    <td data-priority="1" class="rows"><?= $this->Form->control("evidencia_0" . $evidenciasResul[$i]->id . "_no", ['type'=>'checkbox','label'=>false]); ?></td>
-
+                        
                                                       <?php  }  ?>
                                                 </tr>                               
                                             </table>
-                                        </div>
+                                        </div> 
 
                                          <?php if($i == count($evidenciasResul)-1) { ?>
 	                                         <div class="col-12">
@@ -117,16 +116,17 @@
                              <div class="col-12">
                             <div class="m-t-20">
                                     <h6 class="text-muted"><b>Observaciones primer semestre</b></h6>
+                                    <p class="text-muted">Campo obligatorio</p>
                                    <?php echo $this->Form->control('observatf_',['class' =>"form-control",'type' => 'textarea','maxlength'=>"255",'label' => false,'value' => 'Ninguna']); ?>
                                 </div>
                             </div>
                             <div class="col-12">
-                            <div class="m-t-20">
-                           <h6 class="text-muted"><b>Observaciones segundo semestre</b></h6>
-                           <?php echo $this->Form->control('observats_',['class' =>"form-control",'type' => 'textarea','maxlength'=>"255",'label' => false,'value' => 'Ninguna']); ?>
+                                <div class="m-t-20">
+                                  <h6 class="text-muted"><b>Observaciones segundo semestre</b></h6>
+                                  <p class="text-muted">Campo obligatorio</p>
+                                 <?php echo $this->Form->control('observats_',['class' =>"form-control",'type' => 'textarea','maxlength'=>"255",'label' => false,'value' => 'Ninguna']); ?>
 
-                            </div>
-                            	
+                                </div>
                             </div>
   
                         </div>

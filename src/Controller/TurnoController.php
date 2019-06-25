@@ -33,10 +33,7 @@ class TurnoController extends AppController
      */
     public function view($id = null)
     {
-        $turno = $this->Turno->get($id, [
-            'contain' => []
-        ]);
-
+        $turno = $this->Turno->get($id);
         $this->set('turno', $turno);
     }
     /**

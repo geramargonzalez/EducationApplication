@@ -9,7 +9,7 @@
 <div class="page-content-wrapper ">
     <div class="container">
         <div class="row">
-            <div class="col-12">
+            <div class="col-12">  
                 <div class="card m-b-20">
                     <div class="card-block">
                         <h3 align="center"><?= __('Informe Pedagogico de: ' . $alumno->name . " " . $alumno->surname) ?></h3>

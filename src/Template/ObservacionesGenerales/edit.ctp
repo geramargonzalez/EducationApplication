@@ -12,7 +12,7 @@
    <?= $this->Form->create($observacionesGeneral) ?>
     <div class="card m-b-20">
         <div class="card-block">
-            <h4 class="mt-0 header-title">Acta del dia </h4>
+            <h4 class="mt-0 header-title">Edicion acta del dia </h4>
             <p class="text-muted m-b-30 font-14">Escriba todo lo relevante al equipo de trabajo</p>
             <div class="form-group row">
                 <div class="col-sm-12">
@@ -38,6 +38,10 @@
     </div> <!-- end col -->
     </div> <!-- end row -->
                    <!-- end row -->
+
+
+ 
+  
 
 
  

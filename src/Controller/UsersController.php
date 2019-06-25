@@ -240,6 +240,11 @@ class UsersController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+
+
+   
+
+    // SOLO FUNCIONA EN BLUEHOST
     public function forgotMyPassword() {
         
         $data = $this->request->getData();
@@ -254,20 +259,20 @@ class UsersController extends AppController
                 
                 $new_pass= substr(md5(time()), 0, 8);
                 $email = new Email();
-                $email->transport('default');
+                $email->setTransport('default');
                 $email->setViewVars(['password' => $new_pass, 'username' => $user->name]);
-                $email
-                    ->template('reset_pass')
-                    ->emailFormat('html')
-                    ->subject('Recuperacion de contraseña')
-                    ->to($data['email'])
-                    ->from('contacto@memoriaescolar.com');
-                
+                $email->viewBuilder()->setTemplate('reset_pass');
+                $email->setEmailFormat('html');
+                $email->setSubject('Recuperacion de contraseña');
+                $email->setTo($data['email']);
+                $email->setFrom('contacto@memoriaescolar.com');
+  
                 if ($email->send() != null) {
 
                     $user->password = $new_pass;
                     $this->Users->save($user);
-                    $this->Flash->success(__('Se te envio un email con tu nueva contraseña.'));
+                    $this->Flash->success(__('Se te envio un email con tu nueva contrase単a.'));
+                    return $this->redirect(['action' => 'login']);
                 
                 }
             }

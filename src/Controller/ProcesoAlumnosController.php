@@ -86,11 +86,7 @@ class ProcesoAlumnosController extends AppController
           $procesoAlumno = $this->ProcesoAlumnos->newEntity();
           $tipo_rendimiento = "No hubo evaluacion";
           $contador = 0;
-        //$talleresGrupos = $this->GrupoAlumnos->find('all')->where(['id_alumno' => $id]);
-        //$talleresGrupos = $talleresGrupos->first();
-       // $grupo = $this->Grupo->get($talleresGrupos->id_grupo);
-       // $controllerName = $this->request->getParam('controller');
-        //$controllerAction = $this->request->getParam('action');
+      
         
         if ($this->request->is('post')) {
             
@@ -293,11 +289,40 @@ class ProcesoAlumnosController extends AppController
       // Se van a mostar los alumnos que desabilitaron y los meses donde dejaron.
     }
 
-     public function statsAlumnosMateria(){
-      
+     public function boletinAlumno($id_alumno = null){
+    
+        $alumno = $this->Alumnos->get($id_alumno);
+        $query_user = $this->Taller->find('all');
+        $alumno_boletines =  array();
+        foreach ($query_user as $key) {
+          # code...
+        
+          $alumno_boletines[] = $this->ProcesoAlumnos->find("all")->andWhere(['ProcesoAlumnos.id_alumno =' =>  $alumno->id])->andWhere(['ProcesoAlumnos.id_user' => $key->id_user])
+                                                     ->join([
+                                                        'table' => 'taller',
+                                                        'alias' => 't',
+                                                        'type' => 'right',
+                                                        "conditions" => "t.id_user = " . $key->id_user
+                                                     ])
+                                                      ->join([
+                                                        'table' => 'alumnos',
+                                                        'alias' => 'a',
+                                                        'type' => 'left',
+                                                        "conditions" => "a.id = ProcesoAlumnos.id_alumno"
+                                                     ])
+                                                    ->select([
+                                                         'materia' => "t.name",
+                                                         'id_user'  => "t.id_user",
+                                                         'surname' => "a.surname",
+                                                         'name' => "a.name",
+                                                         'prom_general' => "AVG(ProcesoAlumnos.promedio)"])
+                                                         ->group(['t.name']);                                          
+      }
 
-
-
+      $promedio_general = $this->procesoAvgGeneralTodosLosDocentes($alumno->id);
+      $promedio_conducta = $this->procesoAvgGeneralConductaTodosLosDocentes($alumno->id);
+      $this->set(compact('alumno','alumno_boletines','promedio_general','promedio_conducta'));
+ 
     }
 
     /**
@@ -336,6 +361,18 @@ class ProcesoAlumnosController extends AppController
      public function procesoAvgGeneral($id = null, $user_id = null){
         $query = $this->ProcesoAlumnos->findById_alumnoAndId_user($id,$user_id);
         $condu = $query->select(['avg' => $query->func()->avg('promedio')])->first();
+        return $condu->avg;
+    }
+
+     public function procesoAvgGeneralTodosLosDocentes($id_alumno = nul){
+        $query = $this->ProcesoAlumnos->find('all')->where(['ProcesoAlumnos.id_alumno = ' => $id_alumno]);
+        $condu = $query->select(['avg' => $query->func()->avg('promedio')])->first();
+        return $condu->avg;
+    }
+   
+     public function procesoAvgGeneralConductaTodosLosDocentes($id_alumno = nul){
+        $query = $this->ProcesoAlumnos->find('all')->where(['ProcesoAlumnos.id_alumno = ' => $id_alumno]);
+        $condu = $query->select(['avg' => $query->func()->avg('conducta')])->first();
         return $condu->avg;
     }
 

@@ -38,14 +38,7 @@ class GrupoTable extends Table
         $this->setTable('grupo');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
-
         $this->addBehavior('Timestamp');
-
-        $this->belongsToMany('Alumnos', [
-            'foreignKey' => 'grupo_id',
-            'targetForeignKey' => 'alumno_id',
-            'joinTable' => 'grupo_alumnos'
-        ]);
         
          $this->belongsTo('Centro', [
             'foreignKey' => 'id_centro',

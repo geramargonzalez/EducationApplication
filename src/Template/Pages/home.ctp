@@ -55,90 +55,49 @@
         </div>
       </div>
       <div class="row text-center">
-        <div class="col-md-4">
+       
+        <div class="col-md-3">
           <span class="fa-stack fa-4x">
-            <i class="fas fa-circle fa-stack-2x text-primary"></i>
-            <i class="fas fa-shopping-cart fa-stack-1x fa-inverse"></i>
+           <i class="fas fa-circle fa-stack-2x text-success"></i>
+           
+          
+            <i class="fas fa-chalkboard-teacher fa-stack-1x fa-inverse"></i>
+          </span>
+          <h4 class="service-heading">Sistema de evaluación individual y grupal</h4>
+          <p class="text-muted">Eficaz sistema de seguimiento del proceso de sus estudiantes. Evaluaciones personalizadas, estadisticas y desgloce de rendimientos.</p>
+        </div>
+        <div class="col-md-3">
+          <span class="fa-stack fa-4x">
+           <i class="fas fa-circle fa-stack-2x text-success"></i>
+           
+            <i class="far fa-address-book fa-stack-1x fa-inverse"></i>
+          </span>
+          <h4 class="service-heading">Sistema de generación de informes</h4>
+          <p class="text-muted">Personalice, edite y descargue informes pedagogicos sobre sus estudiantes</p>
+        </div>
+         <div class="col-md-3">
+          <span class="fa-stack fa-4x">
+           <i class="fas fa-circle fa-stack-2x text-success"></i>
+           <i class="far fa-calendar-check  fa-stack-1x fa-inverse"></i>
+
           </span>
           <h4 class="service-heading">Sistema de Asistencias</h4>
           <p class="text-muted">Efectivo sistema de asistencias con estadisticas, que te ayudaran a seguir y controlar el proceso electivo de tus estudiantes.</p>
         </div>
-        <div class="col-md-4">
+         <div class="col-md-3">
           <span class="fa-stack fa-4x">
-            <i class="fas fa-circle fa-stack-2x text-primary"></i>
-            <i class="fas fa-laptop fa-stack-1x fa-inverse"></i>
+            <i class="fas fa-circle fa-stack-2x text-success"></i>
+            <i class="fas fa-eye fa-stack-1x fa-inverse"></i>
+
           </span>
-          <h4 class="service-heading">Sistema de evaluación individual y grupal</h4>
-          <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
-        </div>
-        <div class="col-md-4">
-          <span class="fa-stack fa-4x">
-            <i class="fas fa-circle fa-stack-2x text-primary"></i>
-            <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
-          </span>
-          <h4 class="service-heading">Sistema de generación de informes</h4>
-          <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+          <h4 class="service-heading">Observaciones Inteligentes</h4>
+          <p class="text-muted">Genere una linea de tiempo de cada estudiante o grupo con las observaciones de todos los educadores de su centro.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Portfolio Grid -->
-  <section class="bg-light page-section" id="portfolio">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12 text-center">
-          <h2 class="section-heading text-uppercase">Nuestro Sistema</h2>
-          <h3 class="section-subheading text-muted">Genera un seguimiento efectivo a tus estudiantes.</h3>
-        </div>
-      </div>
-      <div class="row">
-           <div class="col-md-4 col-sm-6 portfolio-item">
-          <a class="portfolio-link" data-toggle="modal" href="#portfolioModal3">
-            <div class="portfolio-hover">
-              <div class="portfolio-hover-content">
-                <i class="fas fa-plus fa-3x"></i>
-              </div>
-            </div>
-               <?= $this->Html->image('../images/portfolio/03-thumbnail.jpg', ['class' => 'img-fluid']);?>
-          </a>
-          <div class="portfolio-caption">
-            <h4>Equipos de trabajo</h4>
-            <p class="text-muted">Sistema de gestion de equipos de trabajo de los docentes de un centro</p>
-          </div>
-        </div>
-       
-        <div class="col-md-4 col-sm-6 portfolio-item">
-          <a class="portfolio-link" data-toggle="modal" href="#portfolioModal2">
-            <div class="portfolio-hover">
-              <div class="portfolio-hover-content">
-                <i class="fas fa-plus fa-3x"></i>
-              </div>
-            </div>
-             <?= $this->Html->image('../images/portfolio/02-thumbnail.jpg', ['class' => 'img-fluid']);?>
-          </a>
-          <div class="portfolio-caption">
-            <h4>Observaciones Inteligentes</h4>
-            <p class="text-muted">Linea de tiempo de todas las observaciones hechas por los docentes sobre un estudiante</p>
-          </div>
-        </div>
-         <div class="col-md-4 col-sm-6 portfolio-item">
-          <a class="portfolio-link" data-toggle="modal" href="#portfolioModal1">
-            <div class="portfolio-hover">
-              <div class="portfolio-hover-content">
-                <i class="fas fa-plus fa-3x"></i>
-              </div>
-            </div>
-            <?= $this->Html->image('../images/portfolio/01-thumbnail.jpg', ['class' => 'img-fluid']);?>
-          </a>
-          <div class="portfolio-caption">
-            <h4>Estadisticas</h4>
-            <p class="text-muted">Estadisticas General y e indivuales sobre los alumnos, Grupos y Centros.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+
 
   <!-- About -->
   <section class="page-section" id="about">
@@ -214,9 +173,9 @@
             </li>
             <li class="timeline-inverted">
               <div class="timeline-image">
-                <h4>Be Part
-                  <br>Of Our
-                  <br>Story!</h4>
+                <h4>Se parte
+                  <br>de
+                  <br>Nosotros!</h4>
               </div>
             </li>
           </ul>

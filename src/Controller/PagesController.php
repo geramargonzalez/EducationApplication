@@ -33,8 +33,7 @@ class PagesController extends AppController
      public function initialize()
     {
         parent::initialize();
-        
-       // $this->Auth->allow('home');
+        $this->Auth->allow('display');
     }
 
 

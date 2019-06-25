@@ -50,8 +50,15 @@ use App\Enums\RolesEnum;
                            <?= $this->Html->link(__('Ver'), ['controller' => 'InformePedagogico', 'action' => 'escojerInformeView', $alumno->id],['class' => 'dropdown-item']) ?>
                         </div>
                     </div>
+                     <?php if($user_session['role_id'] == RolesEnum::PROFESOR_ADMIN) { ?>
+                       <div class="btn-group m-b-10">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Boletin</button>
+                        <div class="dropdown-menu">
+                           <?= $this->Html->link(__('Boletin'),['controller' => 'ProcesoAlumnos', 'action' => 'BoletinAlumno', $alumno->id],['class' => 'dropdown-item']) ?>       
+                        </div>
+                    </div>
+                     <?php } ?>
                 </div>
-
             </div>
         </div>
     </div> 

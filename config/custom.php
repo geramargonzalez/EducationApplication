@@ -5,7 +5,7 @@ return [
     'Authorize' => [
         // Authorize.default utiliza isAuthorized()
         'default' => [
-            'Controller'
+            'Controller' => 'Pages'
         ]
     ]
 ];

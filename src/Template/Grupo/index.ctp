@@ -3,6 +3,7 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Grupo[]|\Cake\Collection\CollectionInterface $grupo
  */
+use App\Enums\RolesEnum;
 ?>
 <div class="page-content-wrapper ">
     <div class="container">
@@ -34,16 +35,16 @@
                                         
                                         <td class="actions">
                                             <?= $this->Html->link(__('Ver'), ['action' => 'view', $grupo->id],['class'=>'btn btn-success btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
-                                            <?= $this->Html->link(__('Edit'), ['action' => 'edit', $grupo->id],['class'=>'btn btn-warning btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
-                                          
+                                            <?= $this->Html->link(__('Editar'), ['action' => 'edit', $grupo->id],['class'=>'btn btn-warning btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
+                                        <?php if($user_session['role_id'] == RolesEnum::PROFESOR_ADMIN) { ?>
+                                          <?= $this->Html->link(__('Eliminar'), ['action' => 'delete', $grupo->id],['class'=>'btn btn-danger btn-rounded waves-effect waves-light m-t-5','type' => 'button']) ?>
+                                         <?php } ?>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>
-   
-                            </div>
-
+                        </div>
                         </div>
 
                     </div>

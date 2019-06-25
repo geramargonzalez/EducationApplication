@@ -19,7 +19,7 @@ class ObservacionesGeneralesController extends AppController
         $this->loadModel('Turno');
         $this->loadModel('UsersCentro');
         $this->loadModel('Centro');
-       
+        
     } 
 
 
@@ -36,7 +36,7 @@ class ObservacionesGeneralesController extends AppController
         $subquery = $this->UsersCentro->find()
                 ->select(['UsersCentro.id_centro'])
                 ->where(['UsersCentro.id_user =' => $user['id']]);
-
+                
         $subquery2 = $this->UsersCentro->find()
                         ->select(['UsersCentro.id_turno'])
                         ->where(['UsersCentro.id_user =' => $user['id']]);
@@ -44,10 +44,7 @@ class ObservacionesGeneralesController extends AppController
         $qry = $this->ObservacionesGenerales->find('all',['contain' => ['Centro','Users']])->where(['status =' => true])->andWhere(['ObservacionesGenerales.id_centro IN'=> $subquery])
              ->andWhere(['ObservacionesGenerales.id_turno IN'=> $subquery2])->order(['ObservacionesGenerales.created' => 'DESC']);
 
-
         $observacionesGenerales = $this->paginate($qry, ['limit' => 200]);
-       // debug($observacionesGenerales);
-        //exit;
         $this->set(compact('observacionesGenerales'));
     }
 
@@ -66,10 +63,7 @@ class ObservacionesGeneralesController extends AppController
      */
     public function view($id = null)
     {
-        $observacionesGeneral = $this->ObservacionesGenerales->get($id, [
-            'contain' => ['Users']
-        ]);
-
+        $observacionesGeneral = $this->ObservacionesGenerales->get($id,['contain' => ['Users']]);
         $this->set('observacionesGeneral', $observacionesGeneral);
     }
 
@@ -109,8 +103,6 @@ class ObservacionesGeneralesController extends AppController
                     'valueField' => 'name'])->where(['Centro.id IN'=> $subquery]);
         
         $turnos = $this->Turno->find('list', ['keyField' => 'id','valueField' => 'nombre']);
-
-       
         $this->set(compact('observacionesGeneral','centros','turnos'));
     }
 
@@ -128,7 +120,7 @@ class ObservacionesGeneralesController extends AppController
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $observacionesGeneral = $this->ObservacionesGenerales->patchEntity($observacionesGenerale, $this->request->getData());
+            $observacionesGeneral = $this->ObservacionesGenerales->patchEntity($observacionesGeneral, $this->request->getData());
             if ($this->ObservacionesGenerales->save($observacionesGeneral)) {
                 $this->Flash->success(__('The observaciones ha sido generada.'));
                 return $this->redirect(['action' => 'index']);
@@ -136,8 +128,16 @@ class ObservacionesGeneralesController extends AppController
             $this->Flash->error(__('The observaciones generale could not be saved. Please, try again.'));
         }
 
+         $subquery = $this->UsersCentro->find()
+                ->select(['UsersCentro.id_centro'])
+                ->where(['UsersCentro.id_user =' => $user['id']]);
+        
+        $centros = $this->Centro->find('list', ['keyField' => 'id',
+                    'valueField' => 'name'])->where(['Centro.id IN'=> $subquery]);
+        
+        $turnos = $this->Turno->find('list', ['keyField' => 'id','valueField' => 'nombre']);
 
-        $this->set(compact('observacionesGeneral'));
+        $this->set(compact('observacionesGeneral','centros','turnos'));
     }
 
     /**

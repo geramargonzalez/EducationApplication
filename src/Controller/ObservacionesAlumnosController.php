@@ -67,9 +67,9 @@ class ObservacionesAlumnosController extends AppController
             $observacionesAlumno->etiqueta = $data['tags'];
             if ($this->ObservacionesAlumnos->save($observacionesAlumno)) {
                 $this->Flash->success(__('The observaciones alumno has been saved.'));
-                return $this->redirect(['controller'=>'Alumnos','action' => 'view',$id]);
+                return $this->redirect(['action' => 'index',$id]);
             }
-            $this->Flash->error(__('The observaciones alumno could not be saved. Please, try again.'));
+            $this->Flash->error(__('La observacion fue ingresada correctamente'));
         }
         $alumno = $this->ObservacionesAlumnos->Alumnos->get($id);
         $tags = $this->Tag->find('list',[
@@ -121,12 +121,13 @@ class ObservacionesAlumnosController extends AppController
     {
         //$this->request->allowMethod(['post', 'delete']);
         $observacionesAlumno = $this->ObservacionesAlumnos->get($id);
+        $alumno = $this->Alumnos->get($observacionesAlumno->id_alumno);
         if ($this->ObservacionesAlumnos->delete($observacionesAlumno)) {
             $this->Flash->success(__('The observaciones alumno has been deleted.'));
         } else {
             $this->Flash->error(__('The observaciones alumno could not be deleted. Please, try again.'));
         }
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect(['action' => 'index',$alumno->id]);
     }
 
       public function statsAlumnoObservacion($id_alumno = null)

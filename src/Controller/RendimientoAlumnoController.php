@@ -40,10 +40,8 @@ class RendimientoAlumnoController extends AppController
 
         $tipoEva->enableHydration(false);
         $tipo_evaluacion = $tipoEva->toList(); 
-
         $tipoEva->enableHydration(false);
         $grafico_torta = $tipoEva->toList();
-
 
         $this->set(compact('tipo_evaluacion','alumno','grafico_torta'));
     }

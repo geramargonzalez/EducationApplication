@@ -1,10 +1,10 @@
   <?php
   use App\Enums\RolesEnum;
 ?>
-
+<div class="row">
 <div class="col-lg-12 ">
       <div class="card m-b-20">
-          <div class="card-block ">
+          <div class="card-block">
               <h1  align="center" >Perfil equipo de trabajo</h1>
               <p class="text-muted m-b-30 font-14" align="center">Opciones para los equipos</p>
               <div class="" align="center">
@@ -52,4 +52,4 @@
               </div>
           </div>
       </div>
-  </div> 
+  </div>

@@ -72,8 +72,8 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
 
-    Router::scope('/informe-pedagogico/', function ($routes) {
-    $routes->extensions('pdf');
+    Router::scope('/memoria-escolar/', function ($routes) {
+    $routes->setExtensions('pdf');
     $routes->connect('/pdf/*', ['controller' => 'InformePedagogico', 'action' => 'pdf']);
     $routes->fallbacks('InflectedRoute');
    });

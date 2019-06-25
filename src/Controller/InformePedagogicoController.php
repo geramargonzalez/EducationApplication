@@ -132,17 +132,22 @@ class InformePedagogicoController extends AppController
 
           public function escojerInforme($id_alumno = null)
         {
+
+             $alumno = $this->Alumnos->get($id_alumno);
             $informes = $this->InformePedagogico->find('list',['keyField' => 'id','valueField' => 'titulo']);
-            $tieneInforme = $this->InformePedagogico->find("all")->where(['InformeAlumno.id_alumno =' => $alumno->id]);
+          //  $tieneInforme = $this->InformePedagogico->find("all")->where(['InformeAlumno.id_alumno =' => $alumno->id]);
+           // $tieneInforme->enableHydration(false);
+                //$tieneInforme = $tieneInforme->toList(); 
             
+
             if ($this->request->is('post')) {
                  $data = $this->request->getData();
-                 return $this->redirect(['action' => 'informeAlumno', $data['informes'],$id_alumno]);
+                 return $this->redirect(['action' => 'informeAlumno', $data['informes'],$alumno->id]);
                 } 
 
-            if(count($informes) < 1){
-                  return $this->redirect(['controller' => 'Alumnos','action' => 'view',$id_alumno]);
-            } 
+          //  if(count($informes) < 1){
+            //      return $this->redirect(['controller' => 'Alumnos','action' => 'view',$alumno->id]);
+            //} 
             $this->set(compact('informes'));   
         }
 
@@ -151,7 +156,7 @@ class InformePedagogicoController extends AppController
             $informes = $this->InformePedagogico->find('list',['keyField' => 'id','valueField' => 'titulo']);
             if ($this->request->is('post')) {
                  $data = $this->request->getData();
-                 return $this->redirect(['action' => 'editarInformeAlumno', $data['informes'],$id_alumno]);
+                 return $this->redirect(['action' => 'editarInformeAlumno', $data['informes'],$alumno->id]);
                 }   
             $this->set(compact('informes'));   
         }
@@ -169,38 +174,41 @@ class InformePedagogicoController extends AppController
             }
             $derivaciones = $this->Derivaciones->find('all');
 
-            if ($this->request->is('post')) {
+            $tieneInforme = $this->InformeAlumno->find("all")->where(['InformeAlumno.id_alumno =' => $alumno->id]);
+                    $tieneInforme->enableHydration(false);
+                    $tieneInforme = $tieneInforme->toList(); 
+
+                   if(count($tieneInforme) < 1) {
+
+
+                        if ($this->request->is('post')) {
+                    
                 
-                $tieneInforme = $this->InformeAlumno->find("all")->where(['InformeAlumno.id_alumno =' => $alumno->id]);
-                $tieneInforme->enableHydration(false);
-                $tieneInforme = $tieneInforme->toList(); 
-                
-                $data = $this->request->getData();
+                            $data = $this->request->getData();
 
-                if(count($tieneInforme) < 1) {
+                            $informeAlumno = $this->InformeAlumno->newEntity();
+                            $contador = 0;
+                                $datos  =  array(
+                                    'id_informe' => $informePedagogico->id,
+                                    "id_alumno" => $alumno->id
+                                );
+                                $informeAlumno = $this->InformeAlumno->patchEntity($informeAlumno,$datos);
 
-                    $informeAlumno = $this->InformeAlumno->newEntity();
-                    $contador = 0;
-                        $datos  =  array(
-                            'id_informe' => $informePedagogico->id,
-                            "id_alumno" => $alumno->id
-                        );
-                        $informeAlumno = $this->InformeAlumno->patchEntity($informeAlumno,$datos);
+                          //  debug($data);
+                          //  exit;
 
-                    if ($this->InformeAlumno->save($informeAlumno)) {
+                            if ($this->InformeAlumno->save($informeAlumno)) {
 
-                        foreach ($data as $key => $value) {
+                                   foreach ($data as $key => $value) {
 
-                            $rest = substr($key, 0, 10);
+                                    $rest = substr($key, 0, 10);
 
-                                if('evidencia_' == $rest){
-                                      
-                                      $evidencia_final = substr($key, 12, 13);
-                                      $id_evidencia = substr($key, 10, -3);
-                                      $evidenciaResultadoAlumno = $this->EvidenciaResultadoAlumno->newEntity();
-                                      
-                                        if($evidencia_final == '_si'){
-
+                                        if('evidencia_' == $rest){
+                                              
+                                             // $evidencia_final = substr($key, 12, 13);
+                                            $id_evidencia = substr($key, 10, -3);
+                                            $evidenciaResultadoAlumno = $this->EvidenciaResultadoAlumno->newEntity();
+                                              
                                             if($value == 1){
 
                                                 $datosEvi  =  array(
@@ -208,77 +216,91 @@ class InformePedagogicoController extends AppController
                                                     "id_alumno" => $alumno->id,
                                                     'status' => true
                                                 );
-                                            }
+                                            } else {
 
-                                        } // end evidencia final si
-
-                                       if($evidencia_final == '_no'){
-
-                                         if($value == 1){
-                                              
-                                            $datosEvi  =  array(
+                                                 $datosEvi  =  array(
                                                     'id_evidencia_resultado' => $id_evidencia,
                                                     "id_alumno" => $alumno->id,
                                                     'status' => false
                                                 );
-                                         }
-                                         $evidenciaResultadoAlumno = $this->EvidenciaResultadoAlumno->patchEntity($evidenciaResultadoAlumno,$datosEvi);
-                                         $this->EvidenciaResultadoAlumno->save($evidenciaResultadoAlumno);
+                                            }
+                                               
 
-                                      } // end evidencia final no
-                                       
-                                } // end general  
-                                $rest = substr($key, 0, 10);
-                                if("derivacio_" == $rest){
-                                      $deri_id = substr($key, -1, 1);
-                                      $derivacionAlumno = $this->DerivacionesAlumnos->newEntity();
-                                      if($value == 1){
-                                          $datosDeri  =  array(
-                                                     "id_derivacion" =>  $deri_id,
-                                                    "id_alumno" => $alumno->id
-                                                );
-                                           $derivacionAlumno  = $this->DerivacionesAlumnos->patchEntity($derivacionAlumno,$datosDeri);
-                                    $this->DerivacionesAlumnos->save($derivacionAlumno);
-                                  }
-                                } // end derivaciones
-                                $rest = substr($key, 0, 10);
-                                if("observatf_" == $rest){
-                                       $observacionesInformef = $this->ObservacionesInforme->newEntity();
-                                        $datos_obs  =  array(
-                                                     'id_informe' => $informePedagogico->id,
-                                                     "id_alumno" => $alumno->id,
-                                                     "titulo" => "primer semestre",
-                                                     "descripcion" => $value
-                                                );
-                                    $observacionesInformef  = $this->ObservacionesInforme->patchEntity($observacionesInformef,$datos_obs);
-                                    $this->ObservacionesInforme->save($observacionesInformef);
-                                }
-                                if("observats_" == $rest){
-                                      
-                                        $observacionesInformes = $this->ObservacionesInforme->newEntity();
-                                        $datos_obs  =  array(
-                                                     'id_informe' => $informePedagogico->id,
-                                                     "id_alumno" => $alumno->id,
-                                                     "titulo" => "segundo semestre",
-                                                     "descripcion" => $value
-                                                );
-                                        $observacionesInformes  = $this->ObservacionesInforme->patchEntity($observacionesInformes,$datos_obs);
-                                      $this->ObservacionesInforme->save($observacionesInformes);
+                                            $evidenciaResultadoAlumno = $this->EvidenciaResultadoAlumno->patchEntity($evidenciaResultadoAlumno,$datosEvi);
+                                            $this->EvidenciaResultadoAlumno->save($evidenciaResultadoAlumno);
 
-                                } // end obser s
-                            } // end foreach
+                                         } // end evidencia final no
+                                        
+                                        $rest = substr($key, 0, 10);
+                                        
+                                        if("derivacio_" == $rest){
+                                              $deri_id = substr($key, -1, 1);
+                                              $derivacionAlumno = $this->DerivacionesAlumnos->newEntity();
+                                              if($value == 1){
+                                                  $datosDeri  =  array(
+                                                             "id_derivacion" =>  $deri_id,
+                                                            "id_alumno" => $alumno->id
+                                                        );
+                                                   $derivacionAlumno  = $this->DerivacionesAlumnos->patchEntity($derivacionAlumno,$datosDeri);
+                                            $this->DerivacionesAlumnos->save($derivacionAlumno);
+                                          }
+                                        } // end derivaciones
 
-                        $this->Flash->success(__('Se creo un informe pedagogico para ' . " " . $alumno->name ." " . $alumno->surname));
-                        return $this->redirect(['action' => 'verInformeAlumno', $informePedagogico->id,$alumno->id]);
 
-                       } // end save informe alumno
+                                         
+                                        
+                                        $rest = substr($key, 0, 10);
+                                        if("observatf_" == $rest){
+                                               $observacionesInformef = $this->ObservacionesInforme->newEntity();
+                                                $datos_obs  =  array(
+                                                             'id_informe' => $informePedagogico->id,
+                                                             "id_alumno" => $alumno->id,
+                                                             "titulo" => "primer semestre",
+                                                             "descripcion" => $value
+                                                        );
+                                            $observacionesInformef  = $this->ObservacionesInforme->patchEntity($observacionesInformef,$datos_obs);
+                                            $this->ObservacionesInforme->save($observacionesInformef);
+                                        }
+
+
+                                        if("observats_" == $rest){
+                                              
+                                                $observacionesInformes = $this->ObservacionesInforme->newEntity();
+                                                $datos_obs  =  array(
+                                                             'id_informe' => $informePedagogico->id,
+                                                             "id_alumno" => $alumno->id,
+                                                             "titulo" => "segundo semestre",
+                                                             "descripcion" => $value
+                                                        );
+                                                $observacionesInformes  = $this->ObservacionesInforme->patchEntity($observacionesInformes,$datos_obs);
+                                              $this->ObservacionesInforme->save($observacionesInformes);
+
+                                        }
+
+                                      } // end foreach evidencias
+
+                                    $this->Flash->success(__('Se creo un informe pedagogico para ' . " " . $alumno->name ." " . $alumno->surname));
+                               
+                                    return $this->redirect(['action' => 'verInformeAlumno', $informePedagogico->id,$alumno->id]); 
+
+                                } //end save
+
+                            
+                               } // end post
+
+                     
                     
                     } else {
+                       
                         $this->Flash->error(__('El usuario ya tiene informe pedagogico.'));
+
+                          return $this->redirect(['controller'=>'Alumnos','action' => 'view',$alumno->id]);
                      }
-                 }     
+
+                
+                      
             
-            $this->set(compact('informePedagogico','evidencias','evidenciasResultado','derivaciones'));
+           $this->set(compact('informePedagogico','evidencias','evidenciasResultado','derivaciones'));
         }
 
 
@@ -328,10 +350,6 @@ class InformePedagogicoController extends AppController
                     $data = $this->request->getData();
                     $informeAlumno = $this->InformeAlumno->find('all')->where(['InformeAlumno.id_alumno =' => $alumno->id]);
                     $informeAlumno = $informeAlumno->first();
-
-
-                    //debug($data);
-                   // exit;
 
                         foreach ($data as $key => $value) {
 
@@ -396,8 +414,6 @@ class InformePedagogicoController extends AppController
                                        }
 
                                   }
-
-                               
                                 $rest = substr($key, 0, 10);
                                 if("observatf_" == $rest){
                                        //$observacionesInformef = $this->ObservacionesInforme->newEntity();
@@ -567,7 +583,7 @@ class InformePedagogicoController extends AppController
         
         if ($this->InformeAlumno->delete($informeAlumno)) {
 
-            /* $evidenciaResultadoAlumnos = $this->EvidenciaResultadoAlumno->find('all')->where(['EvidenciaResultadoAlumno.id_alumno =' =>$alumno->id]);*/
+             $evidenciaResultadoAlumnos = $this->EvidenciaResultadoAlumno->find('all')->where(['EvidenciaResultadoAlumno.id_alumno =' =>$alumno->id]);
 
              foreach ($evidenciaResultadoAlumnos as $evidenciaResultadoAlumno) {
                  $this->EvidenciaResultadoAlumno->delete($evidenciaResultadoAlumno);

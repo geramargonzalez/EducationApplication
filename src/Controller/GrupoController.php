@@ -67,19 +67,17 @@ class GrupoController extends AppController
         $user = $this->Auth->user();
         $alumnos = array();
         $cantidad = 0;
-
         $talleresGrupos = $this->GrupoAlumnos->find('all')->where(['id_grupo' => $id]);
         $grupo = $this->Grupo->get($id);
- 
+        
         foreach ($talleresGrupos as $alumnoGrupo) {
             $alumnos[] = $this->Alumnos->get($alumnoGrupo->id_alumno);
             $cantidad++;
         }
-
+        
         $subquery = $this->UsersCentro->find()
                          ->select(['UsersCentro.id_centro'])
                          ->where(['UsersCentro.id_user =' => $user['id']]);
-
         $subquery2 = $this->UsersCentro->find()
                 ->select(['UsersCentro.id_turno'])
                 ->where(['UsersCentro.id_user =' => $user['id']]);
@@ -101,10 +99,8 @@ class GrupoController extends AppController
      */
     public function add()
     {
-        
         $user = $this->Auth->user();
         $grupo = $this->Grupo->newEntity();
-        
         if ($this->request->is('post')) {
             
             $data = $this->request->getData();
@@ -133,21 +129,15 @@ class GrupoController extends AppController
      */
     public function edit($id = null)
     {
-        
         $grupo = $this->Grupo->get($id);
-        
         if ($this->request->is(['patch', 'post', 'put'])) {
-            
             $grupo = $this->Grupo->patchEntity($grupo, $this->request->getData());
-            
             if ($this->Grupo->save($grupo)) {
-
                 $this->Flash->success(__('The grupo has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The grupo could not be saved. Please, try again.'));
         }
-        
         $turnos = $this->Turno->find('list', ['keyField' => 'id',
                                              'valueField' => 'nombre']);
         $centros = $this->Centro->find('list', ['keyField' => 'id',
@@ -155,7 +145,6 @@ class GrupoController extends AppController
         
         $this->set(compact('grupo','turnos','centros'));
     }
-
 
     public function estadisticasGrupo($id_grupo){
 
@@ -176,40 +165,33 @@ class GrupoController extends AppController
                                                     "conditions" => "a.id = " . $alum->id_alumno
                                                  ])
                                                   ->select([
+                                                         'id' => "a.id",
                                                          'name' => "a.name",
                                                          'surname' => "a.surname",
                                                          'prom_general' => "AVG(ProcesoAlumnos.promedio)"  
                                                     ]);
         }                         
+
         $this->set(compact('grupo','alumnoPromedios'));
     }
-
-
     /**
      * Delete method
-     *
      * @param string|null $id Grupo id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
     {
-       // $this->request->allowMethod(['post', 'delete']);
         $grupo = $this->Grupo->get($id);
-        $grupo->status = false;
-
-        $query = $this->GrupoAlumnos->findById_grupo($id);
-       // $gruposA = $query->toList();
-
-        if ($this->Grupo->save($grupo)) {
-            foreach ($query as $ga) {
+        $grupos_alumnos = $this->GrupoAlumnos->find('all')->where(['GrupoAlumnos.id_grupo =' => $grupo->id]);
+        if ($this->Grupo->delete($grupo)){
+            foreach ($grupos_alumnos as $ga) { 
                 $this->GrupoAlumnos->delete($ga);
             }
-            $this->Flash->success(__('The grupo has been deleted.'));
+            $this->Flash->success(__('El grupo ha sido eliminado.'));
         } else {
-            $this->Flash->error(__('The grupo could not be deleted. Please, try again.'));
+            $this->Flash->error(__('El grupo no pudo eliminarse. Verifique los datos.'));
         }
-
         return $this->redirect(['action' => 'index']);
     }
 }
